@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Think & Tinker Brand Architecture</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito+Sans:ital,opsz,wght@0,6..12,400;0,6..12,600;0,6..12,700;1,6..12,400&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- PDF Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        :root {
+            /* Think & Tinker Palette */
+            --tinker-teal: #1AAFA0;
+            --spark-orange: #F47B20;
+            --idea-gold: #FDB813;
+            --deep-navy: #1B2A4A;
+            --story-coral: #E8614D;
+            --leaf-green: #27AE60;
+            --sky-blue: #3498DB;
+            --charcoal: #2C3E50;
+            --warm-white: #FFF9F0;
+            --cloud-gray: #F2F3F4;
+            --soft-cream: #FEF5E7;
+            
+            /* Functional UI Metrics */
+            --base-grid: 8px;
+            --border-light: rgba(44, 62, 80, 0.15);
+        }
+
+        body {
+            font-family: 'Nunito Sans', sans-serif;
+            color: var(--charcoal);
+            background-color: #E2E8F0;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .controls {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .btn-download {
+            background-color: var(--tinker-teal);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            padding: 16px 40px;
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(26, 175, 160, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-download:hover {
+            background-color: var(--deep-navy);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(27, 42, 74, 0.3);
+        }
+
+        /* A4 Page Architecture */
+        .page {
+            width: 210mm;
+            height: 297mm;
+            background: var(--warm-white);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            position: relative;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 50px;
+            overflow: hidden;
+        }
+
+        .border-frame {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border: 2px solid var(--tinker-teal);
+            border-radius: 16px;
+            pointer-events: none;
+            opacity: 0.2;
+        }
+
+        .folio {
+            position: absolute;
+            bottom: 32px;
+            right: 48px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 12px;
+            color: var(--tinker-teal);
+            letter-spacing: 1px;
+        }
+
+        .page-header {
+            padding: 48px 48px 24px 64px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            position: relative;
+            border-bottom: 2px solid var(--cloud-gray);
+            margin: 0 24px;
+        }
+
+        .header-brand {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 16px;
+            color: var(--tinker-teal);
+            letter-spacing: 0.5px;
+        }
+
+        .header-doc {
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 9px;
+            color: var(--deep-navy);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .content-area {
+            padding: 24px 64px 40px 64px;
+            flex-grow: 1;
+            position: relative;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            color: var(--deep-navy);
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+        
+        h1 { font-family: 'Fredoka', sans-serif; font-size: 32px; line-height: 1.15; color: var(--tinker-teal); }
+        h2 { font-family: 'Fredoka', sans-serif; font-size: 22px; margin-bottom: 20px; color: var(--deep-navy); border-bottom: 2px solid var(--tinker-teal); padding-bottom: 8px; display: inline-block; }
+        h3 { font-family: 'Nunito Sans', sans-serif; font-size: 15px; font-weight: 700; color: var(--spark-orange); margin-top: 24px; text-transform: uppercase; letter-spacing: 0.5px;}
+        h4 { font-family: 'Nunito Sans', sans-serif; font-size: 12px; font-weight: 700; color: var(--tinker-teal); margin-top: 16px; margin-bottom: 4px; }
+
+        p, li {
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 10.5px;
+            line-height: 1.6;
+            font-weight: 400;
+            margin-bottom: 12px;
+        }
+
+        ul, ol {
+            margin-bottom: 16px;
+            padding-left: 20px;
+        }
+
+        strong {
+            font-weight: 700;
+            color: var(--deep-navy);
+        }
+
+        blockquote {
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--tinker-teal);
+            border-left: 4px solid var(--idea-gold);
+            padding-left: 16px;
+            margin: 20px 0;
+            background: var(--soft-cream);
+            padding: 16px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* Layout Utilities */
+        .col-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .icon-text {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .icon-text i {
+            color: var(--spark-orange);
+            font-size: 20px;
+            margin-top: 2px;
+        }
+
+        /* Matrix Tables */
+        .matrix-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 24px;
+            font-size: 9.5px;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .matrix-table th {
+            background-color: var(--deep-navy);
+            color: #FFFFFF;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 10px 12px;
+            text-align: left;
+            letter-spacing: 0.5px;
+            font-size: 9px;
+        }
+
+        .matrix-table td {
+            border-top: 1px solid var(--border-light);
+            padding: 10px 12px;
+            line-height: 1.5;
+            background-color: #FFFFFF;
+            vertical-align: top;
+        }
+        
+        .matrix-table tr:not(:last-child) td {
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .matrix-table td:first-child {
+            font-weight: 700;
+            color: var(--tinker-teal);
+            width: 25%;
+        }
+
+        /* Color Grid */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+            margin-bottom: 24px;
+        }
+
+        .color-block {
+            display: flex;
+            height: 70px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            background: #FFFFFF;
+        }
+
+        .color-swatch { width: 40%; height: 100%; }
+        .color-details {
+            width: 60%;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .color-name {
+            font-weight: 700;
+            font-size: 11px;
+            color: var(--deep-navy);
+            margin-bottom: 4px;
+        }
+
+        .color-codes {
+            font-size: 8.5px;
+            color: var(--charcoal);
+            font-family: monospace;
+        }
+
+        /* Type Specimen */
+        .type-specimen {
+            margin-bottom: 16px;
+            padding: 16px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+        }
+
+        /* Cover Page */
+        .cover-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 64px;
+            background: linear-gradient(135deg, var(--warm-white) 0%, var(--soft-cream) 100%);
+        }
+
+        .cover-logo {
+            max-width: 180px;
+            margin-bottom: 40px;
+            filter: drop-shadow(0 10px 20px rgba(27, 42, 74, 0.1));
+        }
+
+        .cover-meta {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: var(--charcoal);
+            text-transform: uppercase;
+            margin-top: auto;
+            border-top: 2px solid var(--tinker-teal);
+            padding-top: 20px;
+            width: 80%;
+        }
+
+        .do-not { color: var(--story-coral); font-weight: 700; }
+        .do { color: var(--leaf-green); font-weight: 700; }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <button class="btn-download" onclick="generatePDF()">
+            Export TTKC Brand Bible (14 Pages)
+        </button>
+    </div>
+
+    <!-- PAGE 01: COVER -->
+    <div class="page cover-page">
+        <div class="border-frame"></div>
+        <img src="https://i.ibb.co/0VV6TShY/logo-tnt-portrait.png" alt="Think & Tinker Logo" class="cover-logo">
+        
+        <h1 style="color: var(--deep-navy); font-size: 28px; margin-bottom: 10px;">BRAND ARCHITECTURE <br>& IDENTITY SYSTEM</h1>
+        <p style="font-family: 'Fredoka', sans-serif; font-size: 16px; color: var(--tinker-teal);">Building curious minds through play, creativity, and exploration.</p>
+        
+        <div style="margin-top: 60px; background: #FFFFFF; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); width: 60%;">
+            <p style="margin: 0; font-size: 12px;"><strong>Prepared by:</strong> JBS Praxis</p>
+            <p style="margin: 4px 0 0 0; font-size: 12px;"><strong>Lead Consultant:</strong> Tom-Blake Forghab</p>
+        </div>
+
+        <div class="cover-meta">
+            MAY 2026 — VERSION 1.0<br>
+            <span style="color: var(--story-coral);">CONFIDENTIAL</span>
+        </div>
+        <div class="folio">PAGE 01</div>
+    </div>
+
+    <!-- PAGE 02: STORY & MANIFESTO -->
+    <div class="page">
+        <div class="border-frame"></div>
+        <div class="page-header">
+            <div class="header-brand">THINK & TINKER</div>
+            <div class="header-doc">1. BRAND STORY & MANIFESTO</div>
+        </div>
+        <div class="content-area">
+            <h2>1. BRAND STORY & MANIFESTO</h2>
+            
+            <h3>1.1 The Origin Story</h3>
+            <div class="col-2">
+                <div>
+                    <p>Think & Tinker was born from a deeply personal conviction: that every child deserves more than rote learning. Founded by Janeth Joseph, an educator with years of frontline experience in Lagos classrooms, Think & Tinker emerged from the gap between what children need and what the traditional system offers.</p>
+                    <p>Janeth saw children who were brilliant but bored, curious but constrained, creative but confined to textbooks that never asked them to wonder.</p>
+                    <p>She started small. A spiral-bound consult booklet for a single subject. A home lesson for one child who needed extra care. A Saturday morning where kids could read, build, paint, and ask questions without being told to sit still.</p>
+                </div>
+                <div>
+                    <p>What began as a side passion alongside her teaching career grew into something the community began to rely on. Parents referred other parents. Schools asked for curriculum guidance. Teachers sought her out for training.</p>
+                    <p>Today, Think & Tinker operates across five interconnected pillars, each designed to nurture the whole child. From its base in Gbagada, Lagos, the brand serves children aged 1 to 14 and their families, offering a complete educational support ecosystem that bridges what happens in school with what should happen everywhere else.</p>
+                </div>
+            </div>
+
+            <h3>1.2 The Brand Manifesto</h3>
+            <blockquote>“Every child is a thinker. Every child is a tinker. Every child can shine.”</blockquote>
+            <p>We believe learning should feel like play, and play should teach you something. We believe that a child who reads for joy will read for life. That a child who builds with their hands will one day build the future. That the best education does not happen in silence but in the mess of curiosity, in the noise of discovery, in the wonder of getting it wrong and trying again.</p>
+            <p>We exist to give every child in Lagos and beyond the tools, the confidence, and the space to think critically, create boldly, and explore fearlessly. We are not just a tutoring service. We are not just a bookstore. We are not just a Saturday club. We are a movement that places the child at the centre of their own learning journey.</p>
+            <p>We partner with parents who want more for their children. We equip teachers who want to teach better. We advise schools that want to be more than exam factories. And we build resources that make learning personal, practical, and permanent.</p>
+            <p style="text-align: center; font-family: 'Fredoka', sans-serif; font-size: 16px; color: var(--tinker-teal); margin-top: 30px;">
+                This is Think & Tinker. Where curiosity is the curriculum.
+            </p>
+        </div>
+        <div class="folio">PAGE 02</div>
+    </div>
+
+    <!-- PAGE 03: MISSION, VISION, VALUES -->
+    <div class="page">
+        <div class="border-frame"></div>
+        <div class="page-header">
+            <div class="header-brand">THINK & TINKER</div>
+            <div class="header-doc">1. CORE IDENTITY</div>
+        </div>
+        <div class="content-area">
+            <h3>1.3 Mission Statement</h3>
+            <p style="font-size: 12px; font-weight: 600; padding: 16px; background: var(--cloud-gray); border-radius: 8px; border-left: 4px solid var(--tinker-teal);">
+                To provide accessible, high-quality, and child-centred educational services that build critical thinking, creativity, and confidence in every learner aged 1 to 14, through personalised tutoring, structured academic resources, hands-on STEM and reading experiences, expert consultation, and a curated educational marketplace.
+            </p>
+
+            <h3>1.4 Vision Statement</h3>
+            <p style="font-size: 12px; font-weight: 600; padding: 16px; background: var(--cloud-gray); border-radius: 8px; border-left: 4px solid var(--spark-orange);">
+                To become the most trusted and comprehensive educational support ecosystem in Lagos and across Nigeria, setting the standard for how children learn outside the classroom, and proving that structured play, personalised attention, and expert guidance can transform educational outcomes at scale.
+            </p>
+
+            <h3>1.5 Core Values</h3>
+            <div class="col-2" style="margin-top: 16px;">
+                <div class="icon-text">
+                    <i class="ph-fill ph-question"></i>
+                    <div>
+                        <h4>Curiosity First</h4>
+                        <p>We design every experience to spark questions, not just deliver answers. A child who asks why will always outlearn a child who only memorises what.</p>
+                    </div>
+                </div>
+                <div class="icon-text">
+                    <i class="ph-fill ph-users-three"></i>
+                    <div>
+                        <h4>Whole-Child Development</h4>
+                        <p>Academic excellence is only one dimension. We nurture character, confidence, social skills, creativity, and emotional resilience alongside subject mastery.</p>
+                    </div>
+                </div>
+                <div class="icon-text">
+                    <i class="ph-fill ph-shield-check"></i>
+                    <div>
+                        <h4>Integrity & Trust</h4>
+                        <p>Parents entrust us with their most valuable treasure. We honour that trust with professionalism, transparency, and accountability in every interaction.</p>
+                    </div>
+                </div>
+                <div class="icon-text">
+                    <i class="ph-fill ph-puzzle-piece"></i>
+                    <div>
+                        <h4>Play-Based Rigour</h4>
+                        <p>We reject the false choice between fun and structure. Our programs are meticulously planned yet feel effortlessly engaging because children learn best when they are joyful.</p>
+                    </div>
+                </div>
+                <div class="icon-text">
+                    <i class="ph-fill ph-handshake"></i>
+                    <div>
+                        <h4>Community & Collaboration</h4>
+                        <p>Education is a village effort. We work alongside parents, teachers, and schools as partners, never as replacements.</p>
+                    </div>
+                </div>
+                <div class="icon-text">
+                    <i class="ph-fill ph-globe-hemisphere-west"></i>
+                    <div>
+                        <h4>Accessible Excellence</h4>
+                        <p>Premium quality does not mean exclusivity. We build systems and resources that can reach every child who needs them, starting with Lagos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="folio">PAGE 03</div>
+    </div>
+
+    <!-- PAGE 04: POSITIONING & VOICE -->
+    <div class="page">
+        <div class="border-frame"></div>
+        <div class="page-header">
+            <div class="header-brand">THINK & TINKER</div>
+            <div class="header-doc">POSITIONING & BRAND VOICE</div>
+        </div>
+        <div class="content-area">
+            <h3>1.6 Brand Positioning Statement</h3>
+            <p style="background: var(--soft-cream); padding: 20px; border-radius: 8px;">
+                <strong>For parents, guardians, teachers, and schools in Lagos</strong> who want a structured, trustworthy, and child-centred approach to education beyond the classroom, <strong>Think & Tinker</strong> is the comprehensive educational support ecosystem that delivers personalised tutoring, hands-on STEM and reading experiences, expert academic consulting, structured learning resources, and a curated educational marketplace, all under one trusted brand.<br><br>
+                Unlike fragmented tutoring services or generic bookshops, Think & Tinker combines professional rigour with playful pedagogy, giving every child aged 1 to 14 the space to think, create, explore, and shine.
+            </p>
+
+            <h2>2. BRAND VOICE & COPYWRITING</h2>
+            <h3>2.1 Voice Personality</h3>
+            <p>Think & Tinker speaks with the warmth of a favourite teacher and the confidence of an educational authority. The brand voice is simultaneously nurturing and knowledgeable, playful and professional. It never talks down to parents or children, but it always makes complex educational concepts feel approachable and actionable.</p>
+            
+            <h4>The Four Dimensions</h4>
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th>Dimension</th>
+                        <th>Application</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>WARM</td>
+                        <td>We speak like a trusted family friend, not a corporate entity. Every message should feel like it comes from someone who genuinely cares about the child.</td>
+                    </tr>
+                    <tr>
+                        <td>KNOWLEDGEABLE</td>
+                        <td>We demonstrate expertise without arrogance. We cite pedagogy when relevant, reference outcomes, and position ourselves as authorities parents can rely on.</td>
+                    </tr>
+                    <tr>
+                        <td>PLAYFUL</td>
+                        <td>We embrace the energy of childhood. Our language is vibrant, sometimes cheeky, always optimistic. We use metaphors of building, exploring, and discovering.</td>
+                    </tr>
+                    <tr>
+                        <td>EMPOWERING</td>
+                        <td>We give parents and children agency. Our language focuses on what the child can become, not what they lack. We celebrate progress, not perfection.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="folio">PAGE 04</div>
+    </div>
+
+    <!-- PAGE 05: TONE BY AUDIENCE -->
+    <div class="page">
+        <div class="border-frame"></div>
+        <div class="page-header">
+            <div class="header-brand">THINK & TINKER</div>
+            <div class="header-doc">2.2 TONE VARIATIONS</div>
+        </div>
+        <div class="content-area">
+            <h3>2.2 Tone Variations by Audience</h3>
+            
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th>Audience</th>
+                        <th>Tone & Objective</th>
+                        <th>Example Application</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Parents & Guardians</td>
+                        <td>
+                            <strong>Tone:</strong> Reassuring, professional, partnership-oriented.<br><br>
+                            Parents are making an investment in their child. They need to feel confident. Use language that acknowledges their role as the primary decision-maker and positions us as their expert partner.
+                        </td>
+                        <td>"Your child’s potential is already there. We simply build the bridge between where they are and where they’re going. With personalised session notes, transparent progress tracking, and a dedicated educator who knows your child by name, you’ll never wonder what’s happening in a Think & Tinker session."</td>
+                    </tr>
+                    <tr>
+                        <td>Teachers</td>
+                        <td>
+                            <strong>Tone:</strong> Collegial, practical, respectful.<br><br>
+                            Teachers are peers. Avoid any language that implies they are inadequate. Position Think & Tinker as a resource that makes their work easier and more effective, not a replacement.
+                        </td>
+                        <td>"We know the reality of a Lagos classroom. Large class sizes, limited resources, pressure to deliver results. Our consulting and curriculum tools are built by educators who have been in your shoes, designed to give you practical frameworks you can implement on Monday morning."</td>
+                    </tr>
+                    <tr>
+                        <td>Schools</td>
+                        <td>
+                            <strong>Tone:</strong> Strategic, results-oriented, collaborative.<br><br>
+                            Schools think in terms of institutional outcomes, reputation, and compliance. Use language that speaks to measurable improvement and competitive advantage.
+                        </td>
+                        <td>"A well-structured curriculum does not just improve test scores. It transforms your school’s reputation, reduces teacher turnover, and creates a learning culture that parents actively seek out. Think & Tinker’s consulting arm helps you build that from the ground up."</td>
+                    </tr>
+                    <tr>
+                        <td>Children</td>
+                        <td>
+                            <strong>Tone:</strong> Exciting, inclusive, encouraging.<br><br>
+                            Children should feel like Think & Tinker is their favourite place. Use short sentences, action verbs, vivid imagery, and inclusive language.
+                        </td>
+                        <td>"Ready to build something amazing? Grab your thinking cap and your tinker tools. Today, you’re the inventor, the storyteller, the explorer. Let’s go!"</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="folio">PAGE 05</div>
+    </div>
+
+    <!-- PAGE 06: MESSAGING & COPY RULES -->
+    <div class="page">
+        <div class="border-frame"></div>
+        <div class="page-header">
+            <div class="header-brand">THINK & TINKER</div>
+            <div class="header-doc">MESSAGING FRAMEWORK</div>
+        </div>
+        <div class="content-area">
+            <h3>2.3 Key Messaging Framework</h3>
+            <div style="text-align: center; margin: 30px 0;">
+                <span style="font-family: 'Fredoka', sans-serif; font-size: 14px; color: var(--charcoal); text-transform: uppercase;">Primary Tagline</span><br>
+                <span style="font-family: 'Fredoka', sans-serif; font-size: 36px; color: var(--tinker-teal);">Think. Tinker. Shine.</span>
+            </div>
+
+            <h4>Secondary Taglines (by Context)</h4>
+            <ul style="margin-bottom: 30px;">
+                <li><strong>General Brand:</strong> "Building curious minds through play, creativity, and exploration."</li>
+                <li><strong>Tutorials:</strong> "Every child can learn. Every child can shine."</li>
+                <li><strong>STEM & Reading Club:</strong> "Where stories, science, and imagination collide."</li>
+                <li><strong>Consulting:</strong> "Expert guidance for the educators who shape tomorrow."</li>
+                <li><strong>Bookstore:</strong> "The right resources. The right grade. The right results."</li>
+                <li><strong>Consult Booklets:</strong> "Structured learning, one topic at a time."</li>
+            </ul>
+
+            <h3>2.4 Copywriting Do’s and Don’ts</h3>
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th style="background-color: var(--leaf-green); width: 50%;">DO</th>
+                        <th style="background-color: var(--story-coral); width: 50%;">DON'T</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Use active, empowering verbs: build, explore, discover, create, shine</td>
+                        <td>Use passive or deficit language: struggling, failing, behind, weak</td>
+                    </tr>
+                    <tr>
+                        <td>Centre the child as the hero of their story</td>
+                        <td>Position Think & Tinker as a rescue service</td>
+                    </tr>
+                    <tr>
+                        <td>Acknowledge the parent’s role and intelligence</td>
+                        <td>Talk down to parents or imply they’re inadequate</td>
+                    </tr>
+                    <tr>
+                        <td>Be specific about outcomes and processes</td>
+                        <td>Make vague promises: “we’ll change your child’s life”</td>
+                    </tr>
+                    <tr>
+                        <td>Use Nigerian English naturally (e.g. “mummy”, “term”)</td>
+                        <td>Use American slang or culturally foreign references</td>
+                    </tr>
+                    <tr>
+                        <td>Celebrate small wins and incremental progress</td>
+                        <td>Overpromise or guarantee specific grades/results</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="folio">PAGE 06</div>
+    </div>
+
+    <!-- PAGE 07: PILLARS 1 & 2 -->
+    <div class="page">
+        <div class="border-frame"></div>
+        <div class="page-header">
+            <div class="header-brand">THINK & TINKER</div>
+            <div class="header-doc">3. PRODUCT ARCHITECTURE</div>
+        </div>
+        <div class="content-area">
+            <h2>3. PRODUCT & SERVICE ARCHITECTURE</h2>
+            <p>Think & Tinker’s ecosystem is organised into five interconnected pillars. Each pillar serves a distinct purpose but shares the brand’s common mission. Together, they form a complete educational support system that no single competitor in the Lagos market currently offers under one roof.</p>
+
+            <div style="background: var(--soft-cream); padding: 20px; border-radius: 8px; margin-top: 24px;">
+                <h3>3.1 Pillar One — Consult Booklets</h3>
+                <p><strong>What It Is:</strong> Spiral-bound, subject-specific academic workbooks authored by Janeth Joseph. Each booklet is a self-contained learning companion that walks a child through an entire subject’s curriculum for their grade level, combining scheme-of-work mapping with structured question papers.</p>
+                <h4>Structure of Each Booklet:</h4>
+                <ul style="margin-bottom: 12px;">
+                    <li><strong>Cover Page:</strong> Subject name, grade level, Think & Tinker branding.</li>
+                    <li><strong>Purpose Page:</strong> Why the child needs this consult booklet.</li>
+                    <li><strong>Scheme of Work:</strong> Complete topic list aligned to the curriculum.</li>
+                    <li><strong>Author Information:</strong> Janeth Joseph’s credentials.</li>
+                    <li><strong>Introduction:</strong> How to use the booklet effectively.</li>
+                    <li><strong>Question Papers:</strong> Topic-by-topic exercises.</li>
+                </ul>
+                <p><strong>Target Audience:</strong> Parents seeking at-home support; tutors needing resources; schools.</p>
+                <p><strong>Revenue Model:</strong> Direct sale. Can be bundled with tutorial packages.</p>
+            </div>
+
+            <div style="background: #FFFFFF; border: 1px solid var(--border-light); padding: 20px; border-radius: 8px; margin-top: 24px;">
+                <h3>3.2 Pillar Two — Tutorials (Home Lessons)</h3>
+                <p><strong>What It Is:</strong> Personalised, one-on-one or small-group tutoring sessions delivered at the child’s home or online. Tailored to specific needs, learning pace, and curriculum.</p>
+                <h4>Service Flow:</h4>
+                <ol style="margin-bottom: 12px;">
+                    <li>Initial consultation to assess needs and expectations.</li>
+                    <li>Parent completes admission form and signs contract.</li>
+                    <li>Invoice generation and payment processing.</li>
+                    <li>Scheduled sessions with post-session voice-transcribed notes uploaded to portal.</li>
+                    <li>Continuous progress tracking visible to parents via dashboard.</li>
+                </ol>
+                <p><strong>Differentiator:</strong> Session documentation via voice recording and transcription. This level of transparency is unmatched in the Lagos tutoring market.</p>
+            </div>
+        </div>
+        <div class="folio">PAGE 07</div>
+    </div>
+
+    <!-- PAGE 08: PILLAR 3 (STEM) -->
+    <div class="page">
+        <div class="border-frame"></div>
+        <div class="page-header">
+            <div class="header-brand">THINK & TINKER</div>
+            <div class="header-doc">PRODUCT ARCHITECTURE</div>
+        </div>
+        <div class="content-area">
+            <h3>3.3 Pillar Three — STEM & Reading Club</h3>
+            <p><strong>What It Is:</strong> A Saturday enrichment programme running from 9:30 AM to 2:00 PM for children aged 1 to 14. The club combines outdoor play, group reading, creative arts and crafts, STEM experiments, and character-building activities in a structured yet playful format.</p>
+            
+            <h4>Core Activities:</h4>
+            <div class="col-2">
+                <ul style="margin-bottom: 0;">
+                    <li>STEM (Science, Tech, Engineering & Maths) experiments</li>
+                    <li>Creative Art & Craft (sculpture, tie-and-dye, canvas)</li>
+                    <li>Group reading sessions with recount crafts</li>
+                    <li>Mystery Basket: Surprise activity drawn randomly</li>
+                </ul>
+                <ul style="margin-bottom: 0;">
+                    <li>Show & Tell, etiquette training, author spotlight</li>
+                    <li>Young Authors Program & Literary Character Parade</li>
+                    <li>Mental Maths & Quizzes</li>
+                    <li>Life skills: gardening, cooking, culture and values</li>
+                </ul>
+            </div>
+
+            <h4 style="margin-top: 30px;">Membership Plans</h4>
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th>Plan</th>
+                        <th>Duration / Details</th>
+                        <th>Price (₦)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1 Weekend</td>
+                        <td>Trial access for one Saturday session</td>
+                        <td style="font-family: monospace; font-size: 11px;">8,000</td>
+                    </tr>
+                    <tr>
+                        <td>1 Month</td>
+                        <td>Access to 4 consecutive Saturdays</td>
+                        <td style="font-family: monospace; font-size: 11px;">30,000</td>
+                    </tr>
+                    <tr>
+                        <td>3 Months</td>
+                        <td>Full term access (12 Saturdays)</td>
+                        <td style="font-family: monospace; font-size: 11px;">85,000</td>
+                    </tr>
+                    <tr>
+                        <td>6 Months</td>
+                        <td>Half-year access (24 Saturdays)</td>
+                        <td style="font-family: monospace; font-size: 11px;">165,000</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div style="background: var(--cloud-gray); border-left: 4px solid var(--idea-gold); padding: 16px; border-radius: 0 8px 8px 0; margin-top: 30px;">
+                <p style="margin:0; font-style: italic; color: var(--charcoal);">"We reject the false choice between fun and structure. Our programs are meticulously planned yet feel effortlessly engaging because children learn best when they are joyful."</p>
+            </div>
+        </div>
+        <div class="folio">PAGE 08</div>
+    </div>
+
+    <!-- PAGE 09: PILLARS 4 & 5 -->
+    <div class="page">
+        <div class="border-frame"></div>
+        <div class="page-header">
+            <div class="header-brand">THINK & TINKER</div>
+            <div class="header-doc">PRODUCT ARCHITECTURE</div>
+        </div>
+        <div class="content-area">
+            <h3>3.4 Pillar Four — Educational Consulting</h3>
+            <p><strong>What It Is:</strong> Expert advisory services for parents, teachers, and school administrators. This pillar positions Janeth Joseph as a subject-matter authority in child education, curriculum design, and teaching methodology.</p>
+            
+            <h4>Service Categories:</h4>
+            <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 30px;">
+                <div style="display: flex; gap: 12px; align-items: flex-start;">
+                    <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--tinker-teal); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">1</div>
+                    <div>
+                        <strong style="color: var(--tinker-teal);">Parent Consultation:</strong> 
+                        <p style="margin-top: 4px;">One-on-one guidance on learning strategies, school selection, and home support techniques.</p>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 12px; align-items: flex-start;">
+                    <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--spark-orange); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">2</div>
+                    <div>
+                        <strong style="color: var(--spark-orange);">Teacher Training:</strong> 
+                        <p style="margin-top: 4px;">Practical workshops on modern teaching methodologies, classroom management, and curriculum delivery.</p>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 12px; align-items: flex-start;">
+                    <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--deep-navy); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">3</div>
+                    <div>
+                        <strong style="color: var(--deep-navy);">School Curriculum Structuring:</strong> 
+                        <p style="margin-top: 4px;">End-to-end curriculum design, alignment with national standards, and teacher onboarding support.</p>
+                    </div>
+                </div>
+            </div>
+
+            <hr style="border: 0; height: 1px; background: var(--border-light); margin: 30px 0;">
+
+            <h3>3.5 Pillar Five — Online Bookstore</h3>
+            <p><strong>What It Is:</strong> A curated e-commerce platform for educational materials, organised by grade level. Parents can purchase textbooks, exercise books, consult booklets, stationery, and supplementary learning resources in one place.</p>
+            
+            <h4>Product Categories:</h4>
+            <ul style="column-count: 2; column-gap: 30px;">
+                <li>Grade-specific textbook bundles</li>
+                <li>Branded TTKC exercise books</li>
+                <li>Consult booklets</li>
+                <li>Stationery packs</li>
+                <li>Educational toys</li>
+                <li>Recommended reading collections</li>
+            </ul>
+        </div>
+        <div class="folio">PAGE 09</div>
+    </div>
+
+    <!-- PAGE 10: TYPOGRAPHY -->
+    <div class="page">
+        <div class="border-frame"></div>
+        <div class="page-header">
+            <div class="header-brand">THINK & TINKER</div>
+            <div class="header-doc">4. TYPOGRAPHY ARCHITECTURE</div>
+        </div>
+        <div class="content-area">
+            <h2>4. TYPOGRAPHY ARCHITECTURE</h2>
+            <p>Typography balances two competing needs: warmth/playfulness (for children) and professionalism/credibility (for institutional trust).</p>
+
+            <div class="type-specimen">
+                <div style="font-family: 'Nunito Sans', sans-serif; font-weight: 700; font-size: 20px; color: var(--tinker-teal);">Nunito Sans</div>
+                <div style="font-size: 9px; font-weight: 700; color: var(--spark-orange); text-transform: uppercase; margin-bottom: 8px;">Primary Typeface (UI & Body)</div>
+                <p style="margin: 0;">A clean, geometric sans-serif with rounded terminals. Approachable without sacrificing readability. Performs excellently on screen and print.</p>
+            </div>
+
+            <div class="type-specimen">
+                <div style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 20px; color: var(--deep-navy);">Fredoka One</div>
+                <div style="font-size: 9px; font-weight: 700; color: var(--spark-orange); text-transform: uppercase; margin-bottom: 8px;">Secondary Typeface (Display)</div>
+                <p style="margin: 0;">A rounded, bold display typeface capturing childhood energy. Reserved for hero headlines, children-facing materials, and the primary tagline.</p>
+            </div>
+
+            <div class="type-specimen">
+                <div style="font-family: 'Georgia', serif; font-style: italic; font-size: 20px; color: var(--charcoal);">Georgia</div>
+                <div style="font-size: 9px; font-weight: 700; color: var(--spark-orange); text-transform: uppercase; margin-bottom: 8px;">Accent Typeface (Serif)</div>
+                <p style="margin: 0;">Provides classical, editorial counterpoint. Used for quotations, testimonials, and formal documents (contracts, invoices).</p>
+            </div>
+
+            <h3>4.4 Type Scale & Hierarchy</h3>
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th>Element</th>
+                        <th>Font</th>
+                        <th>Weight</th>
+                        <th>Size</th>
+                        <th>Line Height</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Display / Hero</td><td>Fredoka</td><td>Regular 600</td><td>48–72px</td><td>1.1</td></tr>
+                    <tr><td>H1 / Page Title</td><td>Nunito Sans</td><td>Bold 700</td><td>32–40px</td><td>1.2</td></tr>
+                    <tr><td>H2 / Section Title</td><td>Nunito Sans</td><td>SemiBold 600</td><td>24–28px</td><td>1.3</td></tr>
+                    <tr><td>H3 / Subsection</td><td>Nunito Sans</td><td>SemiBold 600</td><td>20–22px</td><td>1.3</td></tr>
+                    <tr><td>Body Large</td><td>Nunito Sans</td><td>Regular 400</td><td>18px</td><td>1.6</td></tr>
+                    <tr><td>Body Regular</td><td>Nunito Sans</td><td>Regular 400</td><td>16px</td><td>1.6</td></tr>
+                    <tr><td>Body Small / Caption</td><td>Nunito Sans</td><td>Regular 400</td><td>14px</td><td>1.5</td></tr>
+                    <tr><td>Button / Label</td><td>Nunito Sans</td><td>SemiBold 600</td><td>14–16px</td><td>1.0</td></tr>
+                    <tr><td>Quote / Testimonial</td><td>Georgia</td><td>Italic</td><td>18–20px</td><td>1.7</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="folio">PAGE 10</div>
+    </div>
+
+    <!-- PAGE 11: COLOURS -->
+    <div class="page">
+        <div class="border-frame"></div>
+        <div class="page-header">
+            <div class="header-brand">THINK & TINKER</div>
+            <div class="header-doc">5. COLOUR ARCHITECTURE</div>
+        </div>
+        <div class="content-area">
+            <h2>5. COLOUR ARCHITECTURE</h2>
+            <p>Balances warmth and vibrancy with sophistication and clarity.</p>
+
+            <h4>5.1 Primary Palette</h4>
+            <div class="color-grid">
+                <div class="color-block">
+                    <div class="color-swatch" style="background-color: var(--tinker-teal);"></div>
+                    <div class="color-details">
+                        <div class="color-name">Tinker Teal</div>
+                        <div class="color-codes">HEX: #1AAFA0<br>Headers, buttons, links, logo text.</div>
+                    </div>
+                </div>
+                <div class="color-block">
+                    <div class="color-swatch" style="background-color: var(--spark-orange);"></div>
+                    <div class="color-details">
+                        <div class="color-name">Spark Orange</div>
+                        <div class="color-codes">HEX: #F47B20<br>Accents, hover states, pricing.</div>
+                    </div>
+                </div>
+                <div class="color-block">
+                    <div class="color-swatch" style="background-color: var(--idea-gold);"></div>
+                    <div class="color-details">
+                        <div class="color-name">Idea Gold</div>
+                        <div class="color-codes">HEX: #FDB813<br>Ratings, badges, energy accents.</div>
+                    </div>
+                </div>
+            </div>
+
+            <h4>5.2 Secondary Palette</h4>
+            <div class="color-grid" style="margin-bottom: 12px;">
+                <div class="color-block">
+                    <div class="color-swatch" style="background-color: var(--deep-navy);"></div>
+                    <div class="color-details">
+                        <div class="color-name">Deep Navy</div>
+                        <div class="color-codes">HEX: #1B2A4A<br>Formal text, corporate docs.</div>
+                    </div>
+                </div>
+                <div class="color-block">
+                    <div class="color-swatch" style="background-color: var(--story-coral);"></div>
+                    <div class="color-details">
+                        <div class="color-name">Story Coral</div>
+                        <div class="color-codes">HEX: #E8614D<br>Errors, urgent notices, signatures.</div>
+                    </div>
+                </div>
+                <div class="color-block">
+                    <div class="color-swatch" style="background-color: var(--leaf-green);"></div>
+                    <div class="color-details">
+                        <div class="color-name">Leaf Green</div>
+                        <div class="color-codes">HEX: #27AE60<br>Success states, STEM activities.</div>
+                    </div>
+                </div>
+                <div class="color-block">
+                    <div class="color-swatch" style="background-color: var(--sky-blue);"></div>
+                    <div class="color-details">
+                        <div class="color-name">Sky Blue</div>
+                        <div class="color-codes">HEX: #3498DB<br>Info, teacher portal accent.</div>
+                    </div>
+                </div>
+            </div>
+
+            <h4>5.5 Colour Application by Portal</h4>
+            <table class="matrix-table" style="margin-top: 10px;">
+                <thead>
+                    <tr><th>Context</th><th>Primary</th><th>Accent</th><th>Background</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Parent Portal</td><td>Tinker Teal</td><td>Spark Orange</td><td>Warm White</td></tr>
+                    <tr><td>Teacher Portal</td><td>Deep Navy</td><td>Sky Blue</td><td>Cloud Gray</td></tr>
+                    <tr><td>School Portal</td><td>Tinker Teal</td><td>Leaf Green</td><td>Warm White</td></tr>
+                    <tr><td>Kids Club</td><td>Spark Orange</td><td>Idea Gold</td><td>Soft Cream</td></tr>
+                    <tr><td>Bookstore</td><td>Deep Navy</td><td>Tinker Teal</td><td>Warm White</td></tr>
+                    <tr><td>Admin/ERP</td><td>Charcoal</td><td>Tinker Teal</td><td>Cloud Gray</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="folio">PAGE 11</div>
+    </div>
+
+    <!-- PAGE 12: LOGO SYSTEM -->
+    <div class="page">
+        <div class="border-frame"></div>
+        <div class="page-header">
+            <div class="header-brand">THINK & TINKER</div>
+            <div class="header-doc">6. LOGO SYSTEM</div>
+        </div>
+        <div class="content-area">
+            <h2>6. LOGO SYSTEM</h2>
+            
+            <h3>6.1 The Combination Mark</h3>
+            <p>The logo is a highly structured combination mark featuring a central symbol (the <strong>Secure Idea Cluster</strong>) positioned above a multi-tiered typography layout.</p>
+            
+            <h4>Symbol Functional Zones:</h4>
+            <ul>
+                <li><strong>Left Hemisphere (Teal Gear):</strong> Represents STEM, engineering, and critical thinking mechanics.</li>
+                <li><strong>Right Hemisphere (Orange & Gold Book):</strong> Represents literacy, reading, creativity.</li>
+                <li><strong>The Core (Navy Shield & Keyhole):</strong> Anchoring the center is a deep navy shield with a keyhole. Visually communicates a zero-trust security vibe—assuring parents of safety and structure—while unlocking potential.</li>
+                <li><strong>The Crown (Gold Rays):</strong> Five rays representing the "shine" and energy of discovery.</li>
+            </ul>
+
+            <h4>Typography Hierarchy:</h4>
+            <ul>
+                <li><strong>Primary Wordmark:</strong> "THINK" in Tinker Teal, "&" in Deep Navy, "TINKER" in Spark Orange.</li>
+                <li><strong>Operational Tagline:</strong> "LEARN. BUILD. SECURE. LEAD." framed by horizontal dividers.</li>
+                <li><strong>Sector Badge:</strong> Solid Deep Navy pill badge containing "EDUCATIONAL FRANCHISE" in white, establishing corporate scale and authority.</li>
+            </ul>
+
+            <h3>6.2 Logo Variants</h3>
+            <table class="matrix-table">
+                <tbody>
+                    <tr><td>Full Logo (Stacked)</td><td>The complete Idea Cluster above wordmark, tagline, and sector badge. For letterheads, hero headers, architectural signage.</td></tr>
+                    <tr><td>Compact Logo</td><td>"THINK & TINKER" text without tagline/badge. Used when vertical space is constrained.</td></tr>
+                    <tr><td>Icon Only</td><td>The Secure Lightbulb only. Favicons, app icons, UI loading states.</td></tr>
+                    <tr><td>TTKC Watermark</td><td>Faded, low-opacity version of the central shield/keyhole for official docs.</td></tr>
+                </tbody>
+            </table>
+
+            <h3>6.3 Spatial Governance</h3>
+            <p><strong>Clear Space:</strong> Minimum unobstructed area equals the height of the Deep Navy "&" symbol (1X).<br>
+            <strong>Minimum Size:</strong> Full stacked logo never smaller than 40mm wide (print) or 150px (screen).<br>
+            <strong>Misuse:</strong> <span class="do-not">Strictly prohibited:</span> stretching, altering gear/book/shield arrangement, unauthorized colors, drop shadows, removing the badge in formal contexts.</p>
+        </div>
+        <div class="folio">PAGE 12</div>
+    </div>
+
+    <!-- PAGE 13: UI GRID & DATA VIZ -->
+    <div class="page">
+        <div class="border-frame"></div>
+        <div class="page-header">
+            <div class="header-brand">THINK & TINKER</div>
+            <div class="header-doc">7 & 8. UI GRID AND DATA VIZ</div>
+        </div>
+        <div class="content-area">
+            <div class="col-2">
+                <div>
+                    <h2>7. MATH GRID & UI</h2>
+                    <p><strong>7.1 The 8px Base Grid:</strong> All spatial decisions are built on an 8px base unit (8, 16, 24, 32, 40, 48, 56, 64). Creates visual harmony and ensures consistency across every screen and component. Half-grid (4px) permitted for fine-tuning.</p>
+                    <p><strong>7.2 Layout Grid:</strong></p>
+                    <ul style="margin-bottom: 12px; padding-left: 14px;">
+                        <li><strong>Desktop (1280px+):</strong> 12-column grid, 32px gutters.</li>
+                        <li><strong>Tablet:</strong> 8-column grid, 24px gutters.</li>
+                        <li><strong>Mobile:</strong> 4-column grid, 16px gutters.</li>
+                    </ul>
+                    
+                    <h4>7.3 Component Sizing</h4>
+                    <table class="matrix-table" style="font-size: 8px;">
+                        <thead><tr><th>Component</th><th>Desktop</th><th>Mobile</th></tr></thead>
+                        <tbody>
+                            <tr><td>Top Nav</td><td>64px height</td><td>56px height</td></tr>
+                            <tr><td>Primary Btn</td><td>48px (h), 16px pad</td><td>48px, full-width</td></tr>
+                            <tr><td>Inputs</td><td>48px (h), 16px pad</td><td>48px, full-width</td></tr>
+                            <tr><td>Cards</td><td>min 280px wide</td><td>full-width</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div>
+                    <h2>8. DATA VISUALIZATION</h2>
+                    <p><strong>8.1 Icon System:</strong> Custom icon set built on a 24px grid with 2px stroke. Phosphor Icons library (rounded variant) is the base set.</p>
+                    <ul style="margin-bottom: 12px; padding-left: 14px;">
+                        <li><strong>Default:</strong> Charcoal (#2C3E50)</li>
+                        <li><strong>Active:</strong> Tinker Teal (#1AAFA0)</li>
+                        <li><strong>Destructive:</strong> Story Coral (#E8614D)</li>
+                        <li><strong>Success:</strong> Leaf Green (#27AE60)</li>
+                    </ul>
+
+                    <p><strong>8.2 Data Visualization:</strong> Parent portal and ERP charts adhere to the brand palette.</p>
+                    <p><strong>Chart Sequence:</strong> Tinker Teal → Spark Orange → Idea Gold → Deep Navy → Leaf Green → Sky Blue → Story Coral. Max 7 colors.</p>
+                    <p><strong>Progress:</strong> Avoid red/green binary pass/fail. Use spectrum from Idea Gold (in progress) to Tinker Teal (on track) to Leaf Green (mastered).</p>
+
+                    <p><strong>8.3 Illustration Style:</strong> Flat, vector-based style. Diverse characters actively engaged (building, experimenting). No drop shadows, warm and hand-crafted feel.</p>
+                </div>
+            </div>
+        </div>
+        <div class="folio">PAGE 13</div>
+    </div>
+
+    <!-- PAGE 14: PHOTOGRAPHY & APP -->
+    <div class="page">
+        <div class="border-frame"></div>
+        <div class="page-header">
+            <div class="header-brand">THINK & TINKER</div>
+            <div class="header-doc">9 & 10. VISUAL DIRECTION & APP</div>
+        </div>
+        <div class="content-area">
+            <h2>9. PHOTOGRAPHY & VISUAL DIRECTION</h2>
+            <p>Photography builds trust. Parents need to see real children in real learning environments.</p>
+            
+            <ul style="margin-bottom: 24px;">
+                <li><strong>Shoot at child level:</strong> Camera at eye height. Communicates respect.</li>
+                <li><strong>Capture action, not poses:</strong> Children reading, building, mixing. No lined-up group shots.</li>
+                <li><strong>Show the environment:</strong> Colourful, messy, creative space. STEM equipment visible.</li>
+                <li><strong>Diverse representation:</strong> Reflect Lagos’s diversity across ethnicity and ability.</li>
+                <li><strong>Natural lighting:</strong> Avoid harsh flash. Warmth via golden hour or well-lit rooms.</li>
+            </ul>
+            <p><strong>Video Direction:</strong> Short-form (15-60s) for individual moments (mystery basket reveal). Long-form (2-5m) for recaps, parent testimonials, and Janeth's educational tips.</p>
+
+            <h2>10. BRAND APPLICATION GUIDELINES</h2>
+            <div class="col-2">
+                <div>
+                    <h4>10.1 Stationery System</h4>
+                    <p>Letterhead features TTKC text mark top left, Idea Cluster top right, RC number beneath logo, teal footer bar, and light peach TTKC watermark at bottom right.</p>
+                    
+                    <h4>10.2 Exercise Book Design</h4>
+                    <p>Idea Cluster logo centred at top, "KIDS ACADEMY" wordmark below. Organic botanical illustrations (secondary palette) on a soft cream background.</p>
+                </div>
+                <div>
+                    <h4>10.3 Digital Templates</h4>
+                    <p>Templates lock logo, typography, and color specs for IG, WhatsApp, session notes, and parent reports.</p>
+                    
+                    <h4>10.4 Signage & Environmental</h4>
+                    <p>Exterior signs use full stacked logo on white. Interior decals feature brand manifesto. Wayfinding uses the approved 24px icon system.</p>
+                </div>
+            </div>
+
+            <div style="background-color: var(--tinker-teal); color: #FFFFFF; padding: 30px; margin-top: 40px; text-align: center; border-radius: 12px;">
+                <h1 style="color: #FFFFFF; font-size: 40px; margin-bottom: 0;">Think. Tinker. Shine.</h1>
+            </div>
+        </div>
+        <div class="folio">PAGE 14</div>
+    </div>
+
+    <script>
+        window.jsPDF = window.jspdf.jsPDF;
+
+        function generatePDF() {
+            const btn = document.querySelector('.btn-download');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'GENERATING TTKC BIBLE...';
+            btn.style.opacity = '0.7';
+            btn.disabled = true;
+
+            const pages = document.querySelectorAll('.page');
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pageWidth = 210;
+            
+            const processPage = (index) => {
+                if (index >= pages.length) {
+                    pdf.save('TTKC_Brand_Architecture.pdf');
+                    btn.innerHTML = originalText;
+                    btn.style.opacity = '1';
+                    btn.disabled = false;
+                    return;
+                }
+
+                html2canvas(pages[index], {
+                    scale: 3,
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: '#FFF9F0' 
+                }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/jpeg', 0.98);
+                    const imgHeight = canvas.height * pageWidth / canvas.width;
+                    
+                    if (index > 0) pdf.addPage();
+                    pdf.addImage(imgData, 'JPEG', 0, 0, pageWidth, imgHeight);
+                    
+                    processPage(index + 1);
+                });
+            };
+
+            setTimeout(() => processPage(0), 100);
+        }
+    </script>
+</body>
+</html>

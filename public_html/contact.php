@@ -1,5 +1,6 @@
 <?php $pageTitle='Contact Us'; require_once __DIR__.'/includes/config.php'; include __DIR__.'/templates/header.php'; ?>
-<section class="section" style="background:linear-gradient(135deg,var(--tinker-teal),#138D80);color:#FFF;padding:60px 0;text-align:center;">
+<section class="section" style="background:var(--glass-bg-dark);backdrop-filter:var(--blur-lg);color:#FFF;padding:60px 0;text-align:center;position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,var(--tinker-teal),#138D80);z-index:-1;"></div>
     <div class="container"><h1 style="color:#FFF;">Get in Touch</h1><p style="opacity:.8;">We'd love to hear from you. Reach out anytime.</p></div>
 </section>
 <section class="section"><div class="container" style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;">
@@ -18,9 +19,9 @@
     </div>
     <div>
         <h2 class="mb-3">Other Ways to Reach Us</h2>
-        <div class="card mb-2"><div class="card-body"><h3 style="font-size:1rem;margin-bottom:8px;">📍 Visit Us</h3><p style="font-size:.9375rem;color:#666;"><?= htmlspecialchars(getSetting('business_address','Lagos, Nigeria')) ?></p></div></div>
-        <div class="card mb-2"><div class="card-body"><h3 style="font-size:1rem;margin-bottom:8px;">📞 Call Us</h3><p style="font-size:.9375rem;"><a href="tel:<?= htmlspecialchars(getSetting('business_phone','')) ?>"><?= htmlspecialchars(getSetting('business_phone','')) ?></a></p></div></div>
-        <div class="card mb-2"><div class="card-body"><h3 style="font-size:1rem;margin-bottom:8px;">✉️ Email</h3><p style="font-size:.9375rem;"><a href="mailto:<?= htmlspecialchars(getSetting('business_email','')) ?>"><?= htmlspecialchars(getSetting('business_email','')) ?></a></p></div></div>
+        <div class="card mb-2"><div class="card-body"><h3 style="font-size:1rem;margin-bottom:8px;color:var(--deep-navy);">📍 Visit Us</h3><p style="font-size:.9375rem;color:#666;"><?= htmlspecialchars(getSetting('business_address','Lagos, Nigeria')) ?></p></div></div>
+        <div class="card mb-2"><div class="card-body"><h3 style="font-size:1rem;margin-bottom:8px;color:var(--deep-navy);">📞 Call Us</h3><p style="font-size:.9375rem;"><a href="tel:<?= htmlspecialchars(getSetting('business_phone','')) ?>"><?= htmlspecialchars(getSetting('business_phone','')) ?></a></p></div></div>
+        <div class="card mb-2"><div class="card-body"><h3 style="font-size:1rem;margin-bottom:8px;color:var(--deep-navy);">✉️ Email</h3><p style="font-size:.9375rem;"><a href="mailto:<?= htmlspecialchars(getSetting('business_email','')) ?>"><?= htmlspecialchars(getSetting('business_email','')) ?></a></p></div></div>
         <a href="<?= whatsappLink("Hello! I'd like to learn more about Think & Tinker.") ?>" target="_blank" class="btn btn-success btn-block btn-lg" style="margin-top:12px;">💬 Chat on WhatsApp</a>
     </div>
 </div></section>

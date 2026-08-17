@@ -1,0 +1,33 @@
+# ============================================
+# THINK & TINKER — ENVIRONMENT CONFIGURATION
+# ============================================
+# Copy this file to .env and fill in your values.
+# NEVER commit .env to version control.
+#
+# This file contains ONLY server/environment
+# credentials. All business settings (prices,
+# address, bank accounts, services) are managed
+# from the Hub → Business Setup module and
+# stored in the database.
+# ============================================
+
+# --- APP ---
+APP_URL=https://think-tinker.com
+HUB_URL=https://hub.think-tinker.com
+APP_ENV=production
+APP_DEBUG=false
+
+# --- DATABASE ---
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=thinktinker_db
+DB_USER=thinktinker_user
+DB_PASS=
+DB_CHARSET=utf8mb4
+
+# --- SMTP EMAIL ---
+SMTP_HOST=mail.think-tinker.com
+SMTP_PORT=465
+SMTP_ENCRYPTION=ssl
+SMTP_USER=no-reply@think-tinker.com
+SMTP_PASS=

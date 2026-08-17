@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Think & Tinker Digital Ecosystem Master Document</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        :root {
+            /* Primary Palette */
+            --tinker-teal: #1AAFA0;
+            --spark-orange: #F47B20;
+            --idea-gold: #FDB813;
+            
+            /* Secondary Palette */
+            --deep-navy: #1B2A4A;
+            --story-coral: #E8614D;
+            --leaf-green: #27AE60;
+            --sky-blue: #3498DB;
+            
+            /* Neutral Palette */
+            --charcoal: #2C3E50;
+            --warm-white: #FFF9F0;
+            --cloud-gray: #F2F3F4;
+            --soft-cream: #FEF5E7;
+            
+            /* Functional */
+            --border-light: rgba(44, 62, 80, 0.15);
+        }
+
+        body {
+            font-family: 'Nunito Sans', sans-serif;
+            color: var(--charcoal);
+            background-color: #E2E8F0;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+	    text-rendering: geometricPrecision;
+    word-spacing: 2px; /* Forces explicit spacing */
+    letter-spacing: normal;
+        }
+
+        .controls {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .btn-download {
+            background-color: var(--tinker-teal);
+            color: #FFFFFF;
+            border: none;
+            padding: 16px 40px;
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(26, 175, 160, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-download:hover {
+            background-color: var(--spark-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(244, 123, 32, 0.3);
+        }
+
+        /* A4 Page Layout */
+        .page {
+            width: 210mm;
+            height: 297mm;
+            background: var(--warm-white);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            position: relative;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 50px;
+            overflow: hidden;
+        }
+
+        .border-frame {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border: 2px solid var(--tinker-teal);
+            border-radius: 16px;
+            pointer-events: none;
+            opacity: 0.2;
+        }
+
+        .folio {
+            position: absolute;
+            bottom: 35px;
+            right: 48px;
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--tinker-teal);
+            letter-spacing: 2px;
+        }
+
+        .page-header {
+            padding: 45px 48px 16px 64px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            position: relative;
+            border-bottom: 1px solid var(--border-light);
+            margin: 0 20px;
+        }
+
+        .header-brand {
+            font-family: 'Fredoka One', cursive;
+            font-size: 16px;
+            color: var(--deep-navy);
+            letter-spacing: 0.5px;
+        }
+        
+        .header-brand span {
+            color: var(--spark-orange);
+        }
+
+        .header-doc {
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 9px;
+            color: var(--charcoal);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .content-area {
+            padding: 24px 64px 30px 64px;
+            flex-grow: 1;
+            position: relative;
+        }
+
+        h1, h2 {
+            font-family: 'Fredoka One', cursive;
+            color: var(--deep-navy);
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+        
+        h1 { font-size: 32px; line-height: 1.2; color: var(--tinker-teal); }
+        h2 { font-size: 22px; margin-bottom: 20px; text-transform: uppercase; }
+        
+        h3 { 
+            font-size: 14px; 
+            color: var(--spark-orange); 
+            font-family: 'Nunito Sans', sans-serif; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+
+        p, li {
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 11px;
+            line-height: 1.6;
+            color: var(--charcoal);
+            margin-bottom: 12px;
+            font-weight: 400;
+        }
+        
+        ul, ol {
+            margin-bottom: 16px;
+            padding-left: 20px;
+        }
+
+        strong {
+            font-weight: 700;
+            color: var(--deep-navy);
+        }
+        
+        .highlight-box {
+            background: var(--soft-cream);
+            border-left: 4px solid var(--idea-gold);
+            padding: 16px 24px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+
+        /* Matrix Tables */
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 10.5px;
+            font-family: 'Nunito Sans', sans-serif;
+            background: #FFFFFF;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .matrix-table th {
+            background-color: var(--tinker-teal);
+            color: #FFFFFF;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 12px;
+            text-align: left;
+            letter-spacing: 1px;
+            font-size: 9px;
+        }
+
+        .matrix-table td {
+            border: 1px solid var(--cloud-gray);
+            padding: 12px;
+            line-height: 1.5;
+            vertical-align: top;
+        }
+
+        .matrix-table td:first-child {
+            font-weight: 700;
+            color: var(--deep-navy);
+            width: 20%;
+        }
+
+        /* Step Process */
+        .step-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .step-list li {
+            position: relative;
+            padding-left: 40px;
+            margin-bottom: 16px;
+            font-size: 11px;
+        }
+
+        .step-list li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 2px;
+            width: 24px;
+            height: 24px;
+            background-color: var(--spark-orange);
+            color: #FFF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 10px;
+        }
+        
+        .step-list li:nth-child(1)::before { content: "1"; }
+        .step-list li:nth-child(2)::before { content: "2"; }
+        .step-list li:nth-child(3)::before { content: "3"; }
+        .step-list li:nth-child(4)::before { content: "4"; }
+        .step-list li:nth-child(5)::before { content: "5"; }
+
+        /* Cover Page Specific */
+        .cover-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 64px;
+            background-color: var(--warm-white);
+        }
+
+        .cover-logo {
+            max-width: 220px;
+            margin-bottom: 40px;
+        }
+
+        .cover-title-area {
+            background: #FFFFFF;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            width: 85%;
+        }
+
+        .cover-meta {
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: var(--charcoal);
+            text-transform: uppercase;
+            margin-top: 50px;
+            border-top: 2px solid var(--cloud-gray);
+            padding-top: 20px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <button class="btn-download" onclick="generatePDF()">
+            Export Digital Ecosystem Document (9 Pages)
+        </button>
+    </div>
+
+    <!-- PAGE 1: COVER -->
+    <div class="page cover-page">
+        <div class="border-frame"></div>
+        
+        <img src="https://i.ibb.co/0VV6TShY/logo-tnt-portrait.png" alt="Think & Tinker Logo" class="cover-logo">
+        
+        <div class="cover-title-area">
+            <h1 style="margin-bottom: 10px;">THINK & TINKER<br>KIDS CLUB</h1>
+            <h3 style="color: var(--deep-navy); font-size: 14px; margin-top: 0;">DIGITAL ECOSYSTEM & OPERATIONS HUB<br>MASTER DOCUMENT</h3>
+            <p style="font-size: 12px; color: var(--tinker-teal); font-weight: 600; margin-top: 20px; line-height: 1.8;">
+                Content Architecture, Portal Design, Bookstore,<br>& Internal Management System Specification
+            </p>
+        </div>
+
+        <div class="cover-meta">
+            PREPARED BY: JBS PRAXIS<br>
+            LEAD CONSULTANT & SYSTEMS ARCHITECT: TOM-BLAKE FORGHAB<br><br>
+            MAY 2026 — VERSION 1.0<br>
+            <span style="color: var(--story-coral);">CONFIDENTIAL</span>
+        </div>
+        
+        <div class="folio">PAGE 01</div>
+    </div>
+
+    <!-- PAGE 2: STRATEGIC OVERVIEW -->
+    <div class="page">
+        <div class="border-frame"></div>
+        <div class="page-header">
+            <div class="header-brand">THINK & <span>TINKER</span></div>
+            <div class="header-doc">PART A: WEBSITE CONTENT ARCHITECTURE</div>
+        </div>
+        <div class="content-area">
+            <h3 style="color: var(--deep-navy); font-size: 16px; margin-bottom: 4px;">PART A: WEBSITE CONTENT ARCHITECTURE</h3>
+            <h2>1. Strategic Overview</h2>  
+            
+            <p>The Think & Tinker website is not merely a marketing page. It is the digital operating system for the entire business. It serves as the public-facing storefront that builds credibility and converts visitors into clients. It is also the operational backbone where parents onboard, sign contracts, pay invoices, and track their children's progress.</p>
+            
+            <div class="highlight-box">
+                <p style="margin: 0; color: var(--tinker-teal); font-weight: 700; font-size: 12px;">
+                    The website must accomplish one overarching strategic goal: make Think & Tinker the most professional, trusted, and comprehensive educational services brand in Lagos, at first glance. Every design decision, every piece of copy, and every user journey will reinforce this goal.
+                </p>
+            </div>
+
+            <h3>1.1 Target Audiences</h3>
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th>Audience</th>
+                        <th>Primary Need</th>
+                        <th>Key Actions</th>
+                        <th>Portal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Parents / Guardians</td>
+                        <td>Academic support for their child</td>
+                        <td>Browse services, onboard, pay, track progress</td>
+                        <td><strong style="color: var(--tinker-teal);">Parent Portal</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Teachers</td>
+                        <td>Professional development, resources</td>
+                        <td>Access training, consult booklets, connect</td>
+                        <td><strong style="color: var(--tinker-teal);">Teacher Portal</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Schools</td>
+                        <td>Curriculum consulting, teacher training</td>
+                        <td>Explore consulting services, request proposal</td>
+                        <td><strong style="color: var(--tinker-teal);">School Portal</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Children (ages 5-14)</td>
+                        <td>Fun, interactive learning content</td>
+                        <td>View club activities, certificates</td>
+                        <td><strong style="color: var(--tinker-teal);">Via Parent Portal</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Admin (Janet/Staff)</td>
+                        <td>Business management</td>
+                        <td>Manage all daily operations</td>
+                        <td><strong style="color: var(--deep-navy);">Internal Hub</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="folio">PAGE 02</div>
+    </div>
+
+    <!-- PAGE 3: CORE CAPABILITIES & PUBLIC SITE 1 -->
+    <div class="page">
+        <div class="border-frame"></div>
+        <div class="page-header">
+            <div class="header-brand">THINK & <span>TINKER</span></div>
+            <div class="header-doc">PART A: WEBSITE CONTENT ARCHITECTURE</div>
+        </div>
+        <div class="content-area">
+            <h3>1.2 Core System Capabilities</h3>
+            <p>Instead of technical jargon, here is what the technology driving your platform will actually do:</p>
+            <ul>
+                <li><strong>Lightning-Fast Browsing:</strong> The site will load instantly, keeping parents engaged.</li>
+                <li><strong>Secure Cloud Database:</strong> All student and business records will be safely stored and backed up automatically.</li>
+                <li><strong>Seamless Payments:</strong> Integrated systems will allow parents to pay via card, bank transfer, or USSD effortlessly.</li>
+                <li><strong>Automated Voice-to-Text:</strong> Tutors can record voice notes that the system automatically types out for parents to read. This avoids long texts.</li>
+                <li><strong>Smart Notifications:</strong> Automated emails and text messages after each tutorial session is over, STEM and Read Club will keep parents informed without manual effort from your team.</li>
+                <li><strong>Branded Documentation:</strong> Automated invoices, contracts, receipts, and quotes are generated automatically for clients.</li>
+            </ul>
+
+            <hr style="border: none; border-top: 1px solid var(--cloud-gray); margin: 30px 0;">
+
+            <h2>2. Public Website Pages</h2>
+            
+            <h3>2.1 Homepage</h3>
+            <ul>
+                <li><strong>Hero Section:</strong> High-quality visuals of children engaged in activities. Primary headline: "Where Curious Minds Come Alive." Two clear buttons: "Explore Our Services" and "Join the Club."</li>
+                <li><strong>Trust Bar:</strong> A horizontal strip displaying your business registration, years of experience, and the tagline "Safe. Fun. Engaging."</li>
+                <li><strong>Five Pillars Section:</strong> A clean grid showcasing Consult Booklets, Tutorials, STEM & Reading Club, Consulting, and the Bookstore.</li>
+                <li><strong>Social Proof Section:</strong> A carousel of parent testimonials and partner school logos to build immediate trust.</li>
+                <li><strong>Club Spotlight:</strong> A visually rich section showcasing the STEM & Reading Club with schedules, pricing, and trial registration.</li>
+                <li><strong>Blog/Tips Preview:</strong> Latest educational tips from Janeth Joseph to establish thought leadership.</li>
+            </ul>
+
+            <h3>2.2 About Us Page</h3>
+            <p>Tells the Think & Tinker origin story, introduces Janeth Joseph with a professional bio, showcases the team, and displays the mission, vision, and core values alongside a company timeline.</p>
+        </div>
+        <div class="folio">PAGE 03</div>
+    </div>
+
+    <!-- PAGE 4: PUBLIC SITE 2 -->
+    <div class="page">
+        <div class="border-frame"></div>
+        <div class="page-header">
+            <div class="header-brand">THINK & <span>TINKER</span></div>
+            <div class="header-doc">PART A: WEBSITE CONTENT ARCHITECTURE</div>
+        </div>
+        <div class="content-area">
+            <h3>2.3 Services Overview Page</h3>
+            <p>An expandable overview of all five pillars with detailed descriptions, pricing, and clear next steps to get started. Designed for easy scanning.</p>
+
+            <h3>2.4 Individual Service Pages</h3>
+            <ul>
+                <li><strong>Consult Booklets:</strong> A catalogue organized by grade and subject with sample previews and direct links to purchase.</li>
+                <li><strong>Tutorials:</strong> Explains the 5-step process from consultation to ongoing tracking, and a prominent "Book a Consultation" button.</li>
+                <li><strong>STEM & Reading Club:</strong> Immersive page with galleries, activity details, schedules, and membership plans.</li>
+                <li><strong>Educational Consulting:</strong> Professional sections tailored for parents, teachers, and schools with a dedicated proposal request form.</li>
+            </ul>
+
+            <h3>2.5 Contact Page</h3>
+            <p>Features a structured inquiry form, an interactive map showing the Atunrase Estate location, direct contact details, and a floating WhatsApp click-to-chat button for immediate assistance.</p>
+
+            <h3>2.6 Blog / Resources Page</h3>
+            <p>A content hub for educational articles, parenting tips, and STEM activity ideas. This drives organic search traffic and solidifies the brand as an industry expert in Lagos.</p>
+        </div>
+        <div class="folio">PAGE 04</div>
+    </div>
+
+    <!-- PAGE 5: PARENT PORTAL -->
+    <div class="page">
+        <div class="border-frame"></div>
+        <div class="page-header">
+            <div class="header-brand">THINK & <span>TINKER</span></div>
+            <div class="header-doc">PART A: WEBSITE CONTENT ARCHITECTURE</div>
+        </div>
+        <div class="content-area">
+            <h2>3. Parent / Guardian Portal</h2>
+            <p>This portal is where trust is built through transparency. It manages the ongoing relationship between the brand and the family, ensuring parents feel continually informed and in control.</p>
+
+            <h3>3.1 The Automated Onboarding Flow</h3>
+            <ul class="step-list">
+                <li><strong>Initial Inquiry:</strong> Parent submits a short inquiry form online.</li>
+                <li><strong>Automated Scheduling:</strong> Parent receives an automated WhatsApp/email with available consultation slots to book a time.</li>
+                <li><strong>Digital Admission:</strong> Parent receives a link to a digital admission form to capture child details, medical notes, and consents.</li>
+                <li><strong>Electronic Contract:</strong> A digital service contract is generated for the parent to sign electronically.</li>
+                <li><strong>Invoice & Account Creation:</strong> An invoice is automatically generated. The parent pays online, and their secure portal account is instantly created.</li>
+            </ul>
+
+            <h3>3.2 The Parent Dashboard</h3>
+            <p>The central hub for parents. It displays upcoming sessions, a progress overview, recent tutor notes, payment history, downloadable receipts, and quick links directly to the bookstore for supplementary materials.</p>
+
+            <h3>3.3 Session Notes & Progress Tracking</h3>
+            <p>After a session, the tutor records a quick voice memo. The system utilizes automated transcription to type it out and posts it to the parent’s dashboard alongside topics covered and visual progress indicators (Not Started, In Progress, Mastered).</p>
+
+            <h3>3.4 Document Vault & Communication</h3>
+            <p>A secure, encrypted area for parents to access signed contracts, invoices, progress reports, and a direct messaging system to reach their specific tutor or Think & Tinker administration.</p>
+        </div>
+        <div class="folio">PAGE 05</div>
+    </div>
+
+    <!-- PAGE 6: TEACHER, SCHOOL, BOOKSTORE -->
+    <div class="page">
+        <div class="border-frame"></div>
+        <div class="page-header">
+            <div class="header-brand">THINK & <span>TINKER</span></div>
+            <div class="header-doc">PART A: WEBSITE CONTENT ARCHITECTURE</div>
+        </div>
+        <div class="content-area">
+            <h2>4. Teacher & School Portals</h2>
+            
+            <h3>4.1 Teacher Portal</h3>
+            <p>Positions Think & Tinker as a professional development hub. Teachers can create professional profiles, download curated resources (lesson plans, STEM guides), register for upcoming workshops, join community discussions, and apply to become official Think & Tinker tutors.</p>
+
+            <h3>4.2 School Portal</h3>
+            <p>Designed specifically for institutional engagement. It showcases consulting services (such as curriculum audits and teacher training), displays detailed case studies of past successes, and features a structured, professional inquiry form for schools to request tailored proposals.</p>
+
+            <hr style="border: none; border-top: 1px solid var(--cloud-gray); margin: 30px 0;">
+
+            <h2>5. Online Bookstore Architecture</h2>
+            <p>A full e-commerce shop integrated directly into the website, creating a seamless revenue stream.</p>
+            
+            <ul>
+                <li><strong>Categories:</strong> Consult Booklets, Branded Exercise Books, Textbooks, Stationery, Educational Toys, and Recommended Reading.</li>
+                <li><strong>Browsing Experience:</strong> Intuitive filters by grade, subject, or curated "Staff Picks."</li>
+                <li><strong>Checkout Process:</strong> Standard online shopping cart with secure online payment, delivery address capture, and automated email receipts.</li>
+                <li><strong>Order Management:</strong> An internal dashboard for your team to track pending orders, manage stock levels, and coordinate physical deliveries.</li>
+            </ul>
+        </div>
+        <div class="folio">PAGE 06</div>
+    </div>
+
+    <!-- PAGE 7: ERP SYSTEM OVERVIEW -->
+    <div class="page">
+        <div class="border-frame"></div>
+        <div class="page-header">
+            <div class="header-brand">THINK & <span>TINKER</span></div>
+            <div class="header-doc">PART B: INTERNAL OPERATIONS HUB (MINI ERP)</div>
+        </div>
+        <div class="content-area">
+            <h3 style="color: var(--deep-navy); font-size: 16px; margin-bottom: 4px;">PART B: INTERNAL OPERATIONS HUB</h3>
+            <h2>6. System Overview</h2>
+            <p>This is the administrative backbone of the business. It is a private command center that allows Janeth and her team to manage every operational aspect of Think & Tinker from a single, secure screen.</p>
+
+            <h3>6.1 Core Management Modules</h3>
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        <th>What It Does</th>
+                        <th>Key Features</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Financials</td>
+                        <td>Tracks money in and out</td>
+                        <td>Automated invoices, expense logging, profit reports</td>
+                    </tr>
+                    <tr>
+                        <td>Client Relations</td>
+                        <td>Manages parent and school data</td>
+                        <td>Contact records, service history, communication logs</td>
+                    </tr>
+                    <tr>
+                        <td>Sessions</td>
+                        <td>Schedules tutoring</td>
+                        <td>Calendars, automated voice-to-text notes, progress tracking</td>
+                    </tr>
+                    <tr>
+                        <td>Team / Staff</td>
+                        <td>Manages employees and tutors</td>
+                        <td>Profiles, payroll, attendance, guarantor records</td>
+                    </tr>
+                    <tr>
+                        <td>Bookstore</td>
+                        <td>Manages shop operations</td>
+                        <td>Stock levels, order fulfillment, product updates</td>
+                    </tr>
+                    <tr>
+                        <td>Club Operations</td>
+                        <td>Runs the weekend club</td>
+                        <td>Membership registry, attendance tracking, certificates</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="folio">PAGE 07</div>
+    </div>
+
+    <!-- PAGE 8: DATA MODELS & DASHBOARD -->
+    <div class="page">
+        <div class="border-frame"></div>
+        <div class="page-header">
+            <div class="header-brand">THINK & <span>TINKER</span></div>
+            <div class="header-doc">PART B: INTERNAL OPERATIONS HUB (MINI ERP)</div>
+        </div>
+        <div class="content-area">
+            <h2>7. Information We Track (Data Models)</h2>
+            <p>The system will securely store and organize the following vital business information:</p>
+            <ul>
+                <li><strong>Client & Child Profiles:</strong> Contact details, medical notes, current schools, and active services.</li>
+                <li><strong>Session History:</strong> Dates, assigned tutors, topics covered, and audio/text notes.</li>
+                <li><strong>Contracts & Billing:</strong> Digital signatures, payment statuses, and detailed line-item invoices.</li>
+                <li><strong>Business Expenses:</strong> Categorized spending with digital receipt uploads.</li>
+                <li><strong>Staff Records:</strong> Employment details, salary information, and guarantor data.</li>
+            </ul>
+
+            <h2>8. User Roles & Access Levels</h2>
+            <p>Security is paramount. Users only see what they are supposed to see based on strict permissions.</p>
+            <ul>
+                <li><strong>Admins (Janeth/Managers):</strong> Full access to financials, all clients, all staff, and master system settings.</li>
+                <li><strong>Tutors:</strong> Can only see their assigned students, their own schedule, and write notes for their own specific sessions.</li>
+                <li><strong>Parents:</strong> Can only access their own child's progress, their specific invoices, and their direct messages.</li>
+            </ul>
+
+            <h2>9. The Admin Dashboard Experience</h2>
+            <p>Designed for Janeth to understand the absolute health of her business in under 60 seconds every morning.</p>
+            <ul>
+                <li><strong>Key Metrics:</strong> Instant views of Total Revenue, Expenses, Net Margin, Active Clients, and Pending Invoices.</li>
+                <li><strong>Activity Feed:</strong> A live timeline showing new inquiries, signed contracts, completed sessions, and new bookstore orders.</li>
+                <li><strong>Quick Actions:</strong> One-click buttons to create an invoice, record an expense, or schedule a session.</li>
+                <li><strong>Financial Reports:</strong> Auto-generated profit and loss statements and cash flow projections.</li>
+            </ul>
+        </div>
+        <div class="folio">PAGE 08</div>
+    </div>
+
+    <!-- PAGE 9: ROLLOUT & SECURITY -->
+    <div class="page">
+        <div class="border-frame"></div>
+        <div class="page-header">
+            <div class="header-brand">THINK & <span>TINKER</span></div>
+            <div class="header-doc">PART B: INTERNAL OPERATIONS HUB (MINI ERP)</div>
+        </div>
+        <div class="content-area">
+            <h2>10. Phased Rollout Plan</h2>
+            <p>To ensure a smooth launch, we will build and release the platform in strategic phases to minimize risk and allow for user adoption.</p>
+            
+            <div class="highlight-box" style="margin-bottom: 12px; border-left-color: var(--tinker-teal);">
+                <strong style="color: var(--tinker-teal);">Phase 1 — Foundation (Week 1):</strong> Launch the public website, digital inquiry forms, online contracts, basic online payments, and the initial Admin dashboard.
+            </div>
+            <div class="highlight-box" style="margin-bottom: 12px; border-left-color: var(--spark-orange);">
+                <strong style="color: var(--spark-orange);">Phase 2 — Portals & Commerce (Week 2):</strong> Launch the Parent Portal (with voice-to-text session notes) and the Online Bookstore.
+            </div>
+            <div class="highlight-box" style="margin-bottom: 12px; border-left-color: var(--idea-gold);">
+                <strong style="color: var(--idea-gold);">Phase 3 — Ecosystem Expansion (Week 3):</strong> Launch the Teacher and School Portals, advanced reporting, and automated email marketing.
+            </div>
+            <div class="highlight-box" style="margin-bottom: 24px; border-left-color: var(--leaf-green);">
+                <strong style="color: var(--leaf-green);">Phase 4 — Scale & Optimise (Week 4):</strong> Refine features based on feedback, add advanced inventory management, and prepare systems for multiple business locations.
+            </div>
+
+            <h2>11. Security, Privacy & Search Optimization</h2>
+            <ul>
+                <li><strong>Search Engine Optimization (SEO):</strong> The site will be architecturally built to rank high on Google for high-intent terms like <em>"private tutor for kids Lagos"</em> and <em>"STEM club for kids Lagos."</em></li>
+                <li><strong>Data Protection:</strong> All personal data is protected with bank-grade encryption, fully compliant with Nigerian Data Protection Regulations (NDPR).</li>
+                <li><strong>Payment Security:</strong> No credit card data is stored on your servers; all transactions are handled safely through a trusted, compliant gateway (Paystack).</li>
+                <li><strong>Child Safety:</strong> Strict digital access controls ensure parent data is siloed, and explicit digital consents are captured for any photography or recordings.</li>
+            </ul>
+
+            <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--cloud-gray);">
+                <h3 style="color: var(--tinker-teal); font-size: 14px;">END OF DIGITAL ECOSYSTEM MASTER DOCUMENT</h3>
+            </div>
+        </div>
+        <div class="folio">PAGE 09</div>
+    </div>
+
+    <script>
+    window.jsPDF = window.jspdf.jsPDF;
+
+    function generatePDF() {
+        const btn = document.querySelector('.btn-download');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = 'GENERATING DIGITAL ECOSYSTEM...';
+        btn.style.opacity = '0.7';
+        btn.disabled = true;
+
+        // NEW: Force the browser to wait until all fonts are 100% loaded
+        document.fonts.ready.then(() => {
+            const pages = document.querySelectorAll('.page');
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pageWidth = 210;
+            
+            const processPage = (index) => {
+                if (index >= pages.length) {
+                    pdf.save('Think_and_Tinker_Digital_Ecosystem.pdf');
+                    btn.innerHTML = originalText;
+                    btn.style.opacity = '1';
+                    btn.disabled = false;
+                    return;
+                }
+
+                html2canvas(pages[index], {
+                    scale: 3,
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: '#FFF9F0',
+                    letterRendering: 1 // Helps prevent letter squishing
+                }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/jpeg', 0.98);
+                    const imgHeight = canvas.height * pageWidth / canvas.width;
+                    
+                    if (index > 0) pdf.addPage();
+                    pdf.addImage(imgData, 'JPEG', 0, 0, pageWidth, imgHeight);
+                    
+                    processPage(index + 1);
+                });
+            };
+
+            // Slightly longer timeout to ensure UI updates before capture
+            setTimeout(() => processPage(0), 300);
+        });
+    }
+</script>
+</body>
+</html>
