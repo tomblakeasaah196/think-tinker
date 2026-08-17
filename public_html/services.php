@@ -1,0 +1,25 @@
+<?php $pageTitle='Our Services'; require_once __DIR__.'/includes/config.php'; include __DIR__.'/templates/header.php'; ?>
+<section class="section" style="background:linear-gradient(135deg,#1B2A4A,var(--tinker-teal));color:#FFF;padding:80px 0;text-align:center;">
+    <div class="container"><h1 style="color:#FFF;font-size:2.25rem;">Our Services</h1><p style="opacity:.8;max-width:560px;margin:12px auto 0;">A complete educational ecosystem for children ages 1–14. Five pillars, one mission: build curious, confident learners.</p></div>
+</section>
+<section class="section"><div class="container">
+    <div class="service-full reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-bottom:60px;">
+        <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&q=80" alt="Home tutoring" style="border-radius:var(--radius-lg);width:100%;box-shadow:var(--shadow-md);">
+        <div><div class="section-tag" style="color:var(--tinker-teal);">Pillar 1</div><h2>Home Tutorials</h2><p style="color:#666;line-height:1.8;">Experienced tutors come to your home for 1-on-1 sessions tailored to your child's pace and curriculum. All subjects from nursery through secondary school. Flexible scheduling — mornings, afternoons, or weekends.</p><a href="<?= APP_URL ?>/services/tutorials.php" class="btn btn-primary mt-2">Learn More →</a></div>
+    </div>
+    <div class="service-full reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-bottom:60px;">
+        <div style="order:2;"><img src="https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=600&q=80" alt="STEM club" style="border-radius:var(--radius-lg);width:100%;box-shadow:var(--shadow-md);"></div>
+        <div><div class="section-tag" style="color:var(--spark-orange);">Pillar 2</div><h2>STEM & Reading Club</h2><p style="color:#666;line-height:1.8;">Every Saturday, children ages 4–14 come together for hands-on science experiments, coding activities, robotics, creative writing, and story adventures. Multiple plan options available.</p><a href="<?= APP_URL ?>/services/stem-club.php" class="btn btn-secondary mt-2">Join the Club →</a></div>
+    </div>
+    <div class="service-full reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-bottom:60px;">
+        <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&q=80" alt="Consulting" style="border-radius:var(--radius-lg);width:100%;box-shadow:var(--shadow-md);">
+        <div><div class="section-tag" style="color:var(--deep-navy);">Pillar 3</div><h2>Educational Consulting</h2><p style="color:#666;line-height:1.8;">Expert guidance for parents and schools: curriculum design, school selection, learning assessments, and child development strategies. We help you make informed decisions about your child's education.</p><a href="<?= APP_URL ?>/services/consulting.php" class="btn btn-navy mt-2">Learn More →</a></div>
+    </div>
+    <div class="pillars-grid" style="grid-template-columns:1fr 1fr;gap:24px;">
+        <a href="<?= APP_URL ?>/services/consult-booklets.php" class="pillar-card reveal" style="--accent:#27AE60;"><div class="pillar-icon">📖</div><h3>Consult Booklets</h3><p>Age-appropriate workbooks, activity sheets, and learning guides designed by education experts for self-paced study at home.</p><span class="pillar-link">Explore →</span></a>
+        <a href="<?= APP_URL ?>/shop.php" class="pillar-card reveal" style="--accent:#3498DB;"><div class="pillar-icon">🛒</div><h3>Online Bookstore</h3><p>Textbooks, STEM kits, flashcards, stationery, and educational toys — carefully curated and delivered across Lagos.</p><span class="pillar-link">Shop Now →</span></a>
+    </div>
+</div></section>
+<style>.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s,transform .7s;}.reveal.visible{opacity:1;transform:translateY(0);}.section-tag{display:inline-block;font-size:.6875rem;font-weight:800;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;}.pillars-grid{display:grid;}.pillar-card{background:#FFF;border-radius:var(--radius-lg);padding:28px;text-align:center;box-shadow:var(--shadow-sm);border-top:4px solid var(--accent);text-decoration:none;color:var(--charcoal);transition:transform .3s;}.pillar-card:hover{transform:translateY(-6px);color:var(--charcoal);}.pillar-icon{font-size:2.5rem;margin-bottom:12px;}.pillar-card h3{color:var(--deep-navy);margin-bottom:8px;}.pillar-card p{font-size:.8125rem;color:#666;line-height:1.6;margin-bottom:12px;}.pillar-link{font-size:.75rem;font-weight:700;color:var(--tinker-teal);}@media(max-width:768px){.service-full{grid-template-columns:1fr !important;}.service-full div[style*="order:2"]{order:0 !important;}.pillars-grid{grid-template-columns:1fr !important;}}</style>
+<script>document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('.reveal').forEach(el=>{new IntersectionObserver((e)=>{e.forEach(en=>{if(en.isIntersecting){en.target.classList.add('visible');}});},{threshold:.1}).observe(el);});});</script>
+<?php include __DIR__.'/templates/footer.php'; ?>

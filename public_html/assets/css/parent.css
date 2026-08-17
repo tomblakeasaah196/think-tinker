@@ -1,0 +1,148 @@
+/* assets/css/parent.css — Parent Portal Styles */
+
+/* ============================================================
+   CHILD SWITCHER
+   ============================================================ */
+.child-switcher { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: var(--space-3); -webkit-overflow-scrolling: touch; }
+.child-chip {
+    display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: var(--radius-full);
+    background: #FFF; border: 2px solid var(--cloud-gray); font-size: 0.8125rem; font-weight: 700;
+    white-space: nowrap; cursor: pointer; transition: all 0.2s;
+}
+.child-chip.active { border-color: var(--tinker-teal); background: rgba(26,175,160,0.08); color: var(--tinker-teal); }
+.child-chip .chip-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--tinker-teal); color: #FFF; display: flex; align-items: center; justify-content: center; font-size: 0.6875rem; font-weight: 800; }
+
+/* ============================================================
+   DASHBOARD CARDS
+   ============================================================ */
+.parent-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: var(--space-3); }
+.parent-stat {
+    background: #FFF; border-radius: var(--radius-md); padding: 16px; box-shadow: var(--shadow-sm);
+    text-align: center; border-top: 3px solid var(--tinker-teal);
+}
+.parent-stat .stat-num { font-family: 'Quicksand', sans-serif; font-size: 1.75rem; font-weight: 800; color: var(--deep-navy); }
+.parent-stat .stat-lbl { font-size: 0.6875rem; color: #999; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; margin-top: 2px; }
+.parent-stat.orange { border-top-color: var(--spark-orange); }
+.parent-stat.green { border-top-color: var(--leaf-green); }
+.parent-stat.coral { border-top-color: var(--story-coral); }
+
+/* ============================================================
+   SESSION CARDS (upcoming sessions list)
+   ============================================================ */
+.session-card {
+    background: #FFF; border-radius: var(--radius-md); padding: 16px; margin-bottom: 10px;
+    box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 14px;
+    border-left: 4px solid var(--sky-blue); transition: transform 0.15s;
+}
+.session-card:active { transform: scale(0.98); }
+.session-card.completed { border-left-color: var(--leaf-green); opacity: 0.7; }
+.session-card.cancelled { border-left-color: var(--story-coral); opacity: 0.5; }
+.session-date-box {
+    width: 52px; text-align: center; flex-shrink: 0;
+}
+.session-date-box .day { font-size: 1.5rem; font-weight: 800; color: var(--deep-navy); line-height: 1; }
+.session-date-box .month { font-size: 0.625rem; text-transform: uppercase; color: #999; font-weight: 700; }
+.session-info { flex: 1; min-width: 0; }
+.session-info .tutor { font-size: 0.8125rem; font-weight: 700; color: var(--deep-navy); }
+.session-info .time { font-size: 0.75rem; color: #999; }
+.session-info .note-badge { font-size: 0.625rem; color: var(--tinker-teal); font-weight: 700; }
+
+/* ============================================================
+   NOTE CARD (session notes from tutor)
+   ============================================================ */
+.note-card {
+    background: #FFF; border-radius: var(--radius-md); padding: 16px; margin-bottom: 12px;
+    box-shadow: var(--shadow-sm); border-left: 4px solid var(--spark-orange);
+}
+.note-card .note-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.note-card .note-date { font-size: 0.75rem; color: #999; }
+.note-card .note-tutor { font-size: 0.8125rem; font-weight: 700; color: var(--deep-navy); }
+.note-card .note-text { font-size: 0.875rem; color: #444; line-height: 1.6; }
+.note-card .note-topics { margin-top: 8px; font-size: 0.75rem; color: var(--tinker-teal); font-weight: 700; }
+
+/* ============================================================
+   PAYMENT CARD
+   ============================================================ */
+.invoice-card {
+    background: #FFF; border-radius: var(--radius-md); padding: 16px; margin-bottom: 10px;
+    box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 14px;
+}
+.invoice-card .inv-amount { font-family: 'Quicksand', sans-serif; font-size: 1.25rem; font-weight: 800; color: var(--deep-navy); white-space: nowrap; }
+.invoice-card .inv-detail { flex: 1; min-width: 0; }
+.invoice-card .inv-number { font-size: 0.8125rem; font-weight: 700; }
+.invoice-card .inv-due { font-size: 0.75rem; color: #999; }
+
+/* ============================================================
+   BANK DETAILS BOX (on payment pages)
+   ============================================================ */
+.bank-details-box {
+    background: var(--soft-cream); border: 1px solid rgba(244,123,32,0.3); border-radius: var(--radius-md);
+    padding: 16px; margin: var(--space-2) 0;
+}
+.bank-details-box h4 { color: var(--spark-orange); font-size: 0.8125rem; margin-bottom: 8px; }
+.bank-item { margin-bottom: 10px; }
+.bank-item .bank-name { font-weight: 700; font-size: 0.8125rem; }
+.bank-item .acct-num { font-family: 'Quicksand', sans-serif; font-size: 1.25rem; font-weight: 800; color: var(--deep-navy); letter-spacing: 1px; cursor: pointer; }
+.bank-item .acct-name { font-size: 0.75rem; color: #666; }
+.bank-item .copy-hint { font-size: 0.625rem; color: var(--tinker-teal); }
+
+/* ============================================================
+   DOCUMENT VAULT
+   ============================================================ */
+.doc-card {
+    background: #FFF; border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 8px;
+    box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 12px;
+    cursor: pointer; transition: background 0.15s;
+}
+.doc-card:hover { background: #FAFAFA; }
+.doc-icon { font-size: 1.5rem; flex-shrink: 0; }
+.doc-info { flex: 1; }
+.doc-info .doc-name { font-size: 0.8125rem; font-weight: 700; }
+.doc-info .doc-date { font-size: 0.6875rem; color: #999; }
+.doc-dl { color: var(--tinker-teal); font-size: 0.75rem; font-weight: 700; }
+
+/* ============================================================
+   PROGRESS RING (child profile)
+   ============================================================ */
+.progress-summary { display: flex; gap: 16px; justify-content: center; margin: var(--space-2) 0; }
+.progress-item { text-align: center; }
+.progress-item .prog-num { font-family: 'Quicksand', sans-serif; font-size: 1.5rem; font-weight: 800; }
+.progress-item .prog-lbl { font-size: 0.625rem; color: #999; text-transform: uppercase; font-weight: 700; }
+.progress-item.mastered .prog-num { color: var(--leaf-green); }
+.progress-item.in-progress .prog-num { color: var(--spark-orange); }
+.progress-item.not-started .prog-num { color: #CCC; }
+
+/* ============================================================
+   ONBOARDING WIZARD
+   ============================================================ */
+.wizard-steps { display: flex; justify-content: center; gap: 8px; margin-bottom: var(--space-3); }
+.wizard-step {
+    width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 0.8125rem; font-weight: 800; background: var(--cloud-gray); color: #999; transition: all 0.3s;
+}
+.wizard-step.active { background: var(--tinker-teal); color: #FFF; transform: scale(1.15); }
+.wizard-step.done { background: var(--leaf-green); color: #FFF; }
+.wizard-panel { display: none; }
+.wizard-panel.active { display: block; animation: fadeIn 0.3s ease; }
+
+/* ============================================================
+   CLUB MEMBERSHIP CARD
+   ============================================================ */
+.club-card {
+    background: linear-gradient(135deg, var(--tinker-teal), #138D80); color: #FFF;
+    border-radius: var(--radius-lg); padding: 20px; margin-bottom: var(--space-2);
+    position: relative; overflow: hidden;
+}
+.club-card::after { content: '🎪'; position: absolute; right: 12px; top: 12px; font-size: 2.5rem; opacity: 0.2; }
+.club-card .plan { font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }
+.club-card .status { font-size: 1.25rem; font-weight: 800; margin: 4px 0; }
+.club-card .expires { font-size: 0.8125rem; opacity: 0.8; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 480px) {
+    .parent-stats { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .parent-stat { padding: 12px; }
+    .parent-stat .stat-num { font-size: 1.375rem; }
+}
