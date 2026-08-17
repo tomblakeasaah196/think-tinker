@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /includes/
+Disallow: /templates/
+Disallow: /pdf-templates/
+Disallow: /uploads/contracts/
+Disallow: /uploads/signatures/
+Disallow: /uploads/invoices/
+Disallow: /uploads/receipts/
+Disallow: /hub/
+Disallow: /database/
+Disallow: /logs/
+Disallow: /backups/
+
+Sitemap: https://think-tinker.com/sitemap.xml
