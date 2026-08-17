@@ -16,13 +16,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-          
+      # NOTE: shivammathur/setup-php has been removed on purpose.
+      # ubuntu-latest runners already ship with PHP pre-installed (no
+      # external download needed), which sidesteps the GitHub API 429
+      # rate-limit entirely instead of just working around it. This keeps
+      # the lint step as a real safety net instead of a bypassed one.
+      - name: Show PHP version
+        run: php -v
+
       - name: Check PHP Syntax (Linting)
         run: |
           echo "Running PHP syntax check..."
@@ -32,22 +35,26 @@ jobs:
   deploy:
     name: Deploy to cPanel via FTP
     needs: test
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 2
 
       - name: FTP Deploy
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          # The FTP account's root is already /home/vmtqyldz/public_html,
+          # so the destination is "/" — not "/public_html/" (that would
+          # nest into .../public_html/public_html/).
           local-dir: ./public_html/
-          server-dir: /public_html/
+          server-dir: /
           exclude: |
             **/.git*
             **/.git*/**
