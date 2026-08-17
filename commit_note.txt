@@ -1,0 +1,1 @@
+Checked out header, footer, index, about, and shop styling - looks complete and fully cohesive glassmorphic redesign.
