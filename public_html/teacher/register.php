@@ -1,2 +1,0 @@
-<?php
-// teacher/register.php
