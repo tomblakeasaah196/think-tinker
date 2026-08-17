@@ -1,6 +1,8 @@
-vendor/
-docs & references/
 public_html/vendor/
-public_html/vendor/
-docs & references/
-Database/
+public_html/pdf-templates/
+public_html/hub/
+public_html/parent/
+public_html/teacher/
+public_html/school/
+public_html/includes/
+public_html/api/
