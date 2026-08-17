@@ -1,14 +1,14 @@
 <?php $pageTitle='Our Services'; require_once __DIR__.'/includes/config.php'; include __DIR__.'/templates/header.php'; ?>
-<section class="section" style="background:linear-gradient(135deg,#1B2A4A,var(--tinker-teal));color:#FFF;padding:80px 0;text-align:center;">
-    <div class="container"><h1 style="color:#FFF;font-size:2.25rem;">Our Services</h1><p style="opacity:.8;max-width:560px;margin:12px auto 0;">A complete educational ecosystem for children ages 1–14. Five pillars, one mission: build curious, confident learners.</p></div>
+<section class="page-hero page-hero--navy">
+    <div class="container"><h1>Our Services</h1><p>A complete educational ecosystem for children ages 1–14. Five pillars, one mission: build curious, confident learners.</p></div>
 </section>
 <section class="section"><div class="container">
     <div class="service-full reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-bottom:60px;">
-        <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&q=80" alt="Home tutoring" style="border-radius:var(--radius-lg);width:100%;box-shadow:var(--shadow-md);">
+        <img src="<?= APP_URL ?>/assets/img/hero/tutoring-blocks.jpg" alt="Tutor guiding a child through a hands-on activity at home" style="border-radius:var(--radius-lg);width:100%;box-shadow:var(--shadow-md);">
         <div><div class="section-tag" style="color:var(--tinker-teal);">Pillar 1</div><h2>Home Tutorials</h2><p style="color:#666;line-height:1.8;">Experienced tutors come to your home for 1-on-1 sessions tailored to your child's pace and curriculum. All subjects from nursery through secondary school. Flexible scheduling — mornings, afternoons, or weekends.</p><a href="<?= APP_URL ?>/services/tutorials.php" class="btn btn-primary mt-2">Learn More →</a></div>
     </div>
     <div class="service-full reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-bottom:60px;">
-        <div style="order:2;"><img src="https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=600&q=80" alt="STEM club" style="border-radius:var(--radius-lg);width:100%;box-shadow:var(--shadow-md);"></div>
+        <div style="order:2;"><img src="<?= APP_URL ?>/assets/img/hero/stem-multiplication.jpg" alt="Child engaged in a hands-on STEM learning activity" style="border-radius:var(--radius-lg);width:100%;box-shadow:var(--shadow-md);"></div>
         <div><div class="section-tag" style="color:var(--spark-orange);">Pillar 2</div><h2>STEM & Reading Club</h2><p style="color:#666;line-height:1.8;">Every Saturday, children ages 4–14 come together for hands-on science experiments, coding activities, robotics, creative writing, and story adventures. Multiple plan options available.</p><a href="<?= APP_URL ?>/services/stem-club.php" class="btn btn-secondary mt-2">Join the Club →</a></div>
     </div>
     <div class="service-full reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-bottom:60px;">

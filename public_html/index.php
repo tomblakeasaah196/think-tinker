@@ -6,9 +6,11 @@ include __DIR__ . '/templates/header.php';
 ?>
 
 <section class="hero">
+    <div class="hero-photo" role="img" aria-label="Think & Tinker founder and students"></div>
+    <div class="hero-scrim"></div>
     <div class="hero-bg"><div class="hero-orb orb-1"></div><div class="hero-orb orb-2"></div><div class="hero-orb orb-3"></div></div>
     <div class="container hero-inner">
-        <div class="hero-text">
+        <div class="hero-text hero-content-glass">
             <div class="hero-badge slide-in" style="animation-delay:0.2s;">Ages 1 — 14 · Lagos, Nigeria</div>
             <h1 class="hero-title slide-in" style="animation-delay:0.4s;">Building <span class="text-gradient">Curious Minds</span><br>Through Play & Creativity</h1>
             <p class="hero-sub slide-in" style="animation-delay:0.6s;">Home tutorials, STEM & Reading Club, educational consulting, and a bookstore full of learning adventures.</p>
@@ -18,11 +20,10 @@ include __DIR__ . '/templates/header.php';
             </div>
             <div class="hero-trust slide-in" style="animation-delay:1s;"><span>✓ Experienced tutors</span><span>✓ Personalized learning</span><span>✓ Flexible scheduling</span></div>
         </div>
-        <div class="hero-visual slide-in" style="animation-delay:0.6s;">
-            <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80" alt="Children learning" class="hero-img">
-            <div class="hero-float-card float-1"><span style="font-size:1.5rem;">📚</span><div><strong>500+</strong><br><small>Books & Resources</small></div></div>
-            <div class="hero-float-card float-2"><span style="font-size:1.5rem;">🧪</span><div><strong>STEM</strong><br><small>Every Saturday</small></div></div>
-        </div>
+    </div>
+    <div class="hero-float-strip slide-in" style="animation-delay:1s;">
+        <div class="hero-float-card float-1"><span style="font-size:1.5rem;">📚</span><div><strong>500+</strong><br><small>Books & Resources</small></div></div>
+        <div class="hero-float-card float-2"><span style="font-size:1.5rem;">🧪</span><div><strong>STEM</strong><br><small>Every Saturday</small></div></div>
     </div>
 </section>
 
@@ -38,7 +39,7 @@ include __DIR__ . '/templates/header.php';
 </div></section>
 
 <section class="section section-cream" id="why"><div class="container"><div class="why-grid">
-    <div class="why-image reveal"><img src="https://images.unsplash.com/photo-1588072432836-e10032774350?w=600&q=80" alt="Kids learning" style="border-radius:var(--radius-lg);width:100%;box-shadow:var(--shadow-lg);"><div class="why-stat-float"><div class="stat-num">98%</div><div class="stat-txt">Parent Satisfaction</div></div></div>
+    <div class="why-image reveal"><img src="<?= APP_URL ?>/assets/img/hero/why-flashcards.jpg" alt="Tutor and child learning with flashcards" style="border-radius:var(--radius-lg);width:100%;box-shadow:var(--shadow-lg);"><div class="why-stat-float"><div class="stat-num">98%</div><div class="stat-txt">Parent Satisfaction</div></div></div>
     <div class="why-content reveal"><div class="section-tag">Why Think & Tinker</div><h2>Where Learning Meets Adventure</h2>
         <div class="why-features">
             <div class="why-feat"><span class="feat-icon">👩‍🏫</span><div><strong>Expert Tutors</strong><p>Vetted, trained, and matched to your child's style.</p></div></div>
@@ -55,7 +56,7 @@ include __DIR__ . '/templates/header.php';
         <div class="stem-plans"><div class="plan-chip">Trial · ₦<?= number_format((float)getSetting('club_plan_trial','8000'),0) ?></div><div class="plan-chip">Monthly · ₦<?= number_format((float)getSetting('club_plan_monthly','30000'),0) ?></div><div class="plan-chip">Quarterly · ₦<?= number_format((float)getSetting('club_plan_quarterly','85000'),0) ?></div></div>
         <a href="<?= APP_URL ?>/parent/register-club.php" class="btn btn-secondary btn-lg" style="margin-top:20px;">Register Your Child →</a>
     </div>
-    <div class="stem-images"><img src="https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=400&q=80" alt="STEM" class="stem-img img-1"><img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?w=400&q=80" alt="Reading" class="stem-img img-2"></div>
+    <div class="stem-images"><img src="<?= APP_URL ?>/assets/img/hero/stem-multiplication.jpg" alt="Child using a STEM multiplication puzzle" class="stem-img img-1"><div class="stem-img img-2" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px;color:#FFF;background:rgba(255,255,255,0.12);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.25) !important;"><span style="font-size:2rem;">🧠</span><strong style="font-size:.8125rem;margin-top:4px;">Hands-on<br>learning tools</strong></div></div>
 </div></div></section>
 
 <section class="section"><div class="container">
@@ -64,6 +65,18 @@ include __DIR__ . '/templates/header.php';
         <div class="testimonial-card reveal"><div class="testi-stars">⭐⭐⭐⭐⭐</div><p class="testi-text">"My son went from dreading math to asking for extra practice. The tutors make learning feel like play."</p><div class="testi-author"><div class="avatar avatar-sm avatar-teal">AO</div><div><strong>Adaeze O.</strong><span>Lekki</span></div></div></div>
         <div class="testimonial-card reveal"><div class="testi-stars">⭐⭐⭐⭐⭐</div><p class="testi-text">"The Saturday STEM Club is the highlight of my daughter's week. She comes home excited about robots and volcanoes!"</p><div class="testi-author"><div class="avatar avatar-sm avatar-orange">FK</div><div><strong>Folake K.</strong><span>Ikeja</span></div></div></div>
         <div class="testimonial-card reveal"><div class="testi-stars">⭐⭐⭐⭐⭐</div><p class="testi-text">"The parent portal is a game-changer. I track everything — sessions, notes, payments. Very professional."</p><div class="testi-author"><div class="avatar avatar-sm avatar-navy">CB</div><div><strong>Chidi B.</strong><span>Victoria Island</span></div></div></div>
+    </div>
+</div></section>
+
+<section class="section" id="moments"><div class="container">
+    <div class="section-header reveal"><div class="section-tag">Life at Think & Tinker</div><h2>Moments from Our Sessions</h2><p>A peek into the everyday adventures our little thinkers get up to.</p></div>
+    <div class="moments-grid">
+        <div class="moment-card reveal"><img src="<?= APP_URL ?>/assets/img/hero/moment-1.jpg" alt="Bead threading activity building fine motor skills" loading="lazy"></div>
+        <div class="moment-card reveal"><img src="<?= APP_URL ?>/assets/img/hero/moment-2.jpg" alt="Children exploring colors and patterns through play" loading="lazy"></div>
+        <div class="moment-card reveal"><img src="<?= APP_URL ?>/assets/img/hero/moment-3.jpg" alt="Tracing and lacing activities for early learners" loading="lazy"></div>
+    </div>
+    <div class="moments-cta reveal">
+        <a href="https://instagram.com/thinktinkers_tutorialhub" target="_blank" rel="noopener" class="btn btn-outline">📸 Follow @thinktinkers_tutorialhub</a>
     </div>
 </div></section>
 
@@ -77,25 +90,24 @@ include __DIR__ . '/templates/header.php';
 </div></div></section>
 
 <style>
-.hero{background:linear-gradient(135deg,#1B2A4A 0%,#243758 50%,#1AAFA0 100%);color:#FFF;padding:80px 0 60px;position:relative;overflow:hidden;min-height:90vh;display:flex;align-items:center;}
+.hero{background:linear-gradient(135deg,#1B2A4A 0%,#243758 50%,#1AAFA0 100%);color:#FFF;padding:80px 0 60px;position:relative;overflow:hidden;min-height:90vh;display:flex;align-items:center;isolation:isolate;}
 .hero-bg{position:absolute;inset:0;overflow:hidden;}
 .hero-orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:.3;}
 .hero-orb.orb-1{width:500px;height:500px;background:var(--tinker-teal);top:-200px;right:-100px;animation:floatO 15s ease-in-out infinite alternate;}
 .hero-orb.orb-2{width:400px;height:400px;background:var(--spark-orange);bottom:-150px;left:-100px;animation:floatO 18s ease-in-out infinite alternate-reverse;}
 .hero-orb.orb-3{width:300px;height:300px;background:#3498DB;top:50%;left:50%;animation:floatO 12s ease-in-out infinite alternate;}
 @keyframes floatO{0%{transform:translate(0,0) scale(1);}100%{transform:translate(40px,60px) scale(1.15);}}
-.hero-inner{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;position:relative;z-index:1;}
-.hero-badge{display:inline-block;padding:6px 16px;border-radius:var(--radius-full);background:rgba(255,255,255,.12);backdrop-filter:blur(8px);font-size:.8125rem;font-weight:700;margin-bottom:16px;border:1px solid rgba(255,255,255,.2);}
-.hero-title{font-family:'Quicksand',sans-serif;font-size:3rem;font-weight:800;line-height:1.15;margin-bottom:16px;}
+.hero-inner{position:relative;z-index:1;max-width:660px;}
+.hero-badge{display:inline-block;padding:6px 16px;border-radius:var(--radius-full);background:rgba(255,255,255,.12);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-size:.8125rem;font-weight:700;margin-bottom:16px;border:1px solid rgba(255,255,255,.2);}
+.hero-title{font-family:'Quicksand',sans-serif;font-size:3rem;font-weight:800;line-height:1.15;margin-bottom:16px;text-shadow:0 2px 24px rgba(0,0,0,.25);color:#FFF;}
 .text-gradient{background:linear-gradient(90deg,#1AAFA0,#F47B20,#FDB813);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.hero-sub{font-size:1.125rem;line-height:1.7;opacity:.85;max-width:520px;margin-bottom:24px;}
+.hero-sub{font-size:1.125rem;line-height:1.7;opacity:.9;max-width:520px;margin-bottom:24px;}
 .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px;}
-.hero-trust{display:flex;gap:20px;font-size:.8125rem;opacity:.7;flex-wrap:wrap;}
-.hero-visual{position:relative;}
-.hero-img{width:100%;border-radius:var(--radius-lg);box-shadow:0 24px 64px rgba(0,0,0,.3);}
-.hero-float-card{position:absolute;background:#FFF;color:var(--deep-navy);border-radius:var(--radius-md);padding:12px 16px;box-shadow:0 8px 24px rgba(0,0,0,.15);display:flex;align-items:center;gap:10px;font-size:.8125rem;animation:floatC 4s ease-in-out infinite alternate;}
+.hero-trust{display:flex;gap:20px;font-size:.8125rem;opacity:.8;flex-wrap:wrap;}
+.hero-float-strip{position:absolute;right:6%;bottom:9%;z-index:2;display:flex;flex-direction:column;gap:14px;}
+.hero-float-card{background:#FFF;color:var(--deep-navy);border-radius:var(--radius-md);padding:12px 16px;box-shadow:0 8px 24px rgba(0,0,0,.25);display:flex;align-items:center;gap:10px;font-size:.8125rem;animation:floatC 4s ease-in-out infinite alternate;}
 .hero-float-card strong{font-size:1.125rem;}.hero-float-card small{font-size:.6875rem;color:#999;}
-.float-1{top:20%;right:-20px;}.float-2{bottom:15%;left:-20px;animation-delay:2s;}
+.hero-float-card.float-2{animation-delay:2s;}
 @keyframes floatC{0%{transform:translateY(0);}100%{transform:translateY(-10px);}}
 .slide-in{opacity:0;transform:translateY(24px);animation:slideU .7s ease forwards;}
 @keyframes slideU{to{opacity:1;transform:translateY(0);}}
@@ -127,7 +139,7 @@ include __DIR__ . '/templates/header.php';
 .cta-section{background:linear-gradient(135deg,var(--tinker-teal),#138D80,var(--deep-navy));padding:80px 0;}
 .reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease;}.reveal.visible{opacity:1;transform:translateY(0);}
 @media(max-width:1024px){.pillars-grid{grid-template-columns:repeat(3,1fr);}}
-@media(max-width:768px){.hero{padding:60px 0 40px;min-height:auto;}.hero-inner{grid-template-columns:1fr;gap:32px;text-align:center;}.hero-title{font-size:2rem;}.hero-sub{margin:0 auto 20px;}.hero-ctas,.hero-trust{justify-content:center;}.hero-float-card{display:none;}.why-grid,.stem-inner{grid-template-columns:1fr;}.testimonial-grid{grid-template-columns:1fr;}.why-stat-float{bottom:-16px;right:10px;}.stem-img.img-2{position:static;width:60%;margin-top:12px;}}
+@media(max-width:768px){.hero{padding:60px 0 40px;min-height:auto;}.hero-inner{max-width:none;text-align:center;margin:0 auto;}.hero-content-glass{padding:24px 20px;}.hero-title{font-size:2rem;}.hero-sub{margin:0 auto 20px;}.hero-ctas,.hero-trust{justify-content:center;}.hero-float-strip{display:none;}.why-grid,.stem-inner{grid-template-columns:1fr;}.testimonial-grid{grid-template-columns:1fr;}.moments-grid{grid-template-columns:1fr 1fr;}.why-stat-float{bottom:-16px;right:10px;}.stem-img.img-2{position:static;width:60%;margin-top:12px;}}
 @media(max-width:640px){.pillars-grid{grid-template-columns:1fr 1fr;}}
 </style>
 

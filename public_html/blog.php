@@ -1,6 +1,6 @@
 <?php $pageTitle='Blog'; require_once __DIR__.'/includes/config.php'; include __DIR__.'/templates/header.php'; ?>
-<section class="section" style="background:var(--deep-navy);color:#FFF;padding:60px 0;text-align:center;">
-    <div class="container"><h1 style="color:#FFF;">Blog</h1><p style="opacity:.8;">Tips, stories, and insights on parenting, education, and raising curious kids.</p></div>
+<section class="page-hero page-hero--navy" style="padding:56px 0;">
+    <div class="container"><h1>Blog</h1><p>Tips, stories, and insights on parenting, education, and raising curious kids.</p></div>
 </section>
 <section class="section"><div class="container">
     <div id="blogGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;"><div class="spinner mx-auto" style="grid-column:1/-1;"></div></div>

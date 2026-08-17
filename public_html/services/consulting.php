@@ -1,6 +1,6 @@
 <?php $pageTitle='Educational Consulting'; require_once __DIR__.'/../includes/config.php'; include __DIR__.'/../templates/header.php'; ?>
-<section class="section" style="background:#1B2A4A;color:#FFF;padding:60px 0;text-align:center;">
-    <div class="container"><div style="font-size:3rem;margin-bottom:12px;">🎯</div><h1 style="color:#FFF;">Educational Consulting</h1></div>
+<section class="page-hero page-hero--navy" style="padding:56px 0;">
+    <div class="container"><div style="font-size:3rem;margin-bottom:12px;">🎯</div><h1 style="font-size:1.875rem;">Educational Consulting</h1></div>
 </section>
 <section class="section"><div class="container" style="max-width:860px;">
     <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=860&q=80" alt="Educational Consulting" style="width:100%;border-radius:var(--radius-lg);margin-bottom:32px;box-shadow:var(--shadow-md);">

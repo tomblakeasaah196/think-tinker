@@ -1,9 +1,10 @@
 <?php $pageTitle='About Us'; require_once __DIR__.'/includes/config.php'; include __DIR__.'/templates/header.php'; ?>
-<section class="section" style="background:linear-gradient(135deg,#1B2A4A,#243758);color:#FFF;padding:80px 0 60px;text-align:center;">
-    <div class="container reveal"><div class="section-tag" style="color:var(--idea-gold);">Our Story</div><h1 style="color:#FFF;font-size:2.25rem;">Think. Tinker. Shine.</h1><p style="opacity:.8;max-width:600px;margin:12px auto 0;font-size:1.0625rem;">We believe every child is born curious. Our job is to keep that fire burning.</p></div>
+<section class="page-hero page-hero--navy">
+    <div class="page-hero-photo" style="background-image:url('<?= APP_URL ?>/assets/img/hero/founder-portrait.jpg');background-position:top center;"></div>
+    <div class="container reveal"><div class="section-tag">Our Story</div><h1>Think. Tinker. Shine.</h1><p>We believe every child is born curious. Our job is to keep that fire burning.</p></div>
 </section>
 <section class="section"><div class="container"><div class="why-grid">
-    <div class="reveal"><img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?w=600&q=80" alt="Our team" style="border-radius:var(--radius-lg);width:100%;box-shadow:var(--shadow-md);"></div>
+    <div class="reveal photo-card"><img src="<?= APP_URL ?>/assets/img/hero/founder-portrait.jpg" alt="Janeth Joseph, Founder of Think & Tinker"><div class="photo-caption"><strong>Janeth Joseph</strong><span>Founder, Think & Tinker Kids Club</span></div></div>
     <div class="reveal">
         <div class="section-tag">Who We Are</div><h2>Think & Tinker Kids Club</h2>
         <p style="color:#666;line-height:1.8;margin:16px 0;">Think & Tinker Kids LTD (RC <?= htmlspecialchars(getSetting('business_rc','9030989')) ?>) is a Lagos-based educational services company founded by Janeth Joseph with a mission to make learning joyful, practical, and accessible for every child aged 1–14.</p>

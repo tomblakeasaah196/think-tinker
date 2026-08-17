@@ -1,6 +1,6 @@
 <?php $pageTitle='Consult Booklets'; require_once __DIR__.'/../includes/config.php'; include __DIR__.'/../templates/header.php'; ?>
-<section class="section" style="background:#27AE60;color:#FFF;padding:60px 0;text-align:center;">
-    <div class="container"><div style="font-size:3rem;margin-bottom:12px;">📖</div><h1 style="color:#FFF;">Consult Booklets</h1></div>
+<section class="page-hero" style="padding:56px 0;background:linear-gradient(135deg,#27AE60,#1e8449);">
+    <div class="container"><div style="font-size:3rem;margin-bottom:12px;">📖</div><h1 style="font-size:1.875rem;">Consult Booklets</h1></div>
 </section>
 <section class="section"><div class="container" style="max-width:860px;">
     <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=860&q=80" alt="Consult Booklets" style="width:100%;border-radius:var(--radius-lg);margin-bottom:32px;box-shadow:var(--shadow-md);">

@@ -53,6 +53,10 @@ $moduleList = [
         <span class="sidebar-badge">HUB</span>
     </div>
 
+    <div style="padding: 0 var(--space-2) var(--space-2);">
+        <a href="<?= APP_URL ?>/" class="btn-back-home">← Back to Home</a>
+    </div>
+
     <nav class="sidebar-nav">
         <?php foreach ($moduleList as $slug => [$icon, $label]):
             if ($slug !== 'help' && !in_array($slug, $modules)) continue;

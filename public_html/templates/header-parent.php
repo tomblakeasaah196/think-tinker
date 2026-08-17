@@ -37,6 +37,7 @@ $unreadMessages = dbCount('messages',
             <a href="<?= APP_URL ?>/parent/" class="topbar-logo">Think & Tinker</a>
         </div>
         <div class="flex items-center gap-1">
+            <a href="<?= APP_URL ?>/" class="btn-back-home">← Home</a>
             <?php include __DIR__ . '/notification-bell.php'; ?>
             <div class="dropdown">
                 <button data-dropdown class="avatar avatar-sm avatar-teal"><?= strtoupper(substr($user['first_name'],0,1) . substr($user['last_name'],0,1)) ?></button>

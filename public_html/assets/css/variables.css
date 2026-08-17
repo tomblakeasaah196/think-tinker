@@ -43,3 +43,45 @@
     --nav-height-mobile:  56px;
     --bottom-nav-height:  64px;
 }
+
+/* ============================================================
+   THEME TOKENS — Glassmorphism, gradients, light/dark surfaces
+   Additive only: nothing above this line has been changed, so
+   every existing page/component keeps working exactly as before.
+   These tokens power the public-site refresh (see theme.css).
+   ============================================================ */
+:root {
+    /* Glassmorphism */
+    --glass-bg-light:   rgba(255, 255, 255, 0.6);
+    --glass-bg-dark:    rgba(10, 17, 32, 0.45);
+    --glass-border:     rgba(255, 255, 255, 0.35);
+    --glass-border-soft:rgba(255, 255, 255, 0.16);
+    --glass-shadow:     0 8px 32px rgba(15, 23, 42, 0.16);
+    --blur-sm: blur(6px);
+    --blur-md: blur(14px);
+    --blur-lg: blur(24px);
+
+    /* Brand gradients */
+    --gradient-hero:  linear-gradient(120deg, rgba(8,13,26,.90) 0%, rgba(14,30,46,.72) 40%, rgba(18,60,66,.40) 65%, rgba(26,175,160,.22) 100%);
+    --gradient-brand: linear-gradient(120deg, var(--tinker-teal), var(--spark-orange) 55%, var(--idea-gold));
+    --gradient-navy:  linear-gradient(135deg, #1B2A4A 0%, #243758 55%, var(--tinker-teal) 100%);
+    --gradient-cta:   linear-gradient(135deg, var(--tinker-teal), #12897c, var(--deep-navy));
+    --gradient-mesh:
+        radial-gradient(at 15% 20%, rgba(26,175,160,.20), transparent 55%),
+        radial-gradient(at 85% 10%, rgba(244,123,32,.16), transparent 50%),
+        radial-gradient(at 50% 100%, rgba(52,152,219,.14), transparent 55%);
+
+    /* Dark-mode surfaces (new dedicated names — brand vars above are left
+       untouched since they double as both text AND background colors
+       across the shared design system, so redefining them per-theme
+       would conflict with themselves) */
+    --bg-page-dark:     #0A0F1C;
+    --surface-dark:     #121B2E;
+    --surface-alt-dark: #0F1626;
+    --text-dark:        #E8ECF4;
+    --text-dark-muted:  #93A0B8;
+    --border-dark:      rgba(255, 255, 255, 0.08);
+    --input-bg-dark:    #0F1726;
+
+    --theme-transition: background-color .3s ease, color .3s ease, border-color .3s ease, box-shadow .3s ease;
+}

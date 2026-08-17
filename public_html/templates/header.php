@@ -13,6 +13,15 @@ $currentPage = basename($_SERVER['SCRIPT_NAME'], '.php');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+    (function(){
+        try {
+            var saved = localStorage.getItem('tt-theme');
+            var theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+        } catch (e) {}
+    })();
+    </script>
     <title><?= htmlspecialchars($pageTitle) ?></title>
     <meta name="description" content="<?= htmlspecialchars($pageDescription) ?>">
     <?php include __DIR__ . '/og-meta.php'; ?>
@@ -53,6 +62,10 @@ $currentPage = basename($_SERVER['SCRIPT_NAME'], '.php');
             </div>
 
             <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" type="button">
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <a href="<?= $_SESSION['user_type'] === 'parent' ? APP_URL . '/parent/' : HUB_URL . '/dashboard.php' ?>" class="btn btn-primary btn-sm">My Portal</a>
                 <?php else: ?>
@@ -106,6 +119,17 @@ $currentPage = basename($_SERVER['SCRIPT_NAME'], '.php');
 document.getElementById('navToggle')?.addEventListener('click', function() {
     document.getElementById('navLinks').classList.toggle('open');
     this.classList.toggle('active');
+});
+document.getElementById('themeToggle')?.addEventListener('click', function() {
+    var root = document.documentElement;
+    var isDark = root.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+        root.removeAttribute('data-theme');
+        try { localStorage.setItem('tt-theme', 'light'); } catch (e) {}
+    } else {
+        root.setAttribute('data-theme', 'dark');
+        try { localStorage.setItem('tt-theme', 'dark'); } catch (e) {}
+    }
 });
 </script>
 

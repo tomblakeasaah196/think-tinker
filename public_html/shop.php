@@ -1,9 +1,8 @@
 <?php $pageTitle='Bookstore'; require_once __DIR__.'/includes/config.php'; include __DIR__.'/templates/header.php'; ?>
-<section class="section" style="background:var(--glass-bg-dark);backdrop-filter:var(--blur-lg);color:#FFF;padding:60px 0;position:relative;overflow:hidden;">
-    <div style="position:absolute;inset:0;background:linear-gradient(135deg,#3498DB,#2980B9);z-index:-1;"></div>
-    <div class="container" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
-        <div><h1 style="color:#FFF;margin-bottom:4px;">📚 Bookstore</h1><p style="opacity:.8;">Textbooks, STEM kits, flashcards, and learning tools — delivered across Lagos.</p></div>
-        <a href="<?= APP_URL ?>/cart.php" class="btn btn-lg" style="background:#FFF;color:var(--deep-navy);position:relative;">🛒 Cart <span id="cartCount" class="badge badge-red" style="position:absolute;top:-6px;right:-6px;display:none;">0</span></a>
+<section class="page-hero page-hero--blue" style="padding:56px 0;">
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;text-align:left;">
+        <div><h1 style="margin-bottom:4px;">📚 Bookstore</h1><p style="margin:0;">Textbooks, STEM kits, flashcards, and learning tools — delivered across Lagos.</p></div>
+        <a href="<?= APP_URL ?>/cart.php" class="btn btn-lg glass" style="color:#FFF;position:relative;">🛒 Cart <span id="cartCount" class="badge badge-red" style="position:absolute;top:-6px;right:-6px;display:none;">0</span></a>
     </div>
 </section>
 <section class="section"><div class="container">

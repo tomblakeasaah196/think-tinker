@@ -27,6 +27,7 @@ $isAuth = isset($teacherUser);
             Think & Tinker <span style="color: var(--spark-orange); font-size: 0.75rem; font-weight: 600;">FOR TEACHERS</span>
         </a>
         <div class="flex items-center gap-2">
+            <a href="<?= APP_URL ?>/" class="btn-back-home">← Back to Home</a>
             <?php if ($isAuth): ?>
                 <?php include __DIR__ . '/notification-bell.php'; ?>
                 <span style="font-size: 0.875rem; font-weight: 600;"><?= htmlspecialchars($teacherUser['first_name']) ?></span>

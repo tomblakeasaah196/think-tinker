@@ -1,7 +1,6 @@
 <?php $pageTitle='Contact Us'; require_once __DIR__.'/includes/config.php'; include __DIR__.'/templates/header.php'; ?>
-<section class="section" style="background:var(--glass-bg-dark);backdrop-filter:var(--blur-lg);color:#FFF;padding:60px 0;text-align:center;position:relative;overflow:hidden;">
-    <div style="position:absolute;inset:0;background:linear-gradient(135deg,var(--tinker-teal),#138D80);z-index:-1;"></div>
-    <div class="container"><h1 style="color:#FFF;">Get in Touch</h1><p style="opacity:.8;">We'd love to hear from you. Reach out anytime.</p></div>
+<section class="page-hero page-hero--teal" style="padding:56px 0;">
+    <div class="container"><h1>Get in Touch</h1><p>We'd love to hear from you. Reach out anytime.</p></div>
 </section>
 <section class="section"><div class="container" style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;">
     <div>

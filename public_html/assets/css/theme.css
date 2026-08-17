@@ -1,0 +1,268 @@
+/* ============================================================
+   assets/css/theme.css — Think & Tinker Visual Refresh
+   Glassmorphism · Gradients · Dark/Light Mode · Photo Heroes
+   ------------------------------------------------------------
+   Purely additive layer for the PUBLIC marketing site (home,
+   about, services, shop, blog, contact). Nothing in main.css or
+   variables.css was removed — this file only adds new component
+   classes and dark-mode overrides scoped under [data-theme="dark"],
+   an attribute that is only ever set by the toggle script in
+   templates/header.php, so parent/teacher/hub portal pages are
+   completely unaffected.
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   Smooth theme switching
+   ------------------------------------------------------------ */
+body, .site-nav, .site-footer, .card, .pillar-card, .testimonial-card,
+.product-card, .form-input, .form-select, .form-textarea, .filter-chip,
+.page-hero, .glass, .cart-summary, .cart-item {
+    transition: var(--theme-transition);
+}
+
+/* ------------------------------------------------------------
+   Glassmorphism utilities
+   ------------------------------------------------------------ */
+.glass {
+    background: var(--glass-bg-light);
+    -webkit-backdrop-filter: var(--blur-md);
+    backdrop-filter: var(--blur-md);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+}
+.glass-strong {
+    background: var(--glass-bg-dark);
+    -webkit-backdrop-filter: var(--blur-lg);
+    backdrop-filter: var(--blur-lg);
+    border: 1px solid var(--glass-border-soft);
+    box-shadow: var(--glass-shadow);
+}
+.glass-pill {
+    border-radius: var(--radius-full);
+}
+
+/* ------------------------------------------------------------
+   Theme toggle button (sun / moon)
+   ------------------------------------------------------------ */
+.theme-toggle {
+    position: relative;
+    width: 44px; height: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: var(--radius-full);
+    background: rgba(26,175,160,0.08);
+    border: 1px solid rgba(26,175,160,0.18);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: var(--theme-transition), transform .2s;
+}
+.theme-toggle:hover { transform: translateY(-1px); background: rgba(26,175,160,0.14); }
+.theme-toggle:active { transform: scale(0.93); }
+.theme-toggle svg { width: 20px; height: 20px; display: block; }
+.theme-toggle .icon-sun { color: var(--spark-orange); display: block; }
+.theme-toggle .icon-moon { color: var(--tinker-teal); display: none; }
+[data-theme="dark"] .theme-toggle { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.14); }
+[data-theme="dark"] .theme-toggle .icon-sun { display: none; }
+[data-theme="dark"] .theme-toggle .icon-moon { display: block; color: var(--idea-gold); }
+
+/* ------------------------------------------------------------
+   PAGE HERO — reusable banner for interior pages
+   (about / services / blog / shop / contact)
+   Usage: <section class="page-hero page-hero--navy"> … with an
+   optional <div class="page-hero-photo" style="background-image:url(...)">
+   as a decorative, low-opacity backdrop.
+   ------------------------------------------------------------ */
+.page-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 76px 0 56px;
+    text-align: center;
+    color: #FFF;
+    isolation: isolate;
+}
+.page-hero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: var(--gradient-mesh);
+    z-index: -1;
+    opacity: .8;
+}
+.page-hero-photo {
+    position: absolute; inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.22;
+    z-index: -2;
+    filter: saturate(1.05);
+}
+.page-hero--navy   { background: var(--gradient-navy); }
+.page-hero--teal    { background: linear-gradient(135deg, var(--tinker-teal), #0f6f64); }
+.page-hero--blue    { background: linear-gradient(135deg, #3498DB, #205f8f); }
+.page-hero--sunset  { background: linear-gradient(135deg, var(--spark-orange), var(--story-coral)); }
+.page-hero .section-tag { color: var(--idea-gold); }
+.page-hero h1 { color: #FFF; font-size: 2.375rem; margin-bottom: 10px; }
+.page-hero p  { opacity: .85; max-width: 600px; margin: 0 auto; font-size: 1.0625rem; }
+.page-hero .glass { display: inline-flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 28px; border-radius: var(--radius-lg); text-align: left; margin-top: 4px; }
+@media (max-width: 640px) { .page-hero { padding: 56px 0 40px; } .page-hero h1 { font-size: 1.875rem; } }
+
+/* ------------------------------------------------------------
+   Homepage photo hero — full-bleed image + gradient scrim so
+   headline copy stays fully legible over a real photo.
+   ------------------------------------------------------------ */
+.hero-photo {
+    position: absolute; inset: 0;
+    background-image: url('../img/hero/hero-bg.jpg');
+    background-size: cover;
+    background-position: center 18%;
+    z-index: -2;
+}
+.hero-scrim {
+    position: absolute; inset: 0;
+    background: var(--gradient-hero);
+    z-index: -1;
+}
+.hero-content-glass {
+    background: rgba(8, 14, 26, 0.28);
+    -webkit-backdrop-filter: var(--blur-sm);
+    backdrop-filter: var(--blur-sm);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: var(--radius-lg);
+    padding: 32px 36px;
+}
+@media (max-width: 768px) {
+    .hero-content-glass { padding: 24px 20px; }
+}
+
+/* ------------------------------------------------------------
+   "Life at Think & Tinker" moments gallery
+   ------------------------------------------------------------ */
+.moments-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.moment-card {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    aspect-ratio: 4 / 5;
+    transition: transform .35s ease, box-shadow .35s ease;
+}
+.moment-card:hover { transform: translateY(-6px) scale(1.015); box-shadow: var(--shadow-lg); }
+.moment-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.moments-cta {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    margin-top: var(--space-4);
+}
+@media (max-width: 768px) { .moments-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .moments-grid { grid-template-columns: 1fr; } }
+
+/* ------------------------------------------------------------
+   Photo cards with gradient-scrim caption (about/services use)
+   ------------------------------------------------------------ */
+.photo-card { position: relative; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); }
+.photo-card img { width: 100%; display: block; }
+.photo-card .photo-caption {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 20px;
+    background: linear-gradient(0deg, rgba(8,14,26,.82) 0%, rgba(8,14,26,0) 100%);
+    color: #FFF;
+}
+.photo-card .photo-caption strong { display: block; font-size: 1rem; }
+.photo-card .photo-caption span { font-size: .8125rem; opacity: .85; }
+
+/* ------------------------------------------------------------
+   Back-to-home button (portal headers)
+   ------------------------------------------------------------ */
+.btn-back-home {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.8125rem; font-weight: 700;
+    color: var(--tinker-teal);
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    background: rgba(26,175,160,0.08);
+    border: 1px solid rgba(26,175,160,0.18);
+    transition: background .2s, color .2s;
+    white-space: nowrap;
+}
+.btn-back-home:hover { background: var(--tinker-teal); color: #FFF; }
+
+/* ============================================================
+   DARK MODE — scoped to [data-theme="dark"] on <html>.
+   Only ever set on public pages (templates/header.php). Portal
+   pages never receive this attribute, so they are unaffected.
+   ============================================================ */
+[data-theme="dark"] body { background: var(--bg-page-dark); color: var(--text-dark); }
+[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3,
+[data-theme="dark"] h4, [data-theme="dark"] h5, [data-theme="dark"] h6 { color: var(--text-dark); }
+[data-theme="dark"] p, [data-theme="dark"] li { color: var(--text-dark-muted); }
+[data-theme="dark"] a { color: #4FD1C5; }
+[data-theme="dark"] a:hover { color: #7FE3D8; }
+[data-theme="dark"] .text-muted { color: var(--text-dark-muted); }
+
+/* Nav */
+[data-theme="dark"] .site-nav {
+    background: rgba(10, 15, 28, 0.72);
+    -webkit-backdrop-filter: var(--blur-md);
+    backdrop-filter: var(--blur-md);
+    box-shadow: 0 1px 0 var(--border-dark);
+}
+[data-theme="dark"] .nav-link { color: var(--text-dark); }
+[data-theme="dark"] .nav-link:hover { background: rgba(255,255,255,0.06); }
+[data-theme="dark"] .logo-text { color: #4FD1C5; }
+[data-theme="dark"] .nav-dropdown-menu { background: var(--surface-dark); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+[data-theme="dark"] .nav-dropdown-menu a { color: var(--text-dark); }
+[data-theme="dark"] .nav-dropdown-menu a:hover { background: rgba(255,255,255,0.06); color: #4FD1C5; }
+[data-theme="dark"] .nav-toggle span { background: var(--text-dark); }
+@media (max-width: 768px) {
+    [data-theme="dark"] .nav-links { background: var(--bg-page-dark); }
+    [data-theme="dark"] .nav-link { border-bottom-color: var(--border-dark); }
+}
+
+/* Sections */
+[data-theme="dark"] .section-cream { background: var(--surface-alt-dark); }
+[data-theme="dark"] .section-header p { color: var(--text-dark-muted); }
+
+/* Cards */
+[data-theme="dark"] .card,
+[data-theme="dark"] .pillar-card,
+[data-theme="dark"] .testimonial-card,
+[data-theme="dark"] .product-card,
+[data-theme="dark"] .stat-card {
+    background: var(--surface-dark);
+    color: var(--text-dark);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+    border-color: var(--border-dark);
+}
+[data-theme="dark"] .pillar-card h3, [data-theme="dark"] .product-card .prod-name { color: var(--text-dark); }
+[data-theme="dark"] .pillar-card p, [data-theme="dark"] .card-text, [data-theme="dark"] .testi-text { color: var(--text-dark-muted); }
+[data-theme="dark"] .card-footer { border-top-color: var(--border-dark); }
+[data-theme="dark"] .product-card .prod-img { background: var(--surface-alt-dark); }
+
+/* Page hero glass panel readability on dark */
+[data-theme="dark"] .page-hero .glass { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); }
+
+/* Forms */
+[data-theme="dark"] .form-input, [data-theme="dark"] .form-select, [data-theme="dark"] .form-textarea {
+    background: var(--input-bg-dark);
+    border-color: var(--border-dark);
+    color: var(--text-dark);
+}
+[data-theme="dark"] .form-label { color: var(--text-dark); }
+[data-theme="dark"] .form-hint { color: var(--text-dark-muted); }
+
+/* Shop */
+[data-theme="dark"] .filter-chip { background: var(--surface-dark); border-color: var(--border-dark); color: var(--text-dark-muted); }
+[data-theme="dark"] .filter-chip:hover { border-color: var(--tinker-teal); }
+[data-theme="dark"] .filter-chip.active { background: var(--tinker-teal); color: #FFF; border-color: var(--tinker-teal); }
+[data-theme="dark"] .cart-summary { background: var(--surface-alt-dark); }
+[data-theme="dark"] .cart-item { border-bottom-color: var(--border-dark); }
+[data-theme="dark"] .qty-control { border-color: var(--border-dark); }
+[data-theme="dark"] .qty-control button { background: var(--surface-alt-dark); color: var(--text-dark); }
+
+/* Misc */
+[data-theme="dark"] .empty-state { color: var(--text-dark-muted); }
+[data-theme="dark"] .empty-state h3 { color: var(--text-dark); }
+[data-theme="dark"] .spinner { border-color: var(--border-dark); border-top-color: var(--tinker-teal); }
+[data-theme="dark"] .badge-gray { background: rgba(255,255,255,0.08); color: var(--text-dark-muted); }
+[data-theme="dark"] hr, [data-theme="dark"] [style*="border-top:1px solid var(--cloud-gray)"] { border-color: var(--border-dark) !important; }
+[data-theme="dark"] .btn-back-home { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.14); }
+
+/* Hero orbs read a touch stronger on the photo hero in dark mode */
+[data-theme="dark"] .hero-orb { opacity: .38; }
