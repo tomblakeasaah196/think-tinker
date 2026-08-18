@@ -532,3 +532,19 @@ html .testi-text, [data-theme="dark"] .testi-text { color: var(--text-body); }
     [data-theme="dark"] .nav-dropdown-menu { background: transparent; box-shadow: none; }
     html .nav-links .mobile-auth .btn { width: 100%; justify-content: center; }
 }
+
+/* --- MOBILE NAV CONTAINING-BLOCK FIX --------------------------
+   An element with backdrop-filter becomes the containing block
+   for its position:fixed descendants. The frosted dark nav was
+   therefore trapping the .nav-links slide-out panel inside the
+   56px nav bar (measured: 48px tall, 654px of content, scrolling
+   inside a sliver). Drop the blur below 768px and use an opaque
+   bar instead — the panel goes back to being viewport-sized.
+   Desktop keeps the glass. */
+@media (max-width: 768px) {
+    [data-theme="dark"] .site-nav {
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+        background: var(--bg-page-dark);
+    }
+}
