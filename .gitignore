@@ -1,36 +1,28 @@
 # ============================================================
 #  Think & Tinker — .gitignore
 #
-#  Principle: track ALL application code. Ignore only three
-#  things — secrets, restorable dependencies, and content that
-#  users or the app generate at runtime.
-#
-#  The previous version excluded api/, includes/ and every
-#  portal directory. That left the entire backend unversioned:
-#  no history, no rollback, and one single copy living on a
-#  shared host. Those are now tracked.
+#  Rule: if it is not a secret, it is tracked.
+#  Everything below is either a credential, runtime data that
+#  belongs to users rather than the codebase, or a folder that
+#  is restored by a single command.
 # ============================================================
 
 
-# --- Secrets — never commit ---------------------------------
-# config.php is safe to track: it READS credentials from .env
-# rather than hardcoding them. .env itself must never be in git.
+# --- Credentials --------------------------------------------
+# The ONLY category that exists for secrecy reasons.
+# includes/config.php is intentionally NOT ignored: it reads
+# its values from .env rather than hardcoding them.
 .env
 .env.*
-!.env.example
 **/.env
 **/.env.*
+!.env.example
 !**/.env.example
 
 
-# --- Dependencies — restore with `composer install` ---------
-public_html/vendor/
-composer.phar
-public_html/composer.phar
-public_html/install-deps.php
-
-
-# --- User-generated & runtime content -----------------------
+# --- User data, not code -------------------------------------
+# Parent and child photos, uploaded documents, invoices, logs.
+# Committing these would put customer PII into git history.
 public_html/uploads/*
 !public_html/uploads/.gitkeep
 public_html/logs/*
@@ -38,38 +30,35 @@ public_html/logs/*
 *.log
 
 
-# --- Generated output ---------------------------------------
-public_html/pdf-templates/output/
-public_html/cache/
-*.cache
+# --- Restored by one command ---------------------------------
+# `composer install` regenerates this exactly. Tracking it adds
+# thousands of third-party files to every diff. Say the word and
+# I will remove this rule.
+public_html/vendor/
 
 
-# --- Database dumps ------------------------------------------
-# Keep the schema + seeds under Database/. Ignore ad-hoc dumps,
-# which are large, change constantly, and often contain real
-# customer data.
-*-backup.sql
-*-dump.sql
-backup-*.sql
-
-
-# --- OS / editor noise ---------------------------------------
+# --- Machine noise -------------------------------------------
 .DS_Store
 Thumbs.db
 desktop.ini
 *.swp
 *.swo
 *~
+*.bak
+*.orig
+*.rej
+*.tmp
+
+# Editor settings are per-machine, but shared config is kept.
 .idea/
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json
 
 
-# --- Scratch / working files ---------------------------------
-*.bak
-*.orig
-*.tmp
-*.rej
-_to_delete/
-_qa.html
+# --- Database dumps containing live customer data ------------
+# Schema and seeds under Database/ ARE tracked. These patterns
+# only catch ad-hoc production dumps.
+*-backup.sql
+*-dump.sql
+backup-*.sql
