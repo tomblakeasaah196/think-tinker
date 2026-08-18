@@ -1,8 +1,75 @@
+# ============================================================
+#  Think & Tinker — .gitignore
+#
+#  Principle: track ALL application code. Ignore only three
+#  things — secrets, restorable dependencies, and content that
+#  users or the app generate at runtime.
+#
+#  The previous version excluded api/, includes/ and every
+#  portal directory. That left the entire backend unversioned:
+#  no history, no rollback, and one single copy living on a
+#  shared host. Those are now tracked.
+# ============================================================
+
+
+# --- Secrets — never commit ---------------------------------
+# config.php is safe to track: it READS credentials from .env
+# rather than hardcoding them. .env itself must never be in git.
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+
+# --- Dependencies — restore with `composer install` ---------
 public_html/vendor/
-public_html/pdf-templates/
-public_html/hub/
-public_html/parent/
-public_html/teacher/
-public_html/school/
-public_html/includes/
-public_html/api/
+composer.phar
+public_html/composer.phar
+public_html/install-deps.php
+
+
+# --- User-generated & runtime content -----------------------
+public_html/uploads/*
+!public_html/uploads/.gitkeep
+public_html/logs/*
+!public_html/logs/.gitkeep
+*.log
+
+
+# --- Generated output ---------------------------------------
+public_html/pdf-templates/output/
+public_html/cache/
+*.cache
+
+
+# --- Database dumps ------------------------------------------
+# Keep the schema + seeds under Database/. Ignore ad-hoc dumps,
+# which are large, change constantly, and often contain real
+# customer data.
+*-backup.sql
+*-dump.sql
+backup-*.sql
+
+
+# --- OS / editor noise ---------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+
+# --- Scratch / working files ---------------------------------
+*.bak
+*.orig
+*.tmp
+*.rej
+_to_delete/
+_qa.html
