@@ -18,5 +18,12 @@
 </div>
 <style>.msg-convo-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid #F0F0F0;cursor:pointer;transition:background 0.15s;}.msg-convo-item:hover{background:#FAFAFA;}.msg-convo-item.active{background:rgba(26,175,160,0.08);}</style>
 <script src="<?= APP_URL ?>/assets/js/messenger.js"></script>
-<script>$(function(){ Messenger.init(); });</script>
+<script>
+$(function(){
+    Messenger.init();
+    // Arriving from the dashboard's "Ask a Question" button: open the
+    // composer straight away instead of showing an empty conversation list.
+    if (new URLSearchParams(location.search).get('new')) { Messenger.startNew(); }
+});
+</script>
 <?php require_once __DIR__.'/../templates/footer-parent.php'; ?>

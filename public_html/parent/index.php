@@ -1,6 +1,13 @@
 <?php $pageTitle='Dashboard'; $currentTab='home'; require_once __DIR__.'/../templates/header-parent.php'; ?>
 
 <div id="childSwitcher" class="child-switcher" style="display:none;"></div>
+
+<!-- Opens the existing messaging thread composer directly. Not a second
+     system: ?new=1 simply calls Messenger.startNew() on arrival. -->
+<a href="<?= APP_URL ?>/parent/messages.php?new=1" class="btn btn-primary btn-block ask-question-cta">
+    <span aria-hidden="true">&#128172;</span> Ask a Question
+</a>
+
 <div id="parentStats" class="parent-stats"></div>
 
 <h3 class="mb-2" style="font-size:1rem;">Upcoming Sessions</h3>

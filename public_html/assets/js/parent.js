@@ -24,11 +24,14 @@ Parent.loadDashboard = function() {
         Parent.currentChildId = d.selected_child_id;
         // Stats
         const prog = d.progress || {};
+        // Each tile links to the page it summarises. Previously these were
+        // inert numbers, so a parent reading "0 Messages" concluded there was
+        // nothing there rather than that it was somewhere to tap.
         $('#parentStats').html(`
-            <div class="parent-stat"><div class="stat-num">${(d.upcoming_sessions||[]).length}</div><div class="stat-lbl">Upcoming Sessions</div></div>
-            <div class="parent-stat orange"><div class="stat-num">${d.unread_messages||0}</div><div class="stat-lbl">Messages</div></div>
-            <div class="parent-stat green"><div class="stat-num">${prog.mastered||0}</div><div class="stat-lbl">Topics Mastered</div></div>
-            <div class="parent-stat coral"><div class="stat-num">${(d.pending_invoices||[]).length}</div><div class="stat-lbl">Pending Payments</div></div>
+            <a class="parent-stat" href="calendar.php"><div class="stat-num">${(d.upcoming_sessions||[]).length}</div><div class="stat-lbl">Upcoming Sessions</div></a>
+            <a class="parent-stat orange" href="messages.php"><div class="stat-num">${d.unread_messages||0}</div><div class="stat-lbl">Messages</div></a>
+            <a class="parent-stat green" href="child.php"><div class="stat-num">${prog.mastered||0}</div><div class="stat-lbl">Topics Mastered</div></a>
+            <a class="parent-stat coral" href="payments.php"><div class="stat-num">${(d.pending_invoices||[]).length}</div><div class="stat-lbl">Pending Payments</div></a>
         `);
         // Upcoming sessions
         let sessHtml = '';

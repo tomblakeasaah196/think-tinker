@@ -25,7 +25,13 @@ function loadChild(id, chip) {
         if (!r.success) return;
         const c = r.data.child;
         let html = `<div class="card mb-3"><div class="card-body" style="text-align:center;">
-            <div class="avatar avatar-xl avatar-teal mx-auto mb-2">${TT.initials(c.first_name+' '+c.last_name)}</div>
+            <div class="child-photo-wrap mx-auto mb-2">
+                ${c.photo_url
+                    ? `<img src="${c.photo_url}" alt="${TT.escHtml(c.first_name)}" class="child-photo">`
+                    : `<div class="avatar avatar-xl avatar-teal">${TT.initials(c.first_name+' '+c.last_name)}</div>`}
+                <button type="button" class="child-photo-btn" onclick="ChildPhoto.pick(${c.id})" title="Change photo" aria-label="Change photo">&#128247;</button>
+            </div>
+            <input type="file" id="childPhotoInput" accept="image/*" style="display:none;">
             <h2>${TT.escHtml(c.first_name+' '+c.last_name)}</h2>
             <p class="text-muted text-sm">Age ${c.age} · ${TT.escHtml(c.current_school||'School not set')} · ${TT.escHtml(c.grade_level||'Grade not set')}</p>
             ${c.medical_notes?`<div class="alert alert-warning mt-2" style="text-align:left;"><strong>Medical Notes:</strong> ${TT.escHtml(c.medical_notes)}</div>`:''}
@@ -67,3 +73,51 @@ function loadChild(id, chip) {
 }
 </script>
 <?php require_once __DIR__.'/../templates/footer-parent.php'; ?>
+
+<style>
+/* Child photo — the API has always returned photo_url and the children table
+   has always had a photo column; this page just never used them. */
+.child-photo-wrap { position: relative; width: 96px; height: 96px; }
+.child-photo {
+    width: 96px; height: 96px; border-radius: 50%;
+    object-fit: cover; display: block;
+    border: 3px solid var(--tinker-teal);
+}
+.child-photo-wrap .avatar-xl { width: 96px; height: 96px; font-size: 2rem; }
+.child-photo-btn {
+    position: absolute; right: -2px; bottom: -2px;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--tinker-teal); color: #FFF;
+    border: 2px solid #FFF; cursor: pointer;
+    font-size: 14px; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+}
+.child-photo-btn:hover { background: #0F6F66; }
+</style>
+<script>
+/* Parents may set their own child's photo; ChildController.updateChild()
+   already enforces that a parent can only touch a child whose parent_id
+   matches their own user id, and already accepts $_FILES['photo']. */
+const ChildPhoto = {
+    pick(childId) {
+        const input = document.getElementById('childPhotoInput');
+        input.value = '';
+        input.onchange = () => ChildPhoto.upload(childId, input.files[0]);
+        input.click();
+    },
+    upload(childId, file) {
+        if (!file) return;
+        if (!file.type.startsWith('image/')) { TT.toast('Please choose an image file.', 'error'); return; }
+        if (file.size > 10 * 1024 * 1024) { TT.toast('Image must be under 10MB.', 'error'); return; }
+        const fd = new FormData();
+        fd.append('action', 'update_child');
+        fd.append('id', childId);
+        fd.append('photo', file);
+        TT.toast('Uploading photo...', 'info');
+        TT.api('ChildController.php', fd).done(function(r) {
+            if (r.success) { TT.toast('Photo updated.', 'success'); loadChild(childId); }
+            else { TT.toast(r.message || 'Upload failed.', 'error'); }
+        }).fail(function() { TT.toast('Upload failed. Please try again.', 'error'); });
+    }
+};
+</script>

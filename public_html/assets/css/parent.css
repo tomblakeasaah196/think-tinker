@@ -146,3 +146,27 @@
     .parent-stat { padding: 12px; }
     .parent-stat .stat-num { font-size: 1.375rem; }
 }
+
+/* Dashboard stat tiles are <a> elements now, so they must not pick up
+   link colour or underline, and they should feel tappable. */
+a.parent-stat {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+a.parent-stat:hover,
+a.parent-stat:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    text-decoration: none;
+    color: inherit;
+}
+a.parent-stat:active { transform: translateY(0); }
+
+/* Primary call to action above the tiles */
+.ask-question-cta {
+    margin-bottom: var(--space-3);
+    font-size: 1rem;
+    padding: 14px;
+}
