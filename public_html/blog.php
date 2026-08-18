@@ -15,9 +15,9 @@ function loadBlog(page){
         if(!posts.length){$('#blogGrid').html('<div style="grid-column:1/-1;" class="empty-state"><div class="icon">✍️</div><h3>Coming Soon</h3><p>We\'re working on great content. Check back soon!</p></div>');return;}
         let html='';posts.forEach(p=>{
             const img=p.image_url||'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&q=80';
-            html+=`<a href="<?= APP_URL ?>/blog-post.php?slug=${p.slug}" class="card card-clickable" style="text-decoration:none;color:var(--charcoal);">
+            html+=`<a href="<?= APP_URL ?>/blog-post.php?slug=${p.slug}" class="card card-clickable" style="text-decoration:none;color:var(--text-body);">
                 <img src="${img}" class="card-img" alt="" loading="lazy">
-                <div class="card-body"><span class="badge badge-teal" style="margin-bottom:8px;">${TT.escHtml(p.category||'')}</span><h3 class="card-title" style="font-size:1rem;">${TT.escHtml(p.title)}</h3><p class="card-text">${TT.escHtml((p.excerpt||'').substring(0,120))}</p><span style="font-size:.75rem;color:#999;">${p.formatted_date} · ${TT.escHtml(p.author_name)}</span></div></a>`;
+                <div class="card-body"><span class="badge badge-teal" style="margin-bottom:8px;">${TT.escHtml(p.category||'')}</span><h3 class="card-title" style="font-size:1rem;">${TT.escHtml(p.title)}</h3><p class="card-text">${TT.escHtml((p.excerpt||'').substring(0,120))}</p><span style="font-size:.75rem;color:var(--text-faint);">${p.formatted_date} · ${TT.escHtml(p.author_name)}</span></div></a>`;
         });
         $('#blogGrid').html(html);
         if(r.data.pages>1)TT.buildPagination($('#blogPagination'),r.data.page,r.data.pages,loadBlog);

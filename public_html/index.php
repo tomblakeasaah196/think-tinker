@@ -84,8 +84,8 @@ include __DIR__ . '/templates/header.php';
     <h2 style="color:#FFF;font-size:2rem;margin-bottom:8px;">Ready to Start Your Child's Journey?</h2>
     <p style="color:rgba(255,255,255,0.8);font-size:1.0625rem;max-width:500px;margin:0 auto 24px;">Join hundreds of Lagos families who trust Think & Tinker.</p>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-        <a href="<?= APP_URL ?>/parent/register.php" class="btn btn-lg" style="background:#FFF;color:var(--deep-navy);">Get Started Free</a>
-        <a href="<?= whatsappLink("Hello! I'd like to learn more about Think & Tinker.") ?>" target="_blank" class="btn btn-lg" style="background:var(--leaf-green);color:#FFF;">💬 WhatsApp Us</a>
+        <a href="<?= APP_URL ?>/parent/register.php" class="btn btn-lg btn-on-dark">Get Started Free</a>
+        <a href="<?= whatsappLink("Hello! I'd like to learn more about Think & Tinker.") ?>" target="_blank" class="btn btn-lg" style="background:var(--green-surface);color:#FFF;">💬 WhatsApp Us</a>
     </div>
 </div></div></section>
 
@@ -105,19 +105,19 @@ include __DIR__ . '/templates/header.php';
 .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px;}
 .hero-trust{display:flex;gap:20px;font-size:.8125rem;opacity:.8;flex-wrap:wrap;}
 .hero-float-strip{position:absolute;right:6%;bottom:9%;z-index:2;display:flex;flex-direction:column;gap:14px;}
-.hero-float-card{background:#FFF;color:var(--deep-navy);border-radius:var(--radius-md);padding:12px 16px;box-shadow:0 8px 24px rgba(0,0,0,.25);display:flex;align-items:center;gap:10px;font-size:.8125rem;animation:floatC 4s ease-in-out infinite alternate;}
-.hero-float-card strong{font-size:1.125rem;}.hero-float-card small{font-size:.6875rem;color:#999;}
+.hero-float-card{background:#FFF;color:var(--text-heading);border-radius:var(--radius-md);padding:12px 16px;box-shadow:0 8px 24px rgba(0,0,0,.25);display:flex;align-items:center;gap:10px;font-size:.8125rem;animation:floatC 4s ease-in-out infinite alternate;}
+.hero-float-card strong{font-size:1.125rem;}.hero-float-card small{font-size:.6875rem;color:var(--text-faint);}
 .hero-float-card.float-2{animation-delay:2s;}
 @keyframes floatC{0%{transform:translateY(0);}100%{transform:translateY(-10px);}}
 .slide-in{opacity:0;transform:translateY(24px);animation:slideU .7s ease forwards;}
 @keyframes slideU{to{opacity:1;transform:translateY(0);}}
 .section-tag{display:inline-block;font-size:.6875rem;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:var(--spark-orange);margin-bottom:8px;}
 .pillars-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;}
-.pillar-card{background:#FFF;border-radius:var(--radius-lg);padding:28px 20px;text-align:center;box-shadow:var(--shadow-sm);transition:transform .3s,box-shadow .3s;text-decoration:none;color:var(--charcoal);border-top:4px solid var(--accent);}
-.pillar-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-lg);color:var(--charcoal);}
+.pillar-card{background:#FFF;border-radius:var(--radius-lg);padding:28px 20px;text-align:center;box-shadow:var(--shadow-sm);transition:transform .3s,box-shadow .3s;text-decoration:none;color:var(--text-body);border-top:4px solid var(--accent);}
+.pillar-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-lg);color:var(--text-body);}
 .pillar-icon{font-size:2.5rem;margin-bottom:12px;}
-.pillar-card h3{font-size:1rem;margin-bottom:8px;color:var(--deep-navy);}
-.pillar-card p{font-size:.8125rem;color:#666;line-height:1.6;margin-bottom:12px;}
+.pillar-card h3{font-size:1rem;margin-bottom:8px;color:var(--text-heading);}
+.pillar-card p{font-size:.8125rem;color:var(--text-muted-c);line-height:1.6;margin-bottom:12px;}
 .pillar-link{font-size:.75rem;font-weight:700;color:var(--tinker-teal);}
 .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
 .why-image{position:relative;}
@@ -125,7 +125,7 @@ include __DIR__ . '/templates/header.php';
 .why-stat-float .stat-num{font-family:'Quicksand',sans-serif;font-size:2rem;font-weight:800;}.why-stat-float .stat-txt{font-size:.6875rem;opacity:.8;}
 .why-features{margin-top:24px;}
 .why-feat{display:flex;gap:14px;margin-bottom:20px;}
-.feat-icon{font-size:1.75rem;flex-shrink:0;margin-top:2px;}.why-feat strong{font-size:.9375rem;color:var(--deep-navy);}.why-feat p{font-size:.8125rem;color:#666;margin-top:2px;}
+.feat-icon{font-size:1.75rem;flex-shrink:0;margin-top:2px;}.why-feat strong{font-size:.9375rem;color:var(--text-heading);}.why-feat p{font-size:.8125rem;color:var(--text-muted-c);margin-top:2px;}
 .stem-inner{display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center;}
 .stem-plans{display:flex;gap:10px;flex-wrap:wrap;}
 .plan-chip{padding:8px 16px;border-radius:var(--radius-full);background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);font-size:.8125rem;font-weight:700;color:#FFF;}
@@ -135,7 +135,7 @@ include __DIR__ . '/templates/header.php';
 .testimonial-card{background:#FFF;border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-sm);transition:transform .3s;}
 .testimonial-card:hover{transform:translateY(-4px);}
 .testi-stars{font-size:.875rem;margin-bottom:12px;}.testi-text{font-size:.9375rem;color:#444;line-height:1.7;font-style:italic;margin-bottom:16px;}
-.testi-author{display:flex;align-items:center;gap:10px;}.testi-author strong{font-size:.8125rem;display:block;}.testi-author span{font-size:.6875rem;color:#999;}
+.testi-author{display:flex;align-items:center;gap:10px;}.testi-author strong{font-size:.8125rem;display:block;}.testi-author span{font-size:.6875rem;color:var(--text-faint);}
 .cta-section{background:linear-gradient(135deg,var(--tinker-teal),#138D80,var(--deep-navy));padding:80px 0;}
 .reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease;}.reveal.visible{opacity:1;transform:translateY(0);}
 @media(max-width:1024px){.pillars-grid{grid-template-columns:repeat(3,1fr);}}

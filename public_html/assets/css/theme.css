@@ -266,3 +266,260 @@ body, .site-nav, .site-footer, .card, .pillar-card, .testimonial-card,
 
 /* Hero orbs read a touch stronger on the photo hero in dark mode */
 [data-theme="dark"] .hero-orb { opacity: .38; }
+
+
+/* ============================================================
+   ON-COLOUR TEXT GUARD  — must stay last in this file.
+
+   .page-hero and .hero paint a saturated gradient/photo in BOTH
+   themes, so their text is always white. The generic heading
+   rules above ([data-theme="dark"] h1 …) and the base h1 rule in
+   main.css would otherwise repaint those headings dark and make
+   them vanish against the banner. Same specificity + later
+   position = these win.
+   ============================================================ */
+.page-hero h1, .page-hero h2, .page-hero h3, .page-hero h4,
+.page-hero p,  .page-hero li, .page-hero span:not(.section-tag):not(.badge),
+[data-theme="dark"] .page-hero h1, [data-theme="dark"] .page-hero h2,
+[data-theme="dark"] .page-hero h3, [data-theme="dark"] .page-hero h4,
+[data-theme="dark"] .page-hero p,  [data-theme="dark"] .page-hero li {
+    color: #FFF;
+}
+.page-hero p, [data-theme="dark"] .page-hero p { opacity: .92; }
+.page-hero .section-tag, [data-theme="dark"] .page-hero .section-tag { color: var(--idea-gold); }
+.page-hero a:not(.btn), [data-theme="dark"] .page-hero a:not(.btn) { color: #FFF; text-decoration: underline; }
+
+/* Home page photo hero — same guarantee */
+.hero .hero-title, .hero .hero-sub, .hero .hero-trust, .hero .hero-eyebrow,
+[data-theme="dark"] .hero .hero-title, [data-theme="dark"] .hero .hero-sub,
+[data-theme="dark"] .hero .hero-trust, [data-theme="dark"] .hero .hero-eyebrow {
+    color: #FFF;
+}
+.hero .hero-title .text-gradient, [data-theme="dark"] .hero .hero-title .text-gradient {
+    color: transparent;
+}
+
+/* Footer is dark navy in both themes — keep its text light */
+.site-footer h1, .site-footer h2, .site-footer h3, .site-footer h4,
+[data-theme="dark"] .site-footer h1, [data-theme="dark"] .site-footer h2,
+[data-theme="dark"] .site-footer h3, [data-theme="dark"] .site-footer h4 {
+    color: #FFF;
+}
+
+
+/* ============================================================
+   SEMANTIC TEXT TOKENS
+   Pages carry inline colours (color:var(--deep-navy), #666, …)
+   that are correct on a white card and unreadable on a dark one.
+   These tokens let the same inline declaration follow the theme.
+   ============================================================ */
+:root {
+    --text-heading: var(--deep-navy);
+    --text-body:    var(--charcoal);
+    --text-muted-c: #666;
+    --text-faint:   #5A6472;   /* 6.00:1 on white (was #999 = 2.85:1) */
+}
+[data-theme="dark"] {
+    --text-heading: var(--text-dark);
+    --text-body:    var(--text-dark);
+    --text-muted-c: var(--text-dark-muted);
+    --text-faint:   #A6B3C9;
+}
+
+
+/* ============================================================
+   FOOTER WHATSAPP CALL-TO-ACTION
+   Was rendering as a harsh full-bleed green slab in dark mode.
+   ============================================================ */
+.site-footer .btn-success {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: auto;
+    max-width: 100%;
+    padding: 9px 18px;
+    font-size: .875rem;
+    font-weight: 700;
+    border-radius: 999px;
+    background: rgba(37, 211, 102, 0.14);
+    color: #4ADE80;
+    border: 1px solid rgba(37, 211, 102, 0.35);
+    box-shadow: none;
+    transition: background .2s, color .2s, border-color .2s;
+}
+.site-footer .btn-success:hover {
+    background: #25D366;
+    color: #06301A;
+    border-color: #25D366;
+}
+
+
+/* ============================================================
+   ACCESSIBILITY LAYER — WCAG 2.1 AA (SC 1.4.3 contrast)
+
+   The brand hues are vivid but not contrast-safe as text
+   surfaces: white on #1AAFA0 is 2.73:1 and white on #F47B20 is
+   2.73:1 — both well under the 4.5:1 AA floor. Rather than
+   re-brand we keep the hues and:
+     - darken teal/green slightly where they carry white text
+     - put deep navy on orange (5.02:1) so orange stays vivid
+     - use darkened hues for coloured text on light surfaces
+   Every value below was computed, not eyeballed.
+
+   NOTE ON SPECIFICITY: main.css does @import url('theme.css'),
+   which places these rules BEFORE main.css's own. Light-mode
+   selectors are therefore prefixed with `html` (0,1,1) so they
+   outrank main.css's bare class rules (0,1,0). Dark-mode
+   selectors already win via [data-theme="dark"].
+   Must remain last in this file.
+   ============================================================ */
+:root {
+    --teal-text:      #12796F;   /* 5.26:1 white · 5.04:1 #FAFAFA · 4.87:1 cream */
+    --orange-text:    #A65314;   /* 5.20:1 #FAFAFA · 5.02:1 cream */
+    --green-text:     #1B7F44;   /* 5.04:1 on white  */
+    --teal-surface:   #12796F;   /* white on it = 5.26:1 */
+    --green-surface:  #1B7F44;   /* white on it = 5.04:1 */
+    --on-orange:      #1A2E4A;   /* on #F47B20  = 5.02:1 */
+    --muted-safe:     #5A6472;   /* 6.00:1 on white  */
+}
+[data-theme="dark"] {
+    --teal-text:      #5FE0D2;
+    --orange-text:    #FFA75C;
+    --green-text:     #6FE59B;
+    --teal-surface:   #12796F;
+    --green-surface:  #1B7F44;
+    --on-orange:      #2A1500;
+    --muted-safe:     #A6B3C9;
+}
+
+/* --- Buttons -------------------------------------------------
+   Buttons are <a> elements, so [data-theme="dark"] a { color }
+   was repainting their labels teal-on-teal (1.47:1 — invisible). */
+html .btn-primary,   [data-theme="dark"] .btn-primary   { background: var(--teal-surface);  color: #FFF; border-color: transparent; }
+html .btn-success,   [data-theme="dark"] .btn-success   { background: var(--green-surface); color: #FFF; border-color: transparent; }
+html .btn-secondary, [data-theme="dark"] .btn-secondary { background: var(--spark-orange);  color: var(--on-orange); border-color: transparent; }
+html .btn-primary:hover,   [data-theme="dark"] .btn-primary:hover   { background: #0F6F66; color: #FFF; }
+html .btn-success:hover,   [data-theme="dark"] .btn-success:hover   { background: #17703D; color: #FFF; }
+html .btn-secondary:hover, [data-theme="dark"] .btn-secondary:hover { background: #D9670F; color: var(--on-orange); }
+html .btn-outline,       [data-theme="dark"] .btn-outline       { color: var(--teal-text); border-color: currentColor; background: transparent; }
+html .btn-outline:hover, [data-theme="dark"] .btn-outline:hover { background: var(--teal-surface); color: #FFF; border-color: transparent; }
+
+/* Buttons on the photo hero / coloured banners stay white */
+html .hero .btn-outline, html .page-hero .btn-outline,
+[data-theme="dark"] .hero .btn-outline, [data-theme="dark"] .page-hero .btn-outline {
+    color: #FFF; border-color: rgba(255,255,255,.8);
+}
+html .hero .btn-outline:hover, html .page-hero .btn-outline:hover { background: rgba(255,255,255,.18); color: #FFF; }
+
+/* --- Coloured text on light surfaces ------------------------- */
+html .section-tag,     [data-theme="dark"] .section-tag     { color: var(--orange-text); }
+html .pillar-link,     [data-theme="dark"] .pillar-link     { color: var(--teal-text); }
+html .nav-link.active, [data-theme="dark"] .nav-link.active { color: var(--teal-text); }
+html .nav-link:hover,  [data-theme="dark"] .nav-link:hover  { color: var(--teal-text); }
+html .page-hero .section-tag, [data-theme="dark"] .page-hero .section-tag { color: var(--idea-gold); }
+
+/* --- Small / muted copy -------------------------------------- */
+html small, html .text-faint, html .hero-float-card small,
+[data-theme="dark"] small, [data-theme="dark"] .text-faint { color: var(--muted-safe); }
+html .why-item-desc, html .card-text { color: var(--text-body); }
+
+/* --- Tinted surfaces carrying white text --------------------- */
+html .why-stat-float, [data-theme="dark"] .why-stat-float { background: var(--teal-surface); color: #FFF; }
+html .why-stat-float .stat-txt, [data-theme="dark"] .why-stat-float .stat-txt { opacity: 1; color: rgba(255,255,255,.96); }
+html .avatar-teal,    [data-theme="dark"] .avatar-teal    { background: var(--teal-surface); color: #FFF; }
+html .avatar-orange,  [data-theme="dark"] .avatar-orange  { background: var(--spark-orange); color: var(--on-orange); }
+html .badge-teal,     [data-theme="dark"] .badge-teal     { background: var(--teal-surface); color: #FFF; }
+html .badge-green,    [data-theme="dark"] .badge-green    { background: var(--green-surface); color: #FFF; }
+html .badge-orange,   [data-theme="dark"] .badge-orange   { background: var(--spark-orange); color: var(--on-orange); }
+
+/* --- Cards that stayed white in dark mode -------------------- */
+[data-theme="dark"] .hero-float-card {
+    background: rgba(18, 27, 46, 0.92);
+    color: var(--text-dark);
+    border: 1px solid var(--border-dark);
+}
+[data-theme="dark"] .hero-float-card strong { color: var(--text-dark); }
+[data-theme="dark"] .hero-float-card small  { color: var(--muted-safe); }
+[data-theme="dark"] .pillar-card,
+[data-theme="dark"] .testimonial-card { background: var(--surface-dark); border: 1px solid var(--border-dark); }
+[data-theme="dark"] .stem-img.img-2 { border-color: var(--surface-dark); }
+
+/* --- Footer (dark navy in both themes) ----------------------- */
+html .site-footer h1, html .site-footer h2, html .site-footer h3, html .site-footer h4,
+[data-theme="dark"] .site-footer h1, [data-theme="dark"] .site-footer h2,
+[data-theme="dark"] .site-footer h3, [data-theme="dark"] .site-footer h4 { color: #FFF; }
+html .site-footer, html .site-footer p, html .site-footer li,
+[data-theme="dark"] .site-footer, [data-theme="dark"] .site-footer p { color: rgba(255,255,255,.86); }
+html .site-footer a, [data-theme="dark"] .site-footer a { color: rgba(255,255,255,.86); }
+html .site-footer a:hover, [data-theme="dark"] .site-footer a:hover { color: #FFF; }
+html .site-footer .footer-tagline { color: #FFB877; }
+html .site-footer small, [data-theme="dark"] .site-footer small { color: rgba(255,255,255,.8); }
+
+/* Footer WhatsApp CTA — was a harsh full-bleed green slab */
+html .site-footer .btn-success, [data-theme="dark"] .site-footer .btn-success {
+    display: inline-flex; align-items: center; gap: 8px;
+    width: auto; max-width: 100%;
+    padding: 9px 18px; font-size: .875rem; font-weight: 700;
+    border-radius: 999px;
+    background: rgba(37, 211, 102, 0.16);
+    color: #6EE7A0;
+    border: 1px solid rgba(37, 211, 102, 0.4);
+    box-shadow: none;
+}
+html .site-footer .btn-success:hover, [data-theme="dark"] .site-footer .btn-success:hover {
+    background: #1B7F44; color: #FFF; border-color: #1B7F44;
+}
+
+/* --- Inverted CTA button (white pill on a coloured band) ------ */
+html .btn-on-dark, [data-theme="dark"] .btn-on-dark {
+    background: #FFF;
+    color: #0E5F57;              /* 6.4:1 on white */
+    border-color: transparent;
+}
+html .btn-on-dark:hover, [data-theme="dark"] .btn-on-dark:hover { background: #E9FBF8; color: #0B4E47; }
+
+/* --- Section tag colour variants (were inline styles) -------- */
+html .section-tag--teal,  [data-theme="dark"] .section-tag--teal  { color: var(--teal-text); }
+html .section-tag--navy,  [data-theme="dark"] .section-tag--navy  { color: var(--text-heading); }
+
+/* --- Shop filter chips ---------------------------------------- */
+html .filter-chip.active, [data-theme="dark"] .filter-chip.active {
+    background: var(--teal-surface); color: #FFF; border-color: var(--teal-surface);
+}
+html .filter-chip, [data-theme="dark"] .filter-chip { color: var(--text-body); }
+[data-theme="dark"] .filter-chip { background: var(--surface-dark); border-color: var(--border-dark); }
+
+/* --- Plain links on light surfaces ---------------------------- */
+html a:not(.btn):not(.nav-link):not(.pillar-card):not(.card-clickable):not(.moment-card) { color: var(--teal-text); }
+[data-theme="dark"] a:not(.btn):not(.nav-link):not(.pillar-card):not(.card-clickable):not(.moment-card) { color: #5FE0D2; }
+/* Footer and coloured banners are dark surfaces in BOTH themes, so their
+   links must stay light. Repeat the :not() chain (+1) so these outrank
+   the generic rule above instead of losing to it. */
+html .site-footer a:not(.btn):not(.nav-link):not(.pillar-card):not(.card-clickable):not(.moment-card):not(#_),
+[data-theme="dark"] .site-footer a:not(.btn):not(.nav-link):not(.pillar-card):not(.card-clickable):not(.moment-card):not(#_) { color: rgba(255,255,255,.88); }
+html .site-footer a:not(.btn):not(.nav-link):not(.pillar-card):not(.card-clickable):not(.moment-card):not(#_):hover,
+[data-theme="dark"] .site-footer a:not(.btn):not(.nav-link):not(.pillar-card):not(.card-clickable):not(.moment-card):not(#_):hover { color: #FFF; }
+html .page-hero a:not(.btn):not(.nav-link):not(.pillar-card):not(.card-clickable):not(.moment-card):not(#_),
+[data-theme="dark"] .page-hero a:not(.btn):not(.nav-link):not(.pillar-card):not(.card-clickable):not(.moment-card):not(#_) { color: #FFF; }
+html .hero a:not(.btn):not(.nav-link):not(.pillar-card):not(.card-clickable):not(.moment-card):not(#_),
+[data-theme="dark"] .hero a:not(.btn):not(.nav-link):not(.pillar-card):not(.card-clickable):not(.moment-card):not(#_) { color: #FFF; }
+
+/* --- Glass panels on coloured banners need a darker tint so
+       white label text keeps its contrast over any gradient ---- */
+html .page-hero .glass, [data-theme="dark"] .page-hero .glass {
+    background: rgba(6, 12, 24, 0.34);
+    border-color: rgba(255,255,255,0.28);
+    color: #FFF;
+}
+html .page-hero .btn.glass:hover, [data-theme="dark"] .page-hero .btn.glass:hover {
+    background: rgba(6, 12, 24, 0.5);
+}
+
+/* --- Larger tinted stat text --------------------------------- */
+html .why-stat-float .stat-txt, [data-theme="dark"] .why-stat-float .stat-txt {
+    color: #FFF; font-weight: 600;
+}
+
+/* Testimonial author location line was #999 (2.85:1) */
+html .testi-author span, [data-theme="dark"] .testi-author span { color: var(--muted-safe); }
+html .testi-text, [data-theme="dark"] .testi-text { color: var(--text-body); }

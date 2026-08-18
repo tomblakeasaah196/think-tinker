@@ -18,9 +18,9 @@
     </div>
     <div>
         <h2 class="mb-3">Other Ways to Reach Us</h2>
-        <div class="card mb-2"><div class="card-body"><h3 style="font-size:1rem;margin-bottom:8px;color:var(--deep-navy);">📍 Visit Us</h3><p style="font-size:.9375rem;color:#666;"><?= htmlspecialchars(getSetting('business_address','Lagos, Nigeria')) ?></p></div></div>
-        <div class="card mb-2"><div class="card-body"><h3 style="font-size:1rem;margin-bottom:8px;color:var(--deep-navy);">📞 Call Us</h3><p style="font-size:.9375rem;"><a href="tel:<?= htmlspecialchars(getSetting('business_phone','')) ?>"><?= htmlspecialchars(getSetting('business_phone','')) ?></a></p></div></div>
-        <div class="card mb-2"><div class="card-body"><h3 style="font-size:1rem;margin-bottom:8px;color:var(--deep-navy);">✉️ Email</h3><p style="font-size:.9375rem;"><a href="mailto:<?= htmlspecialchars(getSetting('business_email','')) ?>"><?= htmlspecialchars(getSetting('business_email','')) ?></a></p></div></div>
+        <div class="card mb-2"><div class="card-body"><h3 style="font-size:1rem;margin-bottom:8px;color:var(--text-heading);">📍 Visit Us</h3><p style="font-size:.9375rem;color:var(--text-muted-c);"><?= htmlspecialchars(getSetting('business_address','Lagos, Nigeria')) ?></p></div></div>
+        <div class="card mb-2"><div class="card-body"><h3 style="font-size:1rem;margin-bottom:8px;color:var(--text-heading);">📞 Call Us</h3><p style="font-size:.9375rem;"><a href="tel:<?= htmlspecialchars(getSetting('business_phone','')) ?>"><?= htmlspecialchars(getSetting('business_phone','')) ?></a></p></div></div>
+        <div class="card mb-2"><div class="card-body"><h3 style="font-size:1rem;margin-bottom:8px;color:var(--text-heading);">✉️ Email</h3><p style="font-size:.9375rem;"><a href="mailto:<?= htmlspecialchars(getSetting('business_email','')) ?>"><?= htmlspecialchars(getSetting('business_email','')) ?></a></p></div></div>
         <a href="<?= whatsappLink("Hello! I'd like to learn more about Think & Tinker.") ?>" target="_blank" class="btn btn-success btn-block btn-lg" style="margin-top:12px;">💬 Chat on WhatsApp</a>
     </div>
 </div></section>

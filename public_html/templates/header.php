@@ -27,7 +27,10 @@ $currentPage = basename($_SERVER['SCRIPT_NAME'], '.php');
     <?php include __DIR__ . '/og-meta.php'; ?>
     <link rel="manifest" href="<?= APP_URL ?>/manifest.json">
     <meta name="theme-color" content="#1AAFA0">
-    <link rel="icon" type="image/png" href="<?= APP_URL ?>/assets/img/logo/favicon.png">
+    <link rel="icon" href="<?= APP_URL ?>/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= APP_URL ?>/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= APP_URL ?>/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?= APP_URL ?>/apple-touch-icon.png">
     <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/main.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
@@ -36,10 +39,9 @@ $currentPage = basename($_SERVER['SCRIPT_NAME'], '.php');
 <nav class="site-nav no-print" id="siteNav">
     <div class="container">
         <div class="nav-inner">
-            <a href="<?= APP_URL ?>/" class="nav-logo">
-                <img src="<?= APP_URL ?>/assets/img/logo/logo-full.png" alt="Think & Tinker" class="logo-img"
-                     onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-                <span class="logo-text" style="display:none;">Think & Tinker</span>
+            <a href="<?= APP_URL ?>/" class="nav-logo" aria-label="Think &amp; Tinker — home">
+                <img src="<?= APP_URL ?>/assets/img/logo/logo-full.png" alt="Think &amp; Tinker" class="logo-img logo-light">
+                <img src="<?= APP_URL ?>/assets/img/logo/logo-full-dark.png" alt="" aria-hidden="true" class="logo-img logo-dark">
             </a>
 
             <div class="nav-links" id="navLinks">
@@ -83,11 +85,15 @@ $currentPage = basename($_SERVER['SCRIPT_NAME'], '.php');
 <style>
 .site-nav { background: #FFF; height: var(--nav-height-desktop); position: sticky; top: 0; z-index: 200; box-shadow: var(--shadow-sm); }
 .nav-inner { display: flex; align-items: center; justify-content: space-between; height: var(--nav-height-desktop); }
-.nav-logo { display: flex; align-items: center; }
-.logo-img { height: 40px; width: auto; }
+.nav-logo { display: flex; align-items: center; flex: 0 0 auto; }
+.logo-img { height: 42px; width: auto; display: block; }
+.logo-dark { display: none; }
+[data-theme="dark"] .logo-light { display: none; }
+[data-theme="dark"] .logo-dark  { display: block; }
+@media (max-width: 900px) { .logo-img { height: 34px; } }
 .logo-text { font-family: 'Quicksand', sans-serif; font-weight: 800; font-size: 1.25rem; color: var(--tinker-teal); }
 .nav-links { display: flex; align-items: center; gap: 4px; }
-.nav-link { padding: 8px 14px; font-size: 0.875rem; font-weight: 700; color: var(--charcoal); border-radius: var(--radius-md); transition: all 0.2s; }
+.nav-link { padding: 8px 14px; font-size: 0.875rem; font-weight: 700; color: var(--text-body); border-radius: var(--radius-md); transition: all 0.2s; }
 .nav-link:hover { color: var(--tinker-teal); background: rgba(26,175,160,0.06); }
 .nav-link.active { color: var(--tinker-teal); }
 .nav-actions { display: flex; align-items: center; gap: 8px; }
@@ -96,7 +102,7 @@ $currentPage = basename($_SERVER['SCRIPT_NAME'], '.php');
 .nav-dropdown { position: relative; }
 .nav-dropdown-menu { position: absolute; top: 100%; left: 0; background: #FFF; border-radius: var(--radius-md); box-shadow: 0 8px 24px rgba(0,0,0,0.12); min-width: 220px; opacity: 0; visibility: hidden; transform: translateY(-8px); transition: all 0.2s; z-index: 300; overflow: hidden; }
 .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
-.nav-dropdown-menu a { display: block; padding: 10px 16px; font-size: 0.875rem; color: var(--charcoal); transition: background 0.15s; }
+.nav-dropdown-menu a { display: block; padding: 10px 16px; font-size: 0.875rem; color: var(--text-body); transition: background 0.15s; }
 .nav-dropdown-menu a:hover { background: var(--cloud-gray); color: var(--tinker-teal); }
 
 @media (max-width: 768px) {
