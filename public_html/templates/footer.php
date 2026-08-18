@@ -75,10 +75,14 @@ $year = date('Y');
 }
 </style>
 
-<script src="<?= APP_URL ?>/assets/js/main.js"></script>
+<!-- main.js now loads in header.php, before the per-page inline scripts
+     that set TT.config.*. Loading it again here would re-run
+     `TT.config = {…}` and wipe those values (and re-declaring `const TT`
+     throws), so it is deliberately not included a second time. -->
 <script>
-    TT.config.apiBase = '<?= APP_URL ?>/api';
-    TT.config.csrfToken = '<?= CSRF_TOKEN ?>';
+    // Fallback only: per-page blocks normally set these themselves.
+    TT.config.apiBase   = TT.config.apiBase   || '<?= APP_URL ?>/api';
+    TT.config.csrfToken = TT.config.csrfToken || '<?= CSRF_TOKEN ?>';
 </script>
 </body>
 </html>

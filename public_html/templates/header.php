@@ -33,6 +33,12 @@ $currentPage = basename($_SERVER['SCRIPT_NAME'], '.php');
     <link rel="apple-touch-icon" sizes="180x180" href="<?= APP_URL ?>/apple-touch-icon.png">
     <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/main.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- main.js defines window.TT and must run BEFORE the per-page inline
+         blocks that assign TT.config.*. It used to load from footer.php,
+         after those blocks, so every page threw "TT is not defined" and the
+         loaders never registered (shop/blog spun forever). All of its DOM
+         work is inside $(function(){…}), so loading it here is safe. -->
+    <script src="<?= APP_URL ?>/assets/js/main.js"></script>
 </head>
 <body>
 
