@@ -523,3 +523,12 @@ html .why-stat-float .stat-txt, [data-theme="dark"] .why-stat-float .stat-txt {
 /* Testimonial author location line was #999 (2.85:1) */
 html .testi-author span, [data-theme="dark"] .testi-author span { color: var(--muted-safe); }
 html .testi-text, [data-theme="dark"] .testi-text { color: var(--text-body); }
+
+/* --- Mobile slide-out menu ------------------------------------
+   The panel is dark in dark mode, so its dividers must be too. */
+@media (max-width: 768px) {
+    [data-theme="dark"] .nav-link { border-bottom-color: var(--border-dark); }
+    [data-theme="dark"] .nav-links .mobile-auth { border-top-color: var(--border-dark); }
+    [data-theme="dark"] .nav-dropdown-menu { background: transparent; box-shadow: none; }
+    html .nav-links .mobile-auth .btn { width: 100%; justify-content: center; }
+}

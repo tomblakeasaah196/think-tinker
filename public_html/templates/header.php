@@ -67,6 +67,19 @@ $currentPage = basename($_SERVER['SCRIPT_NAME'], '.php');
                 <a href="<?= APP_URL ?>/shop.php" class="nav-link <?= in_array($currentPage, ['shop','shop-product','cart','checkout']) ? 'active' : '' ?>">Bookstore</a>
                 <a href="<?= APP_URL ?>/blog.php" class="nav-link <?= in_array($currentPage, ['blog','blog-post']) ? 'active' : '' ?>">Blog</a>
                 <a href="<?= APP_URL ?>/contact.php" class="nav-link <?= $currentPage === 'contact' ? 'active' : '' ?>">Contact</a>
+
+                <?php /* Mobile only: .nav-actions .btn is hidden under 768px, so the
+                         auth buttons are re-rendered inside the slide-out panel.
+                         The .mobile-auth styles already existed; the markup did not,
+                         which left mobile visitors with no way to log in or join. */ ?>
+                <div class="mobile-auth">
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <a href="<?= $_SESSION['user_type'] === 'parent' ? APP_URL . '/parent/' : HUB_URL . '/dashboard.php' ?>" class="btn btn-primary btn-block">My Portal</a>
+                    <?php else: ?>
+                        <a href="<?= APP_URL ?>/parent/login.php" class="btn btn-outline btn-block">Log In</a>
+                        <a href="<?= APP_URL ?>/parent/register-club.php" class="btn btn-primary btn-block">Join Club</a>
+                    <?php endif; ?>
+                </div>
             </div>
 
             <div class="nav-actions">
