@@ -40,8 +40,7 @@ function addMembership(): void {
         'quarterly' => (float)getSetting('club_plan_quarterly','85000'), 'biannual' => (float)getSetting('club_plan_biannual','165000')];
     $price = $prices[$plan] ?? $prices['trial'];
     $start = date('Y-m-d');
-    $end = match($plan) { 'trial' => date('Y-m-d', strtotime('+1 week')), 'monthly' => date('Y-m-d', strtotime('+1 month')),
-        'quarterly' => date('Y-m-d', strtotime('+3 months')), 'biannual' => date('Y-m-d', strtotime('+6 months')), default => date('Y-m-d', strtotime('+1 week'))};
+    $end = clubPlanEndDate($plan, $start);
     $id = dbInsert('club_memberships', ['child_id' => $childId, 'parent_id' => $child['parent_id'], 'plan' => $plan,
         'plan_price' => $price, 'start_date' => $start, 'end_date' => $end, 'status' => 'active', 'location_id' => 1]);
     jsonResponse(true, 'Membership created.', ['id' => $id, 'price' => $price]);

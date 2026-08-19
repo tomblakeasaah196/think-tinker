@@ -12,7 +12,7 @@
 
 <!-- Post Editor -->
 <div id="postEditorView" style="display:none;">
-    <button class="btn btn-ghost btn-sm mb-3" onclick="hidePostEditor()">← Back to list</button>
+    <button class="btn btn-ghost btn-sm mb-3" onclick="hidePostEditor()"><?= ttIcon('arrow-left', 'tt-icon', 14) ?> Back to list</button>
     <div class="hub-card">
         <div class="hub-card-header"><h3 id="editorTitle">New Blog Post</h3></div>
         <div class="hub-card-body">

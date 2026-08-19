@@ -10,7 +10,7 @@ $imgUrl=$product['cover_image']?APP_URL.'/'.$product['cover_image']:'https://ima
     <div class="product-detail mt-3">
         <div class="pd-image"><img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($product['name']) ?>"></div>
         <div class="pd-info">
-            <span class="badge badge-teal mb-1"><?= htmlspecialchars($product['category']) ?></span>
+            <span class="badge badge-teal mb-1"><?= htmlspecialchars(categoryLabel($product['category'])) ?></span>
             <h1><?= htmlspecialchars($product['name']) ?></h1>
             <div style="margin:12px 0;"><span class="price price-lg"><?= formatNaira($product['price']) ?></span>
             <?php if($product['compare_price']): ?><span class="price-old" style="margin-left:8px;"><?= formatNaira($product['compare_price']) ?></span><?php endif; ?></div>

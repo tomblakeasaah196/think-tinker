@@ -122,7 +122,11 @@ function uploadProfilePhoto(string $fieldName, string $subDir = 'profiles'): arr
 {
     return uploadFile($fieldName, $subDir, [
         'maxWidth' => 400,
-        'maxSize'  => 2 * 1024 * 1024, // 2MB
+        // Was 2MB, checked BEFORE the resize below ever runs — a typical
+        // un-resized phone camera photo (often 3-8MB) was rejected outright,
+        // which combined with updateProfile() always reporting "Profile
+        // updated!" made photo uploads look broken with no error shown.
+        'maxSize'  => 8 * 1024 * 1024, // 8MB
         'quality'  => 80,
     ]);
 }
@@ -304,10 +308,23 @@ function processImage(string $sourcePath, string $outputPath, string $mimeType, 
     }
 
     // Save as JPEG (always — even if source was PNG/WebP, for consistent compression)
-    // Exception: keep PNG if transparency is needed
-    if ($mimeType === 'image/png') {
+    // Exception: keep PNG if transparency is actually used. Previously this
+    // branched on the SOURCE mime type alone, so every PNG upload (even a
+    // plain opaque product photo or scanned page) kept the much larger PNG
+    // encoding — the code's own comment promised JPEG-by-default and this
+    // didn't deliver it. Now we only keep PNG when the image truly has a
+    // transparent/semi-transparent pixel.
+    if ($mimeType === 'image/png' && imageHasTransparency($source)) {
         $result = imagepng($source, $outputPath, 8); // PNG compression level 0-9
     } else {
+        if ($mimeType === 'image/png') {
+            // Flatten onto white — JPEG has no alpha channel.
+            $flat = imagecreatetruecolor(imagesx($source), imagesy($source));
+            imagefill($flat, 0, 0, imagecolorallocate($flat, 255, 255, 255));
+            imagecopy($flat, $source, 0, 0, 0, 0, imagesx($source), imagesy($source));
+            imagedestroy($source);
+            $source = $flat;
+        }
         // Ensure output extension is .jpg
         $outputPath = preg_replace('/\.\w+$/', '.jpg', $outputPath);
         $result = imagejpeg($source, $outputPath, $quality);
@@ -317,6 +334,30 @@ function processImage(string $sourcePath, string $outputPath, string $mimeType, 
 
     // If original was a tmp file and we processed successfully, we don't need move_uploaded_file
     return $result;
+}
+
+/**
+ * Check whether a GD image actually uses any transparency. Sampled on a
+ * grid (roughly 100x100 points) rather than testing every pixel, since this
+ * runs on images that may be several megapixels.
+ */
+function imageHasTransparency(\GdImage $image): bool
+{
+    $w = imagesx($image);
+    $h = imagesy($image);
+    $stepX = max(1, (int) ($w / 100));
+    $stepY = max(1, (int) ($h / 100));
+
+    for ($y = 0; $y < $h; $y += $stepY) {
+        for ($x = 0; $x < $w; $x += $stepX) {
+            $rgba = imagecolorat($image, $x, $y);
+            $alpha = ($rgba & 0x7F000000) >> 24; // GD alpha: 0 (opaque) .. 127 (fully transparent)
+            if ($alpha > 0) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 /**

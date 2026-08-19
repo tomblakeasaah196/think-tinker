@@ -7,7 +7,7 @@
     <!-- Conversation List -->
     <div style="background:#FFF; border-right:1px solid var(--cloud-gray); display:flex; flex-direction:column;">
         <div style="padding:12px; border-bottom:1px solid var(--cloud-gray);">
-            <div class="search-bar" style="max-width:100%;"><span class="search-icon">🔍</span><input type="text" placeholder="Search conversations..." id="convoSearch"></div>
+            <div class="search-bar" style="max-width:100%;"><span class="search-icon"><?= ttIcon('search', 'tt-icon', 16) ?></span><input type="text" placeholder="Search conversations..." id="convoSearch"></div>
         </div>
         <div id="convoList" style="flex:1; overflow-y:auto;"></div>
     </div>
@@ -18,7 +18,7 @@
             Select a conversation
         </div>
         <div id="chatMessages" style="flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:8px;">
-            <div class="empty-state" style="margin:auto;"><div class="icon">💬</div><p>Select a conversation to view messages.</p></div>
+            <div class="empty-state" style="margin:auto;"><div class="icon-badge"><?= ttIcon('message', 'tt-icon', 26) ?></div><p>Select a conversation to view messages.</p></div>
         </div>
         <div id="chatInput" style="padding:12px 20px; background:#FFF; border-top:1px solid var(--cloud-gray); display:none;">
             <div style="display:flex; gap:8px;">

@@ -43,11 +43,16 @@ function loadChild(id, chip) {
                 html += `<div class="session-card" style="border-left-color:var(--tinker-teal);"><div class="session-info"><div class="tutor">${s.service_type.replace('_',' ')} ${s.frequency?'— '+s.frequency:''}</div><div class="time">Tutor: ${s.tutor_name||'Unassigned'} · Since ${s.start_date}</div></div><span class="badge ${s.status==='active'?'badge-green':'badge-gray'}">${s.status}</span></div>`;
             });
         }
-        // Club
+        // Club — a pending_payment membership gets an honest "payment
+        // pending" card instead of counting down before payment clears.
         if (r.data.club_membership) {
             const cm = r.data.club_membership;
-            const days = Math.max(0, Math.floor((new Date(cm.end_date) - Date.now()) / 86400000));
-            html += `<div class="club-card mt-3"><div class="plan">${cm.plan} Plan</div><div class="status">STEM & Reading Club</div><div class="expires">${cm.start_date} → ${cm.end_date} · ${days} days left</div></div>`;
+            if (cm.status === 'pending_payment') {
+                html += `<a class="club-card club-card--pending mt-3" href="payments.php"><div class="plan">${TT.escHtml(cm.plan)} Plan</div><div class="status">⏳ Payment Pending</div><div class="expires">Pay your invoice to activate the STEM & Reading Club.</div></a>`;
+            } else {
+                const days = Math.max(0, Math.floor((new Date(cm.end_date) - Date.now()) / 86400000));
+                html += `<div class="club-card mt-3"><div class="plan">${TT.escHtml(cm.plan)} Plan</div><div class="status">STEM & Reading Club</div><div class="expires">${cm.start_date} → ${cm.end_date} · ${days} days left</div></div>`;
+            }
         }
         // Progress
         html += '<h3 class="mt-3 mb-2" style="font-size:1rem;">Progress</h3><div id="childProgress"><div class="spinner mx-auto"></div></div>';

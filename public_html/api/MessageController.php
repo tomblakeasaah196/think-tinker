@@ -26,6 +26,7 @@ function getConversations(): void {
             "SELECT m.conversation_id, MAX(m.created_at) as last_activity,
                     (SELECT message_text FROM messages WHERE conversation_id = m.conversation_id ORDER BY created_at DESC LIMIT 1) as last_message,
                     (SELECT display_as FROM messages WHERE conversation_id = m.conversation_id ORDER BY created_at DESC LIMIT 1) as last_sender,
+                    (SELECT sender_type FROM messages WHERE conversation_id = m.conversation_id ORDER BY created_at DESC LIMIT 1) as last_sender_type,
                     SUM(CASE WHEN m.sender_type != 'parent' AND m.is_read = 0 THEN 1 ELSE 0 END) as unread
              FROM messages m WHERE m.conversation_id IN (SELECT DISTINCT conversation_id FROM messages WHERE sender_id = ?)
              GROUP BY m.conversation_id ORDER BY last_activity DESC", [$user['id']]);

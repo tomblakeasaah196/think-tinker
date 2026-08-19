@@ -58,7 +58,7 @@ require_once __DIR__ . '/../templates/header-hub.php';
 <!-- Bank Account Modal -->
 <div class="modal-overlay" id="bankModal">
     <div class="modal">
-        <div class="modal-header"><h3 id="bankModalTitle">Add Bank Account</h3><span class="modal-close">&times;</span></div>
+        <div class="modal-header"><h3 id="bankModalTitle">Add Bank Account</h3><button type="button" class="modal-close" aria-label="Close">&times;</button></div>
         <div class="modal-body">
             <form id="bankForm">
                 <input type="hidden" name="action" value="add_bank_account">

@@ -92,11 +92,14 @@ function getParentDashboard(): void
         }
     }
 
-    // Club status
+    // Club status — include pending_payment too (not just active) so an
+    // unpaid registration shows an honest "payment pending" card instead of
+    // silently disappearing from the dashboard.
     $clubMembership = null;
     if ($childId) {
         $clubMembership = dbFetchOne(
-            "SELECT * FROM `club_memberships` WHERE `child_id` = ? AND `status` = 'active' ORDER BY `end_date` DESC LIMIT 1",
+            "SELECT * FROM `club_memberships` WHERE `child_id` = ? AND `status` IN ('active','pending_payment')
+             ORDER BY FIELD(`status`,'active','pending_payment') ASC, `end_date` DESC LIMIT 1",
             [$childId]
         );
     }
@@ -155,17 +158,27 @@ function updateProfile(): void
         'phone'      => post('phone') ?: $user['phone'],
     ];
 
-    // Handle photo upload
+    // Handle photo upload — a failure here used to be swallowed silently:
+    // the field was just skipped and the response still said "Profile
+    // updated." with no indication the photo never saved. Now name/phone
+    // still save, but a real photo failure is reported instead of hidden.
+    $photoError = '';
     if (!empty($_FILES['profile_photo']['name'])) {
         require_once __DIR__ . '/../includes/upload.php';
         $result = uploadProfilePhoto('profile_photo');
         if ($result['success']) {
             $data['profile_photo'] = $result['path'];
+        } else {
+            $photoError = $result['message'];
         }
     }
 
     dbUpdate('users', $data, 'id = ?', [$user['id']]);
     $_SESSION['user_name'] = $data['first_name'] . ' ' . $data['last_name'];
+
+    if ($photoError) {
+        jsonResponse(false, "Name and phone saved, but the photo didn't upload: {$photoError}");
+    }
 
     jsonResponse(true, 'Profile updated.');
 }

@@ -4,6 +4,21 @@
 'use strict';
 const Shop = window.Shop || {};
 
+// Keep in sync with categoryLabel() in includes/helpers.php and the
+// products.category enum in the database.
+Shop.CATEGORY_LABELS = {
+    consult_booklets: 'Consultation Booklets',
+    workbooks: 'Workbooks',
+    exercise_books: 'Exercise Books',
+    textbooks: 'Textbooks',
+    stationery: 'Stationery',
+    educational_toys: 'Educational Toys',
+    recommended_reading: 'Recommended Reading',
+};
+Shop.categoryLabel = function(cat) {
+    return Shop.CATEGORY_LABELS[cat] || (cat ? cat.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : '');
+};
+
 Shop.loadProducts = function(filters = {}) {
     const params = Object.assign({ action: 'get_products' }, filters);
     TT.get('ShopController.php', params).done(function(r) {
@@ -15,7 +30,7 @@ Shop.loadProducts = function(filters = {}) {
                 ${p.is_featured == 1 ? '<span class="prod-badge">⭐ Featured</span>' : ''}
                 <img src="${img}" alt="${TT.escHtml(p.name)}" class="prod-img" loading="lazy">
                 <div class="prod-body">
-                    <div class="prod-category">${TT.escHtml(p.category)}</div>
+                    <div class="prod-category">${TT.escHtml(Shop.categoryLabel(p.category))}</div>
                     <div class="prod-name">${TT.escHtml(p.name)}</div>
                     <span class="prod-price">${p.formatted_price}</span>
                     ${p.compare_price ? `<span class="prod-old-price">${TT.formatNaira(p.compare_price)}</span>` : ''}

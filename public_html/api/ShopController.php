@@ -71,6 +71,8 @@ function updateProduct(): void {
     if (isset($_POST['description'])) $data['description'] = $_POST['description'];
     if (post('category')) $data['category'] = post('category');
     if (post('grade_level')) $data['grade_level'] = post('grade_level');
+    if (isset($_POST['subject'])) $data['subject'] = post('subject');
+    if (isset($_POST['series'])) $data['series'] = post('series');
     if (isset($_POST['price'])) $data['price'] = postFloat('price');
     if (isset($_POST['stock_quantity'])) $data['stock_quantity'] = postInt('stock_quantity');
     if (isset($_POST['is_featured'])) $data['is_featured'] = postInt('is_featured');

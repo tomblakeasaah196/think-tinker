@@ -138,6 +138,14 @@
 .club-card .status { font-size: 1.25rem; font-weight: 800; margin: 4px 0; }
 .club-card .expires { font-size: 0.8125rem; opacity: 0.8; }
 
+/* Payment-pending variant — a registration that hasn't been paid for yet.
+   Orange instead of teal (teal reads "all good" everywhere else in this
+   UI); clickable straight through to Payments since that's the one thing
+   left to do. */
+.club-card.club-card--pending { background: linear-gradient(135deg, var(--spark-orange), #C85D0F); display: block; text-decoration: none; cursor: pointer; }
+.club-card.club-card--pending::after { content: '💳'; }
+.club-card.club-card--pending:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); color: #FFF; text-decoration: none; }
+
 /* ============================================================
    RESPONSIVE
    ============================================================ */

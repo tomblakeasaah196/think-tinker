@@ -39,7 +39,7 @@ require_once __DIR__ . '/../templates/header-hub.php';
 
 <!-- Invoice Modal -->
 <div class="modal-overlay" id="invoiceModal"><div class="modal modal-lg">
-    <div class="modal-header"><h3>Create Invoice</h3><span class="modal-close">&times;</span></div>
+    <div class="modal-header"><h3>Create Invoice</h3><button type="button" class="modal-close" aria-label="Close">&times;</button></div>
     <div class="modal-body">
         <form id="invoiceForm">
             <input type="hidden" name="action" value="create_invoice">
@@ -62,7 +62,7 @@ require_once __DIR__ . '/../templates/header-hub.php';
 
 <!-- Expense Modal -->
 <div class="modal-overlay" id="expenseModal"><div class="modal">
-    <div class="modal-header"><h3>Add Expense</h3><span class="modal-close">&times;</span></div>
+    <div class="modal-header"><h3>Add Expense</h3><button type="button" class="modal-close" aria-label="Close">&times;</button></div>
     <div class="modal-body">
         <form id="expenseForm">
             <input type="hidden" name="action" value="add_expense">
@@ -79,7 +79,7 @@ require_once __DIR__ . '/../templates/header-hub.php';
 
 <!-- Mark Paid Modal -->
 <div class="modal-overlay" id="paidModal"><div class="modal">
-    <div class="modal-header"><h3>Confirm Payment</h3><span class="modal-close">&times;</span></div>
+    <div class="modal-header"><h3>Confirm Payment</h3><button type="button" class="modal-close" aria-label="Close">&times;</button></div>
     <div class="modal-body">
         <form id="paidForm">
             <input type="hidden" name="action" value="mark_paid"><input type="hidden" name="id" id="paidInvId">

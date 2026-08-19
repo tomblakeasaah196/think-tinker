@@ -186,6 +186,23 @@ function markInvoicePaid(): void {
             APP_URL.'/parent/payments.php', 'View Receipt');
     }
     createNotification($invoice['parent_id'], "Payment confirmed", "Receipt {$receiptNumber} for ".formatNaira($invoice['total']), APP_URL.'/parent/payments.php');
+
+    // Activate a pending club membership tied to this invoice, if any.
+    // The countdown starts from the confirmed payment date rather than the
+    // registration date, so parents get the full plan length they paid for
+    // instead of losing days to however long payment confirmation took.
+    if ($invoice['invoice_type'] === 'club_membership') {
+        $membership = dbFetchOne("SELECT * FROM club_memberships WHERE invoice_id = ? AND status = 'pending_payment'", [$id]);
+        if ($membership) {
+            $activatedStart = date('Y-m-d');
+            dbUpdate('club_memberships', [
+                'status'     => 'active',
+                'start_date' => $activatedStart,
+                'end_date'   => clubPlanEndDate($membership['plan'], $activatedStart),
+            ], 'id = ?', [$membership['id']]);
+        }
+    }
+
     jsonResponse(true, 'Invoice marked as paid. Receipt generated.', ['receipt_number' => $receiptNumber]);
 }
 

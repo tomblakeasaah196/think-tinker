@@ -7,7 +7,7 @@ require_once __DIR__ . '/../templates/header-hub.php';
 <div class="page-header">
     <h1>Session Management</h1>
     <div class="actions">
-        <button class="btn btn-outline btn-sm" onclick="$('#bulkModal').length ? TT.modal.open('#bulkModal') : null">📅 Bulk Schedule</button>
+        <button class="btn btn-outline btn-sm" onclick="$('#bulkModal').length ? TT.modal.open('#bulkModal') : null"><?= ttIcon('calendar', 'tt-icon', 15) ?> Bulk Schedule</button>
         <button class="btn btn-primary btn-sm" onclick="TT.modal.open('#sessionModal')">+ Add Session</button>
     </div>
 </div>
@@ -41,7 +41,7 @@ require_once __DIR__ . '/../templates/header-hub.php';
 <!-- Add Session Modal -->
 <div class="modal-overlay" id="sessionModal">
     <div class="modal">
-        <div class="modal-header"><h3>Schedule Session</h3><span class="modal-close">&times;</span></div>
+        <div class="modal-header"><h3>Schedule Session</h3><button type="button" class="modal-close" aria-label="Close">&times;</button></div>
         <div class="modal-body">
             <form id="sessionForm">
                 <input type="hidden" name="action" value="add_session">
@@ -61,7 +61,7 @@ require_once __DIR__ . '/../templates/header-hub.php';
 <!-- Bulk Schedule Modal -->
 <div class="modal-overlay" id="bulkModal">
     <div class="modal">
-        <div class="modal-header"><h3>Bulk Schedule</h3><span class="modal-close">&times;</span></div>
+        <div class="modal-header"><h3>Bulk Schedule</h3><button type="button" class="modal-close" aria-label="Close">&times;</button></div>
         <div class="modal-body">
             <form id="bulkForm">
                 <input type="hidden" name="action" value="bulk_schedule">

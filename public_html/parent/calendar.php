@@ -14,7 +14,7 @@ function loadCal(){
     TT.get('SessionController.php',{action:'get_calendar',month:calMonth,year:calYear}).done(function(r){
         if(!r.success)return;
         const sessions=r.data.sessions||[];
-        if(!sessions.length){$('#calSessions').html('<div class="empty-state"><div class="icon">📅</div><p>No sessions this month.</p></div>');return;}
+        if(!sessions.length){$('#calSessions').html('<div class="empty-state"><div class="icon-badge"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="2" ry="2"/><line x1="16" y1="2.5" x2="16" y2="6.5"/><line x1="8" y1="2.5" x2="8" y2="6.5"/><line x1="3" y1="9.5" x2="21" y2="9.5"/></svg></div><p>No sessions this month.</p></div>');return;}
         let html='';sessions.forEach(s=>{
             const dt=new Date(s.session_date);
             const cls={scheduled:'',completed:'completed',cancelled:'cancelled'}[s.status]||'';

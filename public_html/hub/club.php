@@ -30,7 +30,7 @@
 
 <!-- Add Membership Modal -->
 <div class="modal-overlay" id="memberModal"><div class="modal">
-    <div class="modal-header"><h3>Add Club Membership</h3><span class="modal-close">&times;</span></div>
+    <div class="modal-header"><h3>Add Club Membership</h3><button type="button" class="modal-close" aria-label="Close">&times;</button></div>
     <div class="modal-body"><form id="memberForm"><input type="hidden" name="action" value="add_membership">
         <div class="form-group"><label class="form-label">Student *</label><select name="child_id" class="form-select" id="clubChildSelect" required><option value="">Select...</option></select></div>
         <div class="form-group"><label class="form-label">Plan *</label><select name="plan" class="form-select" required>
@@ -53,7 +53,7 @@ function loadMemberships(){
             h+=`<tr><td><strong>${TT.escHtml(m.child_name+' '+m.child_last)}</strong></td><td class="text-sm">${TT.escHtml(m.parent_name+' '+m.parent_last)}</td>
             <td><span class="badge badge-teal">${m.plan}</span></td><td class="fw-700">${m.formatted_price}</td><td class="text-sm">${m.end_date}</td>
             <td ${daysClass}>${m.days_remaining} days</td>
-            <td class="row-actions"><button class="btn btn-ghost btn-sm" onclick="genCert(${m.id})">🎓 Certificate</button></td></tr>`;
+            <td class="row-actions"><button class="btn btn-ghost btn-sm" onclick="genCert(${m.id})"><svg class="tt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="5.5"/><polyline points="8.5,13.5 7,21.5 12,18.5 17,21.5 15.5,13.5"/></svg> Certificate</button></td></tr>`;
         });$('#membersTable').html(h);
     });
 }

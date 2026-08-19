@@ -5,7 +5,7 @@
 <section class="section"><div class="container" style="max-width:640px;">
     <div class="card"><div class="card-body">
         <form id="schoolForm">
-            <input type="hidden" name="action" value="submit_inquiry"><input type="hidden" name="inquiry_type" value="school_partnership"><input type="hidden" name="_token" value="<?= CSRF_TOKEN ?>">
+            <input type="hidden" name="action" value="submit_inquiry"><input type="hidden" name="inquiry_type" value="school_proposal"><input type="hidden" name="_token" value="<?= CSRF_TOKEN ?>">
             <div class="form-group"><label class="form-label">Contact Name *</label><input type="text" name="name" class="form-input" required></div>
             <div class="form-group"><label class="form-label">School Name *</label><input type="text" name="school_name" class="form-input" required></div>
             <div class="form-row"><div class="form-group"><label class="form-label">Email *</label><input type="email" name="email" class="form-input" required></div><div class="form-group"><label class="form-label">Phone *</label><input type="tel" name="phone" class="form-input" required></div></div>

@@ -19,9 +19,9 @@ include __DIR__ . '/../templates/header-teacher.php';
 </div>
 
 <div class="teacher-grid">
-    <div class="teacher-card"><div class="tc-icon">🏠</div><h3>Home Tutorials</h3><p>Travel to families across Lagos for personalized 1-on-1 or small group sessions.</p></div>
-    <div class="teacher-card orange"><div class="tc-icon">🎪</div><h3>Saturday Club</h3><p>Lead STEM experiments and reading circles at our Saturday Club sessions.</p></div>
-    <div class="teacher-card navy"><div class="tc-icon">📱</div><h3>Digital Tools</h3><p>Submit session notes via voice-to-text, track student progress, and communicate with parents — all from your phone.</p></div>
+    <div class="teacher-card"><div class="tc-icon"><?= ttIcon('home', 'tt-icon', 40) ?></div><h3>Home Tutorials</h3><p>Travel to families across Lagos for personalized 1-on-1 or small group sessions.</p></div>
+    <div class="teacher-card orange"><div class="tc-icon"><?= ttIcon('tent', 'tt-icon', 40) ?></div><h3>Saturday Club</h3><p>Lead STEM experiments and reading circles at our Saturday Club sessions.</p></div>
+    <div class="teacher-card navy"><div class="tc-icon"><?= ttIcon('smartphone', 'tt-icon', 40) ?></div><h3>Digital Tools</h3><p>Submit session notes via voice-to-text, track student progress, and communicate with parents — all from your phone.</p></div>
 </div>
 
 <div class="card card-flat" style="max-width: 640px; margin: var(--space-4) auto;">

@@ -164,6 +164,28 @@ function generateDocNumber(string $type, string $table, string $column): string
 }
 
 // ============================================================
+// CLUB MEMBERSHIP
+// ============================================================
+
+/**
+ * Compute a club membership's end date from its plan and a start date.
+ * Shared by self-service registration, hub-created memberships, and
+ * payment confirmation, so the plan length is defined in exactly one
+ * place instead of three copy-pasted match() blocks that could drift.
+ */
+function clubPlanEndDate(string $plan, ?string $fromDate = null): string
+{
+    $fromDate = $fromDate ?: date('Y-m-d');
+    return match ($plan) {
+        'trial'     => date('Y-m-d', strtotime("{$fromDate} +1 week")),
+        'monthly'   => date('Y-m-d', strtotime("{$fromDate} +1 month")),
+        'quarterly' => date('Y-m-d', strtotime("{$fromDate} +3 months")),
+        'biannual'  => date('Y-m-d', strtotime("{$fromDate} +6 months")),
+        default     => date('Y-m-d', strtotime("{$fromDate} +1 week")),
+    };
+}
+
+// ============================================================
 // JSON RESPONSE
 // ============================================================
 
@@ -400,4 +422,23 @@ function whatsappLink(string $message = ''): string
         $url .= '?text=' . urlencode($message);
     }
     return $url;
+}
+
+/**
+ * Human-friendly label for a bookstore product's `category` enum value.
+ * Keep in sync with the `products.category` enum in the database and with
+ * the option/chip lists in hub/bookstore.php and shop.php.
+ */
+function categoryLabel(string $category): string
+{
+    static $labels = [
+        'consult_booklets'    => 'Consultation Booklets',
+        'workbooks'           => 'Workbooks',
+        'exercise_books'      => 'Exercise Books',
+        'textbooks'           => 'Textbooks',
+        'stationery'          => 'Stationery',
+        'educational_toys'    => 'Educational Toys',
+        'recommended_reading' => 'Recommended Reading',
+    ];
+    return $labels[$category] ?? ucfirst(str_replace('_', ' ', $category));
 }

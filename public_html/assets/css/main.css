@@ -143,6 +143,25 @@ p { margin-bottom: var(--space-2); }
 .btn-icon { width: var(--btn-height); padding: 0; }
 .btn-icon.btn-sm { width: 36px; }
 
+/* Portal header "back" pill (header-parent.php, header-teacher.php). Was
+   used on both but never actually styled anywhere main.css/parent.css/
+   teacher.css links reach — its only rule lived in theme.css, which is
+   deliberately not loaded on portal pages — so it rendered as a bare
+   underlined blue link on every single portal page. */
+.btn-back-home {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.8125rem; font-weight: 700;
+    color: var(--tinker-teal);
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    background: rgba(26,175,160,0.08);
+    border: 1px solid rgba(26,175,160,0.18);
+    text-decoration: none;
+    transition: background .2s, color .2s;
+    white-space: nowrap;
+}
+.btn-back-home:hover { background: var(--tinker-teal); color: #FFF; }
+
 /* ============================================================
    FORMS
    ============================================================ */
@@ -263,6 +282,10 @@ p { margin-bottom: var(--space-2); }
     display: flex; align-items: center; justify-content: center;
     font-size: 1.25rem; cursor: pointer; color: #999;
     transition: background 0.2s;
+    /* Now a <button> (was a <span>) so it's keyboard-focusable and
+       activates on Enter/Space — reset the UA button chrome so it still
+       looks identical to the old span. */
+    border: none; background-color: transparent; padding: 0; font-family: inherit; line-height: 1;
 }
 .modal-close:hover { background: var(--cloud-gray); color: var(--charcoal); }
 .modal-body { padding: var(--space-3); }
@@ -321,6 +344,24 @@ p { margin-bottom: var(--space-2); }
 .empty-state .icon { font-size: 3rem; margin-bottom: var(--space-2); opacity: 0.5; }
 .empty-state h3 { color: var(--charcoal); margin-bottom: var(--space-1); }
 .empty-state p { font-size: 0.875rem; max-width: 360px; margin: 0 auto var(--space-3); }
+/* Icon-badge — a soft colour-tinted circle behind an inline SVG icon
+   (includes/icons.php), used wherever a bare emoji floating on white
+   read as an unfinished placeholder rather than a deliberate visual.
+   Not scoped to .empty-state: also used for page-level hero icons
+   (e.g. teacher/resources.php, teacher/workshops.php). */
+.icon-badge {
+    width: 64px; height: 64px; margin: 0 auto var(--space-2);
+    border-radius: 50%; background: rgba(26,175,160,0.08);
+    color: var(--tinker-teal);
+    display: flex; align-items: center; justify-content: center;
+}
+.icon-badge--lg { width: 88px; height: 88px; }
+
+/* ============================================================
+   ICONS (includes/icons.php)
+   ============================================================ */
+.tt-icon { display: block; flex-shrink: 0; }
+a .tt-icon, button .tt-icon, .dropdown-item .tt-icon { display: inline-block; vertical-align: -4px; }
 
 /* ============================================================
    LOADING SPINNER
@@ -516,6 +557,46 @@ p { margin-bottom: var(--space-2); }
 @media (min-width: 769px) {
     .bottom-nav { display: none; }
     .has-bottom-nav { padding-bottom: 0; }
+}
+
+/* ============================================================
+   DESKTOP PORTAL SUB-NAV (parent/teacher portals)
+   .bottom-nav above is a mobile-style fixed tab bar and is
+   deliberately hidden at desktop widths — but nothing ever
+   replaced it, so on any non-mobile screen the parent portal had
+   NO in-app navigation at all: no way back to the dashboard from
+   Payments/Messages/My Child except the browser back button.
+   This mirrors the same five tabs as an in-flow strip sticky
+   right under the top bar, so it's always one glance away without
+   any content-padding gymnastics (sticky, not fixed).
+   ============================================================ */
+.portal-subnav { display: none; }
+@media (min-width: 769px) {
+    .portal-subnav {
+        display: flex;
+        justify-content: center;
+        background: #FFF;
+        border-bottom: 1px solid var(--cloud-gray);
+        position: sticky; top: 56px; z-index: 190;
+    }
+    .portal-subnav .subnav-item {
+        position: relative;
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 14px 20px;
+        font-size: 0.8125rem; font-weight: 700;
+        color: #999; text-decoration: none;
+        border-bottom: 3px solid transparent;
+        transition: color 0.2s, border-color 0.2s;
+    }
+    .portal-subnav .subnav-item:hover { color: var(--tinker-teal); }
+    .portal-subnav .subnav-item.active { color: var(--tinker-teal); border-bottom-color: var(--tinker-teal); }
+    .portal-subnav .subnav-icon { font-size: 1rem; }
+    .portal-subnav .subnav-badge {
+        display: inline-flex; align-items: center; justify-content: center;
+        min-width: 17px; height: 17px; padding: 0 4px;
+        border-radius: 999px; background: var(--story-coral); color: #FFF;
+        font-size: 0.625rem; font-weight: 800;
+    }
 }
 
 /* ============================================================

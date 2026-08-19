@@ -22,12 +22,12 @@ require_once __DIR__ . '/../templates/header-hub.php';
     <div class="hub-card">
         <div class="hub-card-header"><h3>Quick Actions</h3></div>
         <div class="hub-card-body" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <a href="<?= HUB_URL ?>/clients.php?action=add" class="btn btn-outline btn-sm" style="justify-content: flex-start;">👥 Add Client</a>
-            <a href="<?= HUB_URL ?>/sessions.php?action=add" class="btn btn-outline btn-sm" style="justify-content: flex-start;">📅 Schedule Session</a>
-            <a href="<?= HUB_URL ?>/finance.php?action=invoice" class="btn btn-outline btn-sm" style="justify-content: flex-start;">💰 Create Invoice</a>
-            <a href="<?= HUB_URL ?>/bookstore.php?action=add" class="btn btn-outline btn-sm" style="justify-content: flex-start;">📚 Add Product</a>
-            <a href="<?= HUB_URL ?>/club.php" class="btn btn-outline btn-sm" style="justify-content: flex-start;">🎪 Club Attendance</a>
-            <a href="<?= HUB_URL ?>/blog.php?action=add" class="btn btn-outline btn-sm" style="justify-content: flex-start;">✍️ New Blog Post</a>
+            <a href="<?= HUB_URL ?>/clients.php?action=add" class="btn btn-outline btn-sm" style="justify-content: flex-start;"><?= ttIcon('users', 'tt-icon', 16) ?> Add Client</a>
+            <a href="<?= HUB_URL ?>/sessions.php?action=add" class="btn btn-outline btn-sm" style="justify-content: flex-start;"><?= ttIcon('calendar', 'tt-icon', 16) ?> Schedule Session</a>
+            <a href="<?= HUB_URL ?>/finance.php?action=invoice" class="btn btn-outline btn-sm" style="justify-content: flex-start;"><?= ttIcon('card', 'tt-icon', 16) ?> Create Invoice</a>
+            <a href="<?= HUB_URL ?>/bookstore.php?action=add" class="btn btn-outline btn-sm" style="justify-content: flex-start;"><?= ttIcon('book', 'tt-icon', 16) ?> Add Product</a>
+            <a href="<?= HUB_URL ?>/club.php" class="btn btn-outline btn-sm" style="justify-content: flex-start;"><?= ttIcon('tent', 'tt-icon', 16) ?> Club Attendance</a>
+            <a href="<?= HUB_URL ?>/blog.php?action=add" class="btn btn-outline btn-sm" style="justify-content: flex-start;"><?= ttIcon('book', 'tt-icon', 16) ?> New Blog Post</a>
         </div>
     </div>
 </div>

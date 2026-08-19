@@ -11,7 +11,7 @@ require_once __DIR__ . '/../templates/header-hub.php';
 </div></div>
 
 <div class="modal-overlay" id="progressModal"><div class="modal modal-lg">
-    <div class="modal-header"><h3 id="progressTitle">Progress</h3><span class="modal-close">&times;</span></div>
+    <div class="modal-header"><h3 id="progressTitle">Progress</h3><button type="button" class="modal-close" aria-label="Close">&times;</button></div>
     <div class="modal-body" id="progressBody"></div>
 </div></div>
 

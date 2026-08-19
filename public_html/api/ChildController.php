@@ -97,9 +97,12 @@ function getChild(): void
         [$id]
     );
 
-    // Club membership
+    // Club membership — include pending_payment too so an unpaid
+    // registration shows an honest "payment pending" state instead of
+    // silently disappearing from the child's page.
     $clubMembership = dbFetchOne(
-        "SELECT * FROM `club_memberships` WHERE `child_id` = ? AND `status` = 'active' ORDER BY `end_date` DESC LIMIT 1",
+        "SELECT * FROM `club_memberships` WHERE `child_id` = ? AND `status` IN ('active','pending_payment')
+         ORDER BY FIELD(`status`,'active','pending_payment') ASC, `end_date` DESC LIMIT 1",
         [$id]
     );
 

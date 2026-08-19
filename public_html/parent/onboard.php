@@ -27,7 +27,7 @@
 
     <div class="wizard-panel" id="step3">
         <div class="card"><div class="card-body" style="text-align:center;">
-            <div style="font-size:3rem;margin-bottom:16px;">✅</div>
+            <div class="icon-badge icon-badge--lg" style="background:rgba(39,174,96,0.1);color:var(--leaf-green);"><?= ttIcon('check', 'tt-icon', 44) ?></div>
             <h2 class="mb-2">You're All Set!</h2>
             <p class="text-muted mb-3">Your child's profile is ready. You'll receive session schedules, progress notes, and invoices right here.</p>
             <a href="<?= APP_URL ?>/parent/" class="btn btn-primary">Go to Dashboard</a>

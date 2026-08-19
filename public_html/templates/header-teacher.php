@@ -3,6 +3,7 @@
  * templates/header-teacher.php — Teacher Portal header
  * For public teacher pages (no auth needed) and dashboard (auth needed).
  */
+require_once __DIR__ . '/../includes/icons.php';
 $pageTitle = ($pageTitle ?? 'For Teachers') . ' — Think & Tinker';
 $currentPage = basename($_SERVER['SCRIPT_NAME'], '.php');
 $isAuth = isset($teacherUser);
@@ -27,7 +28,7 @@ $isAuth = isset($teacherUser);
             Think & Tinker <span style="color: var(--spark-orange); font-size: 0.75rem; font-weight: 600;">FOR TEACHERS</span>
         </a>
         <div class="flex items-center gap-2">
-            <a href="<?= APP_URL ?>/" class="btn-back-home">← Back to Home</a>
+            <a href="<?= APP_URL ?>/" class="btn-back-home"><?= ttIcon('arrow-left', 'tt-icon', 14) ?> Back to Home</a>
             <?php if ($isAuth): ?>
                 <?php include __DIR__ . '/notification-bell.php'; ?>
                 <span style="font-size: 0.875rem; font-weight: 600;"><?= htmlspecialchars($teacherUser['first_name']) ?></span>

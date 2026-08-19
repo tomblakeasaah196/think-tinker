@@ -13,7 +13,7 @@ $userModules = getUserModules($user);
 </div>
 
 <div class="search-bar mb-3" style="max-width:100%;">
-    <span class="search-icon">🔍</span>
+    <span class="search-icon"><?= ttIcon('search', 'tt-icon', 16) ?></span>
     <input type="text" placeholder="Search help topics..." id="helpSearch" oninput="filterHelp(this.value)">
 </div>
 
@@ -27,7 +27,7 @@ $userModules = getUserModules($user);
 $helpContent = [
 
 'dashboard' => [
-    'icon' => '📊', 'title' => 'Dashboard',
+    'icon' => 'home', 'title' => 'Dashboard',
     'intro' => 'Your command centre. See everything at a glance — revenue, client stats, upcoming sessions, and recent activity.',
     'guides' => [
         ['title' => 'Understanding Your Stats', 'content' => 'The top row shows financial metrics: revenue this month, expenses, net margin, and pending invoices. Below that, client metrics show active clients, children, upcoming sessions, and club members. If you\'re a tutor, you\'ll see your personal stats instead — assigned students, pending notes, and upcoming sessions.'],
@@ -37,7 +37,7 @@ $helpContent = [
 ],
 
 'clients' => [
-    'icon' => '👥', 'title' => 'Client Management',
+    'icon' => 'users', 'title' => 'Client Management',
     'intro' => 'Manage parents and their children. Add new clients, view their history, and track their engagement.',
     'guides' => [
         ['title' => 'Adding a New Client', 'content' => 'Click "+ Add Client" to open the form. Fill in the parent\'s details (name, email, phone). Optionally add a child\'s profile and assign a service right away. The system creates their account and sends a welcome email with a temporary password.'],
@@ -48,7 +48,7 @@ $helpContent = [
 ],
 
 'sessions' => [
-    'icon' => '📅', 'title' => 'Session Management',
+    'icon' => 'calendar', 'title' => 'Session Management',
     'intro' => 'Schedule, track, and manage tutorial sessions. View the calendar, add notes, and handle rescheduling.',
     'guides' => [
         ['title' => 'Scheduling a Session', 'content' => 'Click "+ Add Session" to schedule a single session. Select the student, tutor, date, and time. The session appears in both the admin calendar and the parent\'s portal immediately.'],
@@ -59,7 +59,7 @@ $helpContent = [
 ],
 
 'finance' => [
-    'icon' => '💰', 'title' => 'Finance',
+    'icon' => 'card', 'title' => 'Finance',
     'intro' => 'Create invoices, track expenses, confirm payments, and view profit & loss reports.',
     'guides' => [
         ['title' => 'Creating an Invoice', 'content' => 'Click "+ Create Invoice", select the client, add line items (description, quantity, price), and optionally add a discount. When you click "Create & Send", the system generates a PDF, emails it to the parent with bank transfer details, and creates an in-app notification.'],
@@ -70,7 +70,7 @@ $helpContent = [
 ],
 
 'staff' => [
-    'icon' => '🏢', 'title' => 'Staff Management',
+    'icon' => 'id-badge', 'title' => 'Staff Management',
     'intro' => 'Add staff members, track attendance, and generate ID badges.',
     'guides' => [
         ['title' => 'Adding Staff', 'content' => 'Click "+ Add Staff" to create a new staff account. Choose their role (tutor, staff, or admin), fill in their details, and the system creates their account and sends a welcome email with login credentials. They can then access the Hub.'],
@@ -80,7 +80,7 @@ $helpContent = [
 ],
 
 'bookstore' => [
-    'icon' => '📚', 'title' => 'Bookstore',
+    'icon' => 'book', 'title' => 'Bookstore',
     'intro' => 'Manage products, process orders, and track inventory.',
     'guides' => [
         ['title' => 'Adding Products', 'content' => 'Click "+ Add Product" to list a new item. Add a name, description, category, price, stock quantity, and cover image. Mark it as "Featured" to highlight it on the shop page. Products appear on the public bookstore immediately.'],
@@ -90,7 +90,7 @@ $helpContent = [
 ],
 
 'club' => [
-    'icon' => '🎪', 'title' => 'STEM & Reading Club',
+    'icon' => 'tent', 'title' => 'STEM & Reading Club',
     'intro' => 'Manage Saturday club memberships, take attendance, and generate certificates.',
     'guides' => [
         ['title' => 'Managing Memberships', 'content' => 'View all active, expired, or upcoming memberships. Each membership has a plan (trial, monthly, quarterly, bi-annual), a start and end date, and a days-remaining countdown. You can add new memberships manually via "+ Add Membership".'],
@@ -101,7 +101,7 @@ $helpContent = [
 ],
 
 'blog' => [
-    'icon' => '✍️', 'title' => 'Blog',
+    'icon' => 'book', 'title' => 'Blog',
     'intro' => 'Write and publish blog posts that appear on the public website.',
     'guides' => [
         ['title' => 'Creating a Post', 'content' => 'Click "+ New Post" to open the editor. Add a title, select a category, write your content (HTML is supported — paste from any rich-text editor), add tags, and upload a featured image. Click "Publish" to make it live, or "Save as Draft" to finish later.'],
@@ -110,7 +110,7 @@ $helpContent = [
 ],
 
 'messages' => [
-    'icon' => '💬', 'title' => 'Messages',
+    'icon' => 'message', 'title' => 'Messages',
     'intro' => 'Chat with parents in a WhatsApp-style interface. All replies show as "Think & Tinker".',
     'guides' => [
         ['title' => 'Viewing Conversations', 'content' => 'The left panel shows all conversations, sorted by most recent. Unread messages show a red badge. Click any conversation to open it.'],
@@ -120,7 +120,7 @@ $helpContent = [
 ],
 
 'documents' => [
-    'icon' => '📄', 'title' => 'Document Generator',
+    'icon' => 'clipboard', 'title' => 'Document Generator',
     'intro' => 'Generate any branded PDF on demand — invoices, receipts, contracts, certificates, and more.',
     'guides' => [
         ['title' => 'Generating a Document', 'content' => 'Click any document card, fill in the required fields (usually just selecting a student or staff member), and click "Generate". The PDF opens in a new tab. It\'s automatically saved on the server and linked to the relevant record.'],
@@ -130,7 +130,7 @@ $helpContent = [
 ],
 
 'settings' => [
-    'icon' => '⚙️', 'title' => 'Settings',
+    'icon' => 'sliders', 'title' => 'Settings',
     'intro' => 'Configure your business details, bank accounts, and user permissions.',
     'guides' => [
         ['title' => 'Business Setup', 'content' => 'The first tab contains all your business information: company name, RC number, address, phone, email, WhatsApp number, club plan prices, and more. These values appear on PDFs, emails, and the public website. Edit any field and click Save.'],
@@ -148,7 +148,7 @@ foreach ($helpContent as $slug => $module):
 <div class="help-module" data-module="<?= $slug ?>">
     <div class="help-module-header" onclick="toggleModule(this)">
         <div style="display:flex;align-items:center;gap:12px;">
-            <span style="font-size:1.5rem;"><?= $module['icon'] ?></span>
+            <span class="icon-badge" style="width:40px;height:40px;margin:0;"><?= ttIcon($module['icon'], 'tt-icon', 20) ?></span>
             <div>
                 <h3 style="font-size:1rem;margin:0;"><?= $module['title'] ?></h3>
                 <p style="font-size:0.75rem;color:#999;margin:0;"><?= htmlspecialchars($module['intro']) ?></p>

@@ -196,7 +196,7 @@ TT.modal = {
                 <div class="modal" style="max-width: 420px;">
                     <div class="modal-header">
                         <h3>${TT.escHtml(title)}</h3>
-                        <span class="modal-close" data-close>&times;</span>
+                        <button type="button" class="modal-close" data-close aria-label="Close">&times;</button>
                     </div>
                     <div class="modal-body">
                         <p>${TT.escHtml(message)}</p>

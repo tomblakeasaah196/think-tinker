@@ -11,7 +11,7 @@ require_once __DIR__ . '/../templates/header-hub.php';
 
 <!-- Filter Bar -->
 <div class="filter-bar">
-    <div class="search-bar"><span class="search-icon">🔍</span><input type="text" placeholder="Search clients..." id="clientSearch"></div>
+    <div class="search-bar"><span class="search-icon"><?= ttIcon('search', 'tt-icon', 16) ?></span><input type="text" placeholder="Search clients..." id="clientSearch"></div>
     <select class="form-select" id="statusFilter" onchange="loadClients()">
         <option value="">All Statuses</option><option value="active">Active</option><option value="inactive">Inactive</option>
     </select>
@@ -28,14 +28,14 @@ require_once __DIR__ . '/../templates/header-hub.php';
 
 <!-- Detail View (hidden by default) -->
 <div id="clientDetailView" style="display: none;">
-    <button class="btn btn-ghost btn-sm mb-3" onclick="showListView()">← Back to list</button>
+    <button class="btn btn-ghost btn-sm mb-3" onclick="showListView()"><?= ttIcon('arrow-left', 'tt-icon', 14) ?> Back to list</button>
     <div id="clientDetail"></div>
 </div>
 
 <!-- Add/Edit Client Modal -->
 <div class="modal-overlay" id="clientModal">
     <div class="modal modal-lg">
-        <div class="modal-header"><h3>Add New Client</h3><span class="modal-close">&times;</span></div>
+        <div class="modal-header"><h3>Add New Client</h3><button type="button" class="modal-close" aria-label="Close">&times;</button></div>
         <div class="modal-body">
             <form id="clientForm">
                 <input type="hidden" name="action" value="add_client">

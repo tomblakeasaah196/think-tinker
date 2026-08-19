@@ -197,10 +197,11 @@ function getActivityFeed(): void
              WHERE status = 'new' ORDER BY created_at DESC LIMIT 5"
         );
         foreach ($recentInquiries as $q) {
+            $typeLabel = str_replace('_', ' ', $q['inquiry_type']);
             $activities[] = [
                 'type' => 'inquiry',
                 'icon' => 'warning',
-                'text' => "New {$q['inquiry_type']} inquiry from {$q['name']}",
+                'text' => "New {$typeLabel} inquiry from {$q['name']}",
                 'time' => $q['created_at'],
                 'link' => HUB_URL . '/clients.php',
             ];

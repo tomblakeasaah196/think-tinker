@@ -200,7 +200,7 @@ Hub.loadTable = function(controller, action, filters, renderRow, tableBodySelect
             const items = r.data[Object.keys(r.data).find(k => Array.isArray(r.data[k]))] || [];
 
             if (items.length === 0) {
-                $table.html('<tr><td colspan="99"><div class="empty-state"><div class="icon">📭</div><h3>Nothing found</h3><p>Try adjusting your filters.</p></div></td></tr>');
+                $table.html('<tr><td colspan="99"><div class="empty-state"><div class="icon-badge"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.5" y1="15.5" x2="21" y2="21"/></svg></div><h3>Nothing found</h3><p>Try adjusting your filters.</p></div></td></tr>');
                 if ($pagination) $pagination.empty();
                 return;
             }

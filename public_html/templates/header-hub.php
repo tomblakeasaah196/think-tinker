@@ -6,6 +6,7 @@
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/rbac.php';
+require_once __DIR__ . '/../includes/icons.php';
 
 $user = requireAuth();
 $modules = getUserModules($user);
@@ -13,20 +14,27 @@ $pageTitle = ($pageTitle ?? 'Hub') . ' — Think & Tinker Hub';
 $currentModule = $currentModule ?? '';
 $userName = $user['first_name'] . ' ' . $user['last_name'];
 
-// Module definitions: slug => [icon, label]
+// Module definitions: slug => [icon name (see includes/icons.php), label]
+// Kept in sync with the icon choices in hub/help.php's $helpContent array —
+// same module, same icon, in both places.
 $moduleList = [
-    'dashboard'  => ['📊', 'Dashboard'],
-    'clients'    => ['👥', 'Clients'],
-    'sessions'   => ['📅', 'Sessions'],
-    'finance'    => ['💰', 'Finance'],
-    'staff'      => ['🏢', 'Staff'],
-    'bookstore'  => ['📚', 'Bookstore'],
-    'club'       => ['🎪', 'STEM Club'],
-    'blog'       => ['✍️', 'Blog'],
-    'messages'   => ['💬', 'Messages'],
-    'documents'  => ['📄', 'Documents'],
-    'settings'   => ['⚙️', 'Settings'],
-    'help'       => ['❓', 'Help Centre'],
+    'dashboard'  => ['home', 'Dashboard'],
+    'clients'    => ['users', 'Clients'],
+    'sessions'   => ['calendar', 'Sessions'],
+    'finance'    => ['card', 'Finance'],
+    'staff'      => ['id-badge', 'Staff'],
+    'bookstore'  => ['book', 'Bookstore'],
+    'club'       => ['tent', 'STEM Club'],
+    'blog'       => ['book', 'Blog'],
+    'messages'   => ['message', 'Messages'],
+    'documents'  => ['clipboard', 'Documents'],
+    'settings'   => ['sliders', 'Settings'],
+    'help'       => ['smile', 'Help Centre'],
+    // Not a sidebar nav item — getUserModules() never returns 'profile', so
+    // the sidebar loop's permission check below silently skips it. Listed
+    // here only so the topbar title resolves to "My Profile" instead of
+    // falling back to the generic "Hub" label on that page.
+    'profile'    => ['id-badge', 'My Profile'],
 ];
 ?>
 <!DOCTYPE html>
@@ -47,14 +55,14 @@ $moduleList = [
 <aside class="hub-sidebar no-print" id="hubSidebar">
     <div class="sidebar-header">
         <a href="<?= HUB_URL ?>/dashboard.php" class="sidebar-logo">
-            <span class="logo-icon">⚡</span>
+            <span class="logo-icon"><?= ttIcon('zap', 'tt-icon', 20) ?></span>
             <span class="logo-text">Think & Tinker</span>
         </a>
         <span class="sidebar-badge">HUB</span>
     </div>
 
     <div style="padding: 0 var(--space-2) var(--space-2);">
-        <a href="<?= APP_URL ?>/" class="btn-back-home">← Back to Home</a>
+        <a href="<?= APP_URL ?>/" class="btn-back-home"><?= ttIcon('arrow-left', 'tt-icon', 14) ?> Back to Home</a>
     </div>
 
     <nav class="sidebar-nav">
@@ -63,22 +71,25 @@ $moduleList = [
             $isActive = ($currentModule === $slug) ? 'active' : '';
         ?>
         <a href="<?= HUB_URL ?>/<?= $slug === 'dashboard' ? 'dashboard' : $slug ?>.php" class="sidebar-link <?= $isActive ?>">
-            <span class="sidebar-icon"><?= $icon ?></span>
+            <span class="sidebar-icon"><?= ttIcon($icon, 'tt-icon', 18) ?></span>
             <span class="sidebar-label"><?= $label ?></span>
         </a>
         <?php endforeach; ?>
     </nav>
 
     <div class="sidebar-footer">
-        <div class="sidebar-user">
+        <a href="<?= HUB_URL ?>/profile.php" class="sidebar-user">
+            <?php if (empty($user['phone']) || empty($user['profile_photo'])): ?>
+                <span class="sidebar-user-incomplete-dot" title="Your profile is missing some info"></span>
+            <?php endif; ?>
             <div class="avatar avatar-sm avatar-teal"><?= strtoupper(substr($user['first_name'],0,1) . substr($user['last_name'],0,1)) ?></div>
             <div class="sidebar-user-info">
                 <div class="sidebar-user-name"><?= htmlspecialchars($user['first_name']) ?></div>
                 <div class="sidebar-user-role"><?= ucfirst(str_replace('_', ' ', $user['user_type'])) ?></div>
             </div>
-        </div>
+        </a>
         <a href="#" class="sidebar-link" onclick="TT.api('AuthController.php',{action:'logout'}).done(()=>location.href='<?= APP_URL ?>')">
-            <span class="sidebar-icon">🚪</span>
+            <span class="sidebar-icon"><?= ttIcon('logout', 'tt-icon', 18) ?></span>
             <span class="sidebar-label">Log Out</span>
         </a>
     </div>

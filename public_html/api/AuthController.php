@@ -22,6 +22,7 @@ switch ($action) {
     case 'forgot_password':     handleForgotPassword(); break;
     case 'reset_password':      handleResetPassword(); break;
     case 'change_password':     handleChangePassword(); break;
+    case 'update_profile':      handleUpdateProfile(); break;
     case 'get_current_user':    handleGetCurrentUser(); break;
     case 'get_csrf_token':      handleGetCsrfToken(); break;
     default:
@@ -223,15 +224,10 @@ function handleRegisterClub(): void
     ];
     $planPrice = $planPrices[$plan] ?? $planPrices['trial'];
 
-    // Calculate end date based on plan
+    // Provisional dates only — recalculated from the real payment date in
+    // FinanceController::markInvoicePaid() once the invoice below clears.
     $startDate = date('Y-m-d');
-    $endDate = match ($plan) {
-        'trial'     => date('Y-m-d', strtotime('+1 week')),
-        'monthly'   => date('Y-m-d', strtotime('+1 month')),
-        'quarterly' => date('Y-m-d', strtotime('+3 months')),
-        'biannual'  => date('Y-m-d', strtotime('+6 months')),
-        default     => date('Y-m-d', strtotime('+1 week')),
-    };
+    $endDate = clubPlanEndDate($plan, $startDate);
 
     // Create invoice
     $invoiceNumber = generateDocNumber('INV', 'invoices', 'invoice_number');
@@ -263,7 +259,11 @@ function handleRegisterClub(): void
         'total'        => $planPrice,
     ]);
 
-    // Create club membership
+    // Create club membership as pending — it only flips to 'active' (with
+    // start_date reset to the actual payment date) once the invoice above
+    // is confirmed paid. Previously this was inserted 'active' immediately,
+    // so the membership's countdown started — and days silently ticked away
+    // — before any payment had actually been received.
     dbInsert('club_memberships', [
         'child_id'   => $childId,
         'parent_id'  => $parentId,
@@ -271,7 +271,7 @@ function handleRegisterClub(): void
         'plan_price' => $planPrice,
         'start_date' => $startDate,
         'end_date'   => $endDate,
-        'status'     => 'active',
+        'status'     => 'pending_payment',
         'invoice_id' => $invoiceId,
         'location_id' => 1,
     ]);
@@ -409,6 +409,49 @@ function handleChangePassword(): void
     );
 
     jsonResponse(true, 'Password changed successfully.');
+}
+
+// ============================================================
+// UPDATE PROFILE (logged-in user, any portal — self-service)
+// ============================================================
+
+function handleUpdateProfile(): void
+{
+    $user = requireAuth();
+    validateCsrf();
+
+    $phone = post('phone');
+    if ($phone && !isValidPhone($phone)) {
+        jsonResponse(false, 'Please enter a valid Nigerian phone number.');
+    }
+
+    $data = [
+        'first_name' => post('first_name') ?: $user['first_name'],
+        'last_name'  => post('last_name') ?: $user['last_name'],
+        'phone'      => $phone ?: $user['phone'],
+    ];
+
+    // Handle photo upload
+    if (!empty($_FILES['profile_photo']['name'])) {
+        require_once __DIR__ . '/../includes/upload.php';
+        $result = uploadProfilePhoto('profile_photo');
+        if (!$result['success']) {
+            jsonResponse(false, $result['message']);
+        }
+        // Clean up the old photo so uploads/profiles doesn't accumulate
+        // an orphaned file every time someone updates their picture.
+        if (!empty($user['profile_photo'])) {
+            deleteUploadedFile($user['profile_photo']);
+        }
+        $data['profile_photo'] = $result['path'];
+    }
+
+    dbUpdate('users', $data, 'id = ?', [$user['id']]);
+    $_SESSION['user_name'] = $data['first_name'] . ' ' . $data['last_name'];
+
+    jsonResponse(true, 'Profile updated.', [
+        'photo' => isset($data['profile_photo']) ? getUploadUrl($data['profile_photo']) : null,
+    ]);
 }
 
 // ============================================================

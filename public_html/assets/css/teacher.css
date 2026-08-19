@@ -5,7 +5,9 @@
 .teacher-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); margin-bottom: var(--space-4); }
 .teacher-card { background: #FFF; border-radius: var(--radius-lg); padding: 28px; text-align: center; box-shadow: var(--shadow-sm); border-top: 4px solid var(--tinker-teal); transition: transform 0.2s; }
 .teacher-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
-.teacher-card .tc-icon { font-size: 2.5rem; margin-bottom: 12px; }
+.teacher-card .tc-icon { display: flex; justify-content: center; margin-bottom: 14px; color: var(--tinker-teal); }
+.teacher-card.orange .tc-icon { color: var(--spark-orange); }
+.teacher-card.navy .tc-icon { color: var(--deep-navy); }
 .teacher-card h3 { font-size: 1.125rem; margin-bottom: 8px; }
 .teacher-card p { font-size: 0.875rem; color: #666; margin-bottom: 16px; }
 .teacher-card.orange { border-top-color: var(--spark-orange); }
