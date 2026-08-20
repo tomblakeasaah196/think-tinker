@@ -217,7 +217,8 @@ if ($already) {
             margin-bottom: 24px;
         }
         .logo-img {
-            max-width: 120px;
+            max-width: 220px;
+            width: 100%;
             height: auto;
             object-fit: contain;
             filter: drop-shadow(0 8px 16px rgba(0,0,0,0.15));
@@ -442,7 +443,7 @@ if ($already) {
             <div class="panel form-panel">
                 
                 <div class="logo-container">
-                    <img src="<?= APP_URL ?>/assets/img/logo/logo_tnt_portrait.png" alt="Think & Tinker" class="logo-img" onerror="this.style.display='none'">
+                    <img src="<?= APP_URL ?>/assets/img/logo/logo-full.png" alt="Think & Tinker" class="logo-img" onerror="this.style.display='none'">
                 </div>
 
                 <div class="form-header">

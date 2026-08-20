@@ -38,27 +38,6 @@
     TT.config.apiBase = '<?= APP_URL ?>/api';
     TT.config.csrfToken = '<?= CSRF_TOKEN ?>';
     TT.notifications.init();
-
-    // Mobile-nav guard. Media queries read the LAYOUT viewport, which some
-    // Android browsers report as ~980px in "Desktop site" mode (or when the
-    // old `user-scalable=no` meta confused them). visualViewport.width is the
-    // ACTUAL visible width in CSS px, so use it to force the desktop sub-nav
-    // off whenever the real screen is phone/tablet-sized.
-    (function () {
-        function viewportWidth() {
-            return (window.visualViewport && window.visualViewport.width) || window.innerWidth || 0;
-        }
-        function enforcePortalNav() {
-            var sub = document.querySelector('.portal-subnav');
-            if (!sub) return;
-            sub.classList.toggle('is-mobile-hidden', viewportWidth() < 769);
-        }
-        enforcePortalNav();
-        window.addEventListener('resize', enforcePortalNav);
-        if (window.visualViewport) {
-            window.visualViewport.addEventListener('resize', enforcePortalNav);
-        }
-    })();
 </script>
 </body>
 </html>

@@ -29,7 +29,6 @@ body.wa-messages .wa-app {
     min-height: 0;
 }
 @media (max-width: 768px) {
-    body.wa-messages .portal-subnav { display: none; }
     body.wa-messages.wa-chat-open .portal-topbar,
     body.wa-messages.wa-chat-open .bottom-nav { display: none; }
     body.wa-messages.wa-chat-open .wa-app { height: 100vh; }
@@ -37,8 +36,8 @@ body.wa-messages .wa-app {
 body.wa-messages.wa-chat-open .portal-content { padding: 0 !important; }
 
 /* ---- PARENT single-thread: the Messages page IS the chat (no list) ---- */
-/* Full-viewport WhatsApp UI on every screen size; the portal top bar, sub-nav
-   and bottom nav step aside so nothing fights the WhatsApp header. The back
+/* Full-viewport WhatsApp UI on every screen size; the portal top bar and
+   bottom nav step aside so nothing fights the WhatsApp header. The back
    arrow returns the parent to Home. 100dvh tracks mobile URL-bar chrome. */
 body.wa-messages.wa-single-thread .wa-app {
     height: 100vh;
@@ -48,7 +47,6 @@ body.wa-messages.wa-single-thread .wa-app {
     box-shadow: none;
 }
 body.wa-messages.wa-single-thread .portal-topbar,
-body.wa-messages.wa-single-thread .portal-subnav,
 body.wa-messages.wa-single-thread .bottom-nav { display: none !important; }
 body.wa-messages.wa-single-thread .portal-content { padding: 0 !important; max-width: none; }
 body.wa-messages.wa-single-thread.has-bottom-nav { padding-bottom: 0; }
