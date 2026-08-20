@@ -45,11 +45,17 @@ function getConversations(): void {
                     (SELECT message_text FROM messages WHERE conversation_id = m.conversation_id ORDER BY created_at DESC LIMIT 1) as last_message,
                     (SELECT display_as FROM messages WHERE conversation_id = m.conversation_id AND sender_type = 'parent' LIMIT 1) as parent_name,
                     (SELECT first_name FROM users u JOIN messages m2 ON u.id = m2.sender_id WHERE m2.conversation_id = m.conversation_id AND m2.sender_type = 'parent' LIMIT 1) as sender_name,
+                    (SELECT sender_type FROM messages WHERE conversation_id = m.conversation_id ORDER BY created_at DESC LIMIT 1) as last_sender_type,
                     SUM(CASE WHEN m.sender_type = 'parent' AND m.is_read = 0 THEN 1 ELSE 0 END) as unread,
                     m.child_id, (SELECT first_name FROM children WHERE id = m.child_id LIMIT 1) as child_name
              FROM messages m GROUP BY m.conversation_id ORDER BY last_activity DESC");
     }
-    foreach ($convos as &$c) { $c['time_ago'] = timeAgo($c['last_activity']); }
+    foreach ($convos as &$c) {
+        $c['time_ago'] = timeAgo($c['last_activity']);
+        $preview = decodeMessagePayload((string) ($c['last_message'] ?? ''));
+        $c['last_message'] = $preview['preview'];
+        $c['last_is_attachment'] = $preview['attachment'] ? 1 : 0;
+    }
     jsonResponse(true, '', ['conversations' => $convos]);
 }
 
@@ -65,9 +71,7 @@ function getMessages(): void {
         dbExecute("UPDATE messages SET is_read = 1 WHERE conversation_id = ? AND sender_type = 'parent'", [$conversationId]);
     }
     foreach ($messages as &$m) {
-        $m['is_mine'] = ($m['sender_id'] == $user['id']);
-        $m['time'] = date('g:i A', strtotime($m['created_at']));
-        $m['date'] = formatDate($m['created_at'], 'M j');
+        decorateMessage($m, $user);
     }
     jsonResponse(true, '', ['messages' => $messages]);
 }
@@ -75,7 +79,21 @@ function getMessages(): void {
 function sendMessage(): void {
     $user = requireAuth(); validateCsrf();
     $text = trim($_POST['message_text'] ?? '');
-    if (!$text) jsonResponse(false, 'Message cannot be empty.');
+    $attachment = null;
+    if (!empty($_FILES['attachment']['name'])) {
+        require_once __DIR__ . '/../includes/upload.php';
+        $up = uploadMessageAttachment('attachment');
+        if (!$up['success']) {
+            jsonResponse(false, $up['message']);
+        }
+        $attachment = [
+            'path' => $up['path'],
+            'name' => $up['filename'] ?? basename($up['path']),
+            'mime' => $up['mime'] ?? '',
+            'url'  => getUploadUrl($up['path']),
+        ];
+    }
+    if ($text === '' && !$attachment) jsonResponse(false, 'Message cannot be empty.');
     $conversationId = post('conversation_id');
     // New conversation if none provided
     if (!$conversationId) {
@@ -85,10 +103,11 @@ function sendMessage(): void {
         'parent' => 'parent', 'tutor' => 'tutor', default => 'admin',
     };
     $displayAs = ($senderType === 'parent') ? $user['first_name'].' '.$user['last_name'] : getSetting('business_name', 'Think & Tinker');
+    $stored = encodeMessagePayload(sanitize($text), $attachment);
     $id = dbInsert('messages', [
         'conversation_id' => $conversationId, 'sender_id' => $user['id'],
         'sender_type' => $senderType, 'display_as' => $displayAs,
-        'message_text' => sanitize($text), 'child_id' => postInt('child_id') ?: null,
+        'message_text' => $stored, 'child_id' => postInt('child_id') ?: null,
     ]);
     // Notify
     if ($senderType === 'parent') {
@@ -133,6 +152,60 @@ function getNewMessages(): void {
     $where = "conversation_id = ?"; $params = [$conversationId];
     if ($after) { $where .= " AND created_at > ?"; $params[] = $after; }
     $messages = dbFetchAll("SELECT * FROM messages WHERE $where ORDER BY created_at ASC", $params);
-    foreach ($messages as &$m) { $m['is_mine'] = ($m['sender_id'] == $user['id']); $m['time'] = date('g:i A', strtotime($m['created_at'])); }
+    foreach ($messages as &$m) {
+        decorateMessage($m, $user);
+    }
     jsonResponse(true, '', ['messages' => $messages]);
+}
+
+const MSG_ATT_PREFIX = '__TTATT__';
+
+function encodeMessagePayload(string $text, ?array $attachment): string
+{
+    if (!$attachment) {
+        return $text;
+    }
+    return MSG_ATT_PREFIX . json_encode([
+        't'   => $text,
+        'att' => $attachment,
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+}
+
+function decodeMessagePayload(string $raw): array
+{
+    $empty = ['text' => $raw, 'attachment' => null, 'preview' => $raw];
+    if ($raw === '' || !str_starts_with($raw, MSG_ATT_PREFIX)) {
+        return $empty;
+    }
+    $decoded = json_decode(substr($raw, strlen(MSG_ATT_PREFIX)), true);
+    if (!is_array($decoded)) {
+        return $empty;
+    }
+    $text = (string) ($decoded['t'] ?? '');
+    $att  = is_array($decoded['att'] ?? null) ? $decoded['att'] : null;
+    if ($att && empty($att['url']) && !empty($att['path'])) {
+        require_once __DIR__ . '/../includes/upload.php';
+        $att['url'] = getUploadUrl($att['path']);
+    }
+    $preview = $text !== '' ? $text : (($att && str_starts_with((string) ($att['mime'] ?? ''), 'image/')) ? 'Photo' : 'Attachment');
+    return ['text' => $text, 'attachment' => $att, 'preview' => $preview];
+}
+
+function decorateMessage(array &$m, array $user): void
+{
+    $payload = decodeMessagePayload((string) ($m['message_text'] ?? ''));
+    $m['message_text'] = $payload['text'];
+    $m['attachment'] = $payload['attachment'];
+    $m['is_mine'] = ((int) $m['sender_id'] === (int) $user['id']);
+    $m['time'] = date('g:i A', strtotime($m['created_at']));
+    $today = date('Y-m-d');
+    $yesterday = date('Y-m-d', strtotime('-1 day'));
+    $day = date('Y-m-d', strtotime($m['created_at']));
+    if ($day === $today) {
+        $m['date'] = 'Today';
+    } elseif ($day === $yesterday) {
+        $m['date'] = 'Yesterday';
+    } else {
+        $m['date'] = formatDate($m['created_at'], 'D, M j');
+    }
 }

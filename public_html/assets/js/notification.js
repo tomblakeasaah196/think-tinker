@@ -34,13 +34,19 @@ TT.notifications = {
         });
         $('.notif-dropdown').on('click', function(e) { e.stopPropagation(); });
 
-        // Mark single as read
+        // Mark single as read, then route. Use .attr('data-link') rather than
+        // .data('link') so jQuery does not cache/coerce the URL (e.g. stripping
+        // a path or treating it as JSON) and skip the navigation.
         $(document).on('click', '.notif-item[data-id]', function() {
             const id = $(this).data('id');
-            const link = $(this).data('link');
-            TT.api('NotificationController.php', { action: 'mark_read', id: id }, { silent: true });
+            const link = ($(this).attr('data-link') || '').trim();
+            TT.api('NotificationController.php', { action: 'mark_read', id: id }, { silent: true })
+                .done(function() {
+                    if (link) {
+                        window.location.href = link;
+                    }
+                });
             $(this).removeClass('unread');
-            if (link) window.location.href = link;
         });
 
         // Mark all read

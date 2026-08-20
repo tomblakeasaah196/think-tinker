@@ -90,11 +90,14 @@ function uploadFile(string $fieldName, string $subDir, array $options = []): arr
     $isImage = in_array($mimeType, ['image/jpeg', 'image/png', 'image/webp']);
 
     if ($isImage && !$skipResize) {
-        // Resize and compress image via GD
-        $result = processImage($file['tmp_name'], $outputPath, $mimeType, $maxWidth, $quality);
-        if (!$result) {
+        // Resize and compress image via GD. processImage may rewrite the
+        // extension (PNG/WebP flattened to JPEG) — use the path it actually saved.
+        $savedPath = processImage($file['tmp_name'], $outputPath, $mimeType, $maxWidth, $quality);
+        if (!$savedPath) {
             return ['success' => false, 'path' => '', 'message' => 'Image processing failed.'];
         }
+        $outputPath = $savedPath;
+        $newFilename = basename($outputPath);
     } else {
         // Move file as-is (PDFs, documents, etc.)
         if (!move_uploaded_file($file['tmp_name'], $outputPath)) {
@@ -180,8 +183,18 @@ function uploadSessionImage(string $fieldName): array
 }
 
 /**
- * Upload a document file (PDF, DOCX — no image processing).
+ * Chat attachment (images + PDF).
  */
+function uploadMessageAttachment(string $fieldName = 'attachment'): array
+{
+    return uploadFile($fieldName, 'messages', [
+        'maxWidth'     => 1600,
+        'maxSize'      => 10 * 1024 * 1024,
+        'quality'      => 82,
+        'allowedTypes' => ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'],
+    ]);
+}
+
 function uploadDocument(string $fieldName, string $subDir = 'resources'): array
 {
     return uploadFile($fieldName, $subDir, [
@@ -251,9 +264,9 @@ function saveSignatureImage(string $base64Data): array
  * @param string $mimeType   MIME type of the source
  * @param int    $maxWidth   Maximum width in pixels
  * @param int    $quality    JPEG quality (1-100)
- * @return bool
+ * @return string|false  Absolute path actually written, or false on failure
  */
-function processImage(string $sourcePath, string $outputPath, string $mimeType, int $maxWidth, int $quality): bool
+function processImage(string $sourcePath, string $outputPath, string $mimeType, int $maxWidth, int $quality): string|false
 {
     // Create GD image from source
     $source = match ($mimeType) {
@@ -263,9 +276,9 @@ function processImage(string $sourcePath, string $outputPath, string $mimeType, 
         default      => false,
     };
 
-    if (!$source) {
+        if (!$source) {
         // GD failed — fall back to moving raw file
-        return move_uploaded_file($sourcePath, $outputPath);
+        return move_uploaded_file($sourcePath, $outputPath) ? $outputPath : false;
     }
 
     // Get dimensions
@@ -332,8 +345,7 @@ function processImage(string $sourcePath, string $outputPath, string $mimeType, 
 
     imagedestroy($source);
 
-    // If original was a tmp file and we processed successfully, we don't need move_uploaded_file
-    return $result;
+    return $result ? $outputPath : false;
 }
 
 /**
@@ -417,7 +429,10 @@ function getUploadUrl(string $relativePath): string
     if (empty($relativePath)) {
         return APP_URL . '/assets/img/defaults/placeholder.png';
     }
-    return APP_URL . '/' . $relativePath;
+    if (preg_match('#^https?://#i', $relativePath)) {
+        return $relativePath;
+    }
+    return APP_URL . '/' . ltrim($relativePath, '/');
 }
 
 /**
