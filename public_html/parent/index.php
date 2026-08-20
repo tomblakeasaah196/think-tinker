@@ -2,8 +2,8 @@
 
 <div id="childSwitcher" class="child-switcher" style="display:none;"></div>
 
-<!-- Opens the existing messaging thread composer directly. Not a second
-     system: ?new=1 simply calls Messenger.startNew() on arrival. -->
+<!-- Opens the single Think & Tinker thread directly with the composer
+     focused. Not a second system: ?new=1 just focuses #waInput on arrival. -->
 <a href="<?= APP_URL ?>/parent/messages.php?new=1" class="btn btn-primary btn-block ask-question-cta">
     <?= ttIcon('message', 'tt-icon', 18) ?> Ask a Question
 </a>

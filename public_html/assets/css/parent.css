@@ -177,4 +177,47 @@ a.parent-stat:active { transform: translateY(0); }
     margin-bottom: var(--space-3);
     font-size: 1rem;
     padding: 14px;
+    background: var(--gradient-cta);
+    box-shadow: 0 6px 20px rgba(26,175,160,0.35);
+}
+.ask-question-cta:hover { background: var(--gradient-cta); filter: brightness(1.05); }
+
+/* ============================================================
+   GLASSMORPHISM POLISH
+   Echoes the public-site glass tokens (variables.css / theme.css):
+   frosted surfaces + soft blur over a light brand mesh, instead of
+   harsh flat-white rectangles. Borders are left untouched so the
+   teal/orange/blue accent edges on each card stay exactly as-is.
+   ============================================================ */
+.parent-portal {
+    background-color: var(--warm-white);
+    background-image:
+        radial-gradient(at 12% 0%, rgba(26,175,160,0.10), transparent 45%),
+        radial-gradient(at 88% 6%, rgba(244,123,32,0.08), transparent 45%),
+        radial-gradient(at 50% 100%, rgba(52,152,219,0.06), transparent 55%);
+    background-attachment: fixed;
+}
+.parent-stat, .session-card, .note-card, .doc-card, .invoice-card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.7));
+    -webkit-backdrop-filter: blur(12px) saturate(1.1);
+    backdrop-filter: blur(12px) saturate(1.1);
+    box-shadow: 0 8px 28px rgba(15,23,42,0.09);
+}
+.child-chip {
+    background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.72));
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+}
+.bank-details-box {
+    background: linear-gradient(180deg, rgba(254,245,231,0.92), rgba(254,245,231,0.7));
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+/* Reduce blur on low-end mobile where backdrop-filter is expensive / may
+   create a containing block; the translucent gradient already reads as glass. */
+@media (max-width: 768px) {
+    .parent-stat, .session-card, .note-card, .doc-card, .invoice-card {
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
 }

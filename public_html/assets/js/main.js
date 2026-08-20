@@ -10,11 +10,15 @@ const TT = window.TT || {};
 // ============================================================
 // CONFIG
 // ============================================================
-TT.config = {
+// Merge (never clobber) any config already set on window.TT. The parent
+// header sets apiBase/csrfToken EARLY so messenger.js can send before the
+// footer runs; if we overwrote TT.config here that early config would be
+// wiped and sends would hit the wrong URL.
+TT.config = Object.assign({
     apiBase: '',       // Set in header template: '/api' or '/hub/api' depending on context
     csrfToken: '',     // Set in header template from PHP
     pollInterval: 30000, // 30s notification polling
-};
+}, TT.config || {});
 
 // ============================================================
 // AJAX WRAPPER
