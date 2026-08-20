@@ -112,7 +112,10 @@ function sendMessage(): void {
         'parent' => 'parent', 'tutor' => 'tutor', default => 'admin',
     };
     $displayAs = ($senderType === 'parent') ? $user['first_name'].' '.$user['last_name'] : getSetting('business_name', 'Think & Tinker');
-    $stored = encodeMessagePayload(sanitize($text), $attachment);
+    // Store the RAW text (trimmed above). All output paths escape via
+    // TT.escHtml / htmlspecialchars at render time; HTML-encoding here would
+    // double-encode (e.g. "R&D" → "R&amp;D" in the bubble).
+    $stored = encodeMessagePayload($text, $attachment);
     $id = dbInsert('messages', [
         'conversation_id' => $conversationId, 'sender_id' => $user['id'],
         'sender_type' => $senderType, 'display_as' => $displayAs,
