@@ -110,6 +110,17 @@ Messenger.emptyText = function() {
         : 'No messages yet.';
 };
 
+Messenger.ajaxErrorMessage = function(xhr) {
+    try {
+        const resp = JSON.parse(xhr.responseText);
+        if (resp && resp.message) return resp.message;
+    } catch (e) {}
+    if (xhr.status === 401) return 'Your session has expired. Please refresh and log in again.';
+    if (xhr.status === 403) return 'You do not have permission to view messages.';
+    if (xhr.status === 0) return 'Network error. Please check your connection.';
+    return 'Could not load messages. Please try again.';
+};
+
 // ---------------------------------------------------------------------------
 // PARENT — single thread
 // ---------------------------------------------------------------------------
@@ -139,6 +150,9 @@ Messenger.openSingleThread = function() {
             Messenger._lastServerMessages = [];
             Messenger.renderThread();
         }
+    }).fail(function(xhr) {
+        const el = document.getElementById('waThread');
+        if (el) el.innerHTML = '<div class="wa-empty">' + TT.escHtml(Messenger.ajaxErrorMessage(xhr)) + '</div>';
     });
     Messenger.startPolling();
 };
@@ -172,9 +186,12 @@ Messenger.openConvo = function(id, name) {
 
 Messenger.loadConversations = function() {
     TT.get('MessageController.php', { action: 'get_conversations' }).done(function(r) {
-        if (!r.success) return;
-        const convos = r.data.conversations || [];
         const list = document.getElementById('waConvoList');
+        if (!r.success) {
+            if (list) list.innerHTML = '<div class="wa-empty">' + TT.escHtml(r.message || 'Could not load conversations.') + '</div>';
+            return;
+        }
+        const convos = r.data.conversations || [];
         if (!list) return;
         if (!convos.length) {
             list.innerHTML = '<div class="wa-empty">' +
@@ -204,6 +221,9 @@ Messenger.loadConversations = function() {
             </div>`;
         });
         list.innerHTML = html;
+    }).fail(function(xhr) {
+        const list = document.getElementById('waConvoList');
+        if (list) list.innerHTML = '<div class="wa-empty">' + TT.escHtml(Messenger.ajaxErrorMessage(xhr)) + '</div>';
     });
 };
 
@@ -324,6 +344,11 @@ Messenger.loadMessages = function() {
         if (!r.success) return;
         Messenger._lastServerMessages = r.data.messages || [];
         Messenger.renderThread();
+    }).fail(function(xhr) {
+        if (seq !== Messenger._pollSeq) return;
+        if (Messenger._hasRendered) return; // don't blank an already-loaded thread on a transient poll error
+        const el = document.getElementById('waThread');
+        if (el) el.innerHTML = '<div class="wa-empty">' + TT.escHtml(Messenger.ajaxErrorMessage(xhr)) + '</div>';
     });
 };
 
