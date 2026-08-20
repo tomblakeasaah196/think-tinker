@@ -8,6 +8,12 @@ require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/rbac.php';
 
+// Must be defined before the switch below runs: top-level `const` (unlike
+// function/class declarations) is not hoisted — it's evaluated in the
+// file's normal top-to-bottom execution order, so any action handler that
+// calls decodeMessagePayload() would otherwise hit an undefined constant.
+const MSG_ATT_PREFIX = '__TTATT__';
+
 $action = $_POST['action'] ?? $_GET['action'] ?? '';
 switch ($action) {
     case 'get_conversations':   getConversations(); break;
@@ -170,8 +176,6 @@ function getNewMessages(): void {
     }
     jsonResponse(true, '', ['messages' => $messages]);
 }
-
-const MSG_ATT_PREFIX = '__TTATT__';
 
 function encodeMessagePayload(string $text, ?array $attachment): string
 {
