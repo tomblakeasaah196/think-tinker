@@ -1,24 +1,18 @@
-<?php $pageTitle='Messages'; $currentTab='messages'; $bodyClass='wa-messages'; require_once __DIR__.'/../templates/header-parent.php'; ?>
+<?php $pageTitle='Messages'; $currentTab='messages'; $bodyClass='wa-messages wa-single-thread'; require_once __DIR__.'/../templates/header-parent.php'; ?>
 <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/messenger.css">
 
-<div class="wa-app" id="waApp">
-    <div class="wa-pane wa-list-pane" id="waListPane">
-        <div class="wa-list-header">
-            <h2>Chats</h2>
-        </div>
-        <div class="wa-search-wrap"><input type="search" class="wa-search" id="waSearch" placeholder="Search" autocomplete="off"></div>
-        <div class="wa-convo-list" id="waConvoList"></div>
-        <button type="button" class="wa-fab" onclick="Messenger.startNew()" aria-label="New chat">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        </button>
-    </div>
-    <div class="wa-pane is-hidden" id="waChatPane">
+<!-- Parent messaging: exactly ONE thread with the business. There is no
+     conversation list, no search, no "new chat" FAB — this page IS the chat.
+     It loads/creates the Think & Tinker thread immediately and fills the
+     viewport (WhatsApp-style header, wallpaper, bubbles, ticks, composer). -->
+<div class="wa-app wa-app--single" id="waApp">
+    <div class="wa-pane" id="waChatPane">
         <div class="wa-chat-header">
-            <button type="button" class="wa-back" aria-label="Back">
+            <a href="<?= APP_URL ?>/parent/" class="wa-back" aria-label="Back to home">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-            </button>
+            </a>
             <div class="wa-avatar sm">TT</div>
-            <div>
+            <div class="wa-chat-heading">
                 <div class="wa-chat-title" id="waChatName">Think &amp; Tinker</div>
                 <div class="wa-chat-sub">Typically replies today</div>
             </div>
@@ -46,8 +40,9 @@
 <script src="<?= APP_URL ?>/assets/js/messenger.js"></script>
 <script>
 $(function(){
-    Messenger.init({ role: 'parent' });
-    if (new URLSearchParams(location.search).get('new')) { Messenger.startNew(); }
+    Messenger.init({ role: 'parent', single: true });
+    // "Ask a Question" (?new=1) opens this same thread with the composer focused.
+    if (new URLSearchParams(location.search).get('new')) { Messenger.focusComposer(); }
 });
 </script>
 <?php require_once __DIR__.'/../templates/footer-parent.php'; ?>

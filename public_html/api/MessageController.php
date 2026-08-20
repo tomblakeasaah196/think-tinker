@@ -63,6 +63,15 @@ function getMessages(): void {
     $user = requireAuth();
     $conversationId = $_GET['conversation_id'] ?? '';
     if (!$conversationId) jsonResponse(false, 'Conversation ID required.');
+    // Parents may only read threads they belong to (their single business
+    // thread). Staff/tutors go through RBAC further up in getConversations.
+    if ($user['user_type'] === 'parent') {
+        $owns = dbFetchOne(
+            "SELECT id FROM messages WHERE conversation_id = ? AND sender_id = ? LIMIT 1",
+            [$conversationId, $user['id']]
+        );
+        if (!$owns) jsonResponse(false, 'Conversation not found.', [], 404);
+    }
     $messages = dbFetchAll("SELECT * FROM messages WHERE conversation_id = ? ORDER BY created_at ASC", [$conversationId]);
     // Mark as read
     if ($user['user_type'] === 'parent') {
@@ -103,7 +112,10 @@ function sendMessage(): void {
         'parent' => 'parent', 'tutor' => 'tutor', default => 'admin',
     };
     $displayAs = ($senderType === 'parent') ? $user['first_name'].' '.$user['last_name'] : getSetting('business_name', 'Think & Tinker');
-    $stored = encodeMessagePayload(sanitize($text), $attachment);
+    // Store the RAW text (trimmed above). All output paths escape via
+    // TT.escHtml / htmlspecialchars at render time; HTML-encoding here would
+    // double-encode (e.g. "R&D" → "R&amp;D" in the bubble).
+    $stored = encodeMessagePayload($text, $attachment);
     $id = dbInsert('messages', [
         'conversation_id' => $conversationId, 'sender_id' => $user['id'],
         'sender_type' => $senderType, 'display_as' => $displayAs,

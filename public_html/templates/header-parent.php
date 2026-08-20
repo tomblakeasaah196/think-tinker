@@ -21,7 +21,13 @@ $unreadMessages = dbCount('messages',
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <!-- `user-scalable=no` is deliberately absent here: on several Android
+         browsers / WebViews it caused the layout viewport to fall back to a
+         wide (~980px) "desktop" width, which made the min-width:769px media
+         query fire on a phone and draw the desktop .portal-subnav on top of
+         the mobile bottom nav (the "duplicate nav" bug). viewport-fit=cover
+         keeps the composer flush against the safe-area on notched devices. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title><?= htmlspecialchars($pageTitle) ?></title>
     <meta name="theme-color" content="#1AAFA0">
     <link rel="manifest" href="<?= APP_URL ?>/manifest.json">
@@ -29,6 +35,19 @@ $unreadMessages = dbCount('messages',
     <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/main.css">
     <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/parent.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        // Expose the API config EARLY (before any page script or messenger.js
+        // runs). messenger.js historically raced the footer, which only set
+        // TT.config.apiBase / csrfToken at the very end of the document — a
+        // send fired before that pointed at the wrong URL and the bubble
+        // "vanished". main.js merges (never clobbers) this config when it
+        // loads, so both orderings are now safe.
+        window.TT = window.TT || {};
+        TT.config = Object.assign(TT.config || {}, {
+            apiBase: '<?= APP_URL ?>/api',
+            csrfToken: '<?= CSRF_TOKEN ?>'
+        });
+    </script>
 </head>
 <body class="has-bottom-nav parent-portal<?= !empty($bodyClass) ? ' ' . htmlspecialchars($bodyClass) : '' ?>">
 
@@ -86,7 +105,17 @@ $unreadMessages = dbCount('messages',
 </nav>
 
 <style>
-.portal-topbar { background: #FFF; border-bottom: 1px solid var(--cloud-gray); position: sticky; top: 0; z-index: 200; }
+/* Frosted glass top bar — echoes the public-site glass tokens (variables.css)
+   rather than the old flat white strip. A translucent teal-tinted surface +
+   blur over the portal's soft mesh background. */
+.portal-topbar {
+    background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.55));
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    backdrop-filter: blur(14px) saturate(1.4);
+    border-bottom: 1px solid rgba(26,175,160,0.18);
+    box-shadow: 0 4px 24px rgba(15,23,42,0.06);
+    position: sticky; top: 0; z-index: 200;
+}
 .topbar-logo { font-family: 'Quicksand', sans-serif; font-weight: 800; font-size: 1.125rem; color: var(--tinker-teal); }
 .avatar-photo { width: 100%; height: 100%; border-radius: inherit; object-fit: cover; display: block; }
 </style>

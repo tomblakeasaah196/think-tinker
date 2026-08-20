@@ -570,21 +570,38 @@ a .tt-icon, button .tt-icon, .dropdown-item .tt-icon { display: inline-block; ve
    right under the top bar, so it's always one glance away without
    any content-padding gymnastics (sticky, not fixed).
    ============================================================ */
+/* Desktop sub-nav is OFF by default and ONLY enabled at >=769px. The
+   explicit max-width:768px !important rule + the JS-driven
+   `.is-mobile-hidden` class are belt-and-suspenders against browsers that
+   misreport their layout viewport (e.g. "Desktop site", or a WebView that
+   ignores the viewport meta) — the strip must never render above the
+   mobile bottom nav. */
 .portal-subnav { display: none; }
+@media (max-width: 768px) {
+    .portal-subnav { display: none !important; }
+}
+.portal-subnav.is-mobile-hidden { display: none !important; }
 @media (min-width: 769px) {
     .portal-subnav {
         display: flex;
+        flex-wrap: nowrap;          /* never wrap "My Child" onto a 2nd row */
+        overflow-x: auto;           /* if it ever overflows, scroll — never wrap */
+        -webkit-overflow-scrolling: touch;
         justify-content: center;
-        background: #FFF;
-        border-bottom: 1px solid var(--cloud-gray);
+        background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.55));
+        -webkit-backdrop-filter: blur(14px) saturate(1.4);
+        backdrop-filter: blur(14px) saturate(1.4);
+        border-bottom: 1px solid rgba(26,175,160,0.18);
         position: sticky; top: 56px; z-index: 190;
     }
     .portal-subnav .subnav-item {
         position: relative;
         display: inline-flex; align-items: center; gap: 8px;
+        flex: 0 0 auto;             /* never shrink/wrap */
+        white-space: nowrap;
         padding: 14px 20px;
         font-size: 0.8125rem; font-weight: 700;
-        color: #999; text-decoration: none;
+        color: #5a6b7b; text-decoration: none;
         border-bottom: 3px solid transparent;
         transition: color 0.2s, border-color 0.2s;
     }

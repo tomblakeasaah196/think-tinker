@@ -1,7 +1,7 @@
-/* WhatsApp-style messenger — Think & Tinker branded */
+/* WhatsApp-style messenger — Think & Tinker branded (teal, not WhatsApp green) */
 .wa-app {
-    --wa-header: #0e7c73;
-    --wa-header-deep: #0a5c56;
+    --wa-header: var(--tinker-teal);
+    --wa-header-deep: #0f8a7e;
     --wa-mine: #d4f1ec;
     --wa-theirs: #ffffff;
     --wa-wallpaper: #dce8e4;
@@ -36,6 +36,24 @@ body.wa-messages .wa-app {
 }
 body.wa-messages.wa-chat-open .portal-content { padding: 0 !important; }
 
+/* ---- PARENT single-thread: the Messages page IS the chat (no list) ---- */
+/* Full-viewport WhatsApp UI on every screen size; the portal top bar, sub-nav
+   and bottom nav step aside so nothing fights the WhatsApp header. The back
+   arrow returns the parent to Home. 100dvh tracks mobile URL-bar chrome. */
+body.wa-messages.wa-single-thread .wa-app {
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+body.wa-messages.wa-single-thread .portal-topbar,
+body.wa-messages.wa-single-thread .portal-subnav,
+body.wa-messages.wa-single-thread .bottom-nav { display: none !important; }
+body.wa-messages.wa-single-thread .portal-content { padding: 0 !important; max-width: none; }
+body.wa-messages.wa-single-thread.has-bottom-nav { padding-bottom: 0; }
+.wa-app--single .wa-pane { height: 100%; }
+
 .hub-layout .hub-content.wa-hub-content {
     padding: 0;
     display: flex;
@@ -61,17 +79,26 @@ body.wa-messages.wa-chat-open .portal-content { padding: 0 !important; }
     background: var(--wa-header); color: #fff;
     flex-shrink: 0;
 }
+/* Teal glass header — brand gradient + blur, not flat WhatsApp green. */
+.wa-chat-header {
+    background: linear-gradient(120deg, rgba(27,42,74,0.94), rgba(26,175,160,0.92) 70%, rgba(26,175,160,0.86));
+    -webkit-backdrop-filter: blur(10px) saturate(1.3);
+    backdrop-filter: blur(10px) saturate(1.3);
+    border-bottom: 1px solid rgba(255,255,255,0.18);
+}
 .wa-list-header h2, .wa-chat-title {
     font-size: 1.125rem; font-weight: 700; margin: 0; color: #fff;
     font-family: 'Quicksand', 'Nunito Sans', sans-serif;
 }
+.wa-chat-heading { min-width: 0; }
 .wa-chat-sub { font-size: 0.6875rem; opacity: 0.85; font-weight: 500; }
 .wa-back {
     background: none; border: none; color: #fff; cursor: pointer;
     width: 40px; height: 40px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
+    text-decoration: none; flex-shrink: 0;
 }
-.wa-back:hover { background: rgba(255,255,255,0.12); }
+.wa-back:hover { background: rgba(255,255,255,0.12); color: #fff; }
 .wa-search-wrap { padding: 8px 12px; background: #fff; flex-shrink: 0; }
 .wa-search {
     width: 100%; border: none; background: #f0f2f5; border-radius: 8px;
@@ -132,6 +159,30 @@ body.wa-messages.wa-chat-open .portal-content { padding: 0 !important; }
 .wa-ticks.read { color: var(--wa-tick-read); }
 .wa-ticks.read svg:last-child { position: absolute; left: 3px; top: 0; }
 
+/* Optimistic "sending" spinner + failed marker (never silent-vanish a send) */
+.wa-ticks.pending { width: 12px; height: 12px; align-items: center; justify-content: center; }
+.wa-spinner {
+    width: 11px; height: 11px; border-radius: 50%;
+    border: 2px solid rgba(134,150,160,0.35);
+    border-top-color: var(--wa-tick);
+    animation: waSpin 0.8s linear infinite;
+    display: block;
+}
+@keyframes waSpin { to { transform: rotate(360deg); } }
+.wa-bubble.wa-failed { background: #fbe5e2; }
+.wa-failed-mark {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 15px; height: 15px; border-radius: 50%;
+    background: var(--story-coral); color: #fff;
+    font-size: 0.625rem; font-weight: 800; font-style: normal;
+}
+.wa-retry {
+    border: none; background: none; color: var(--story-coral); cursor: pointer;
+    font-size: 0.9375rem; font-weight: 800; padding: 0 2px; line-height: 1;
+}
+.wa-retry:hover { color: #c43c28; }
+.wa-att-file--pending { background: rgba(0,0,0,0.04); border-radius: 6px; padding: 8px 10px; display: flex; gap: 10px; align-items: center; min-width: 180px; }
+
 .wa-att-img {
     display: block; max-width: 260px; max-height: 280px; width: auto;
     border-radius: 6px; cursor: pointer; object-fit: cover;
@@ -146,7 +197,12 @@ body.wa-messages.wa-chat-open .portal-content { padding: 0 !important; }
 
 .wa-composer {
     display: flex; align-items: flex-end; gap: 8px;
-    padding: 8px 10px; background: #f0f2f5; flex-shrink: 0;
+    padding: 8px 10px; flex-shrink: 0;
+    /* Slightly frosted composer bar (glass, teal-tinted). */
+    background: linear-gradient(180deg, rgba(240,242,245,0.86), rgba(255,255,255,0.9));
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(26,175,160,0.14);
 }
 .wa-attach {
     width: 42px; height: 42px; border: none; background: none; cursor: pointer;
