@@ -111,6 +111,32 @@ if (APP_DEBUG) {
     ini_set('error_log', ROOT_PATH . '/logs/php-errors.log');
 }
 
+// API controllers (public_html/api/*Controller.php and hub/api/*Controller.php)
+// echo their own JSON on the happy path. Without this handler, an uncaught
+// exception in production (display_errors off) sends a 500 with a fully
+// empty body — the browser gets nothing to parse and no clue why, and we
+// get nothing in the response to diagnose. Catch it here and always answer
+// with valid JSON so the frontend can show a real message and the true
+// error still lands in the PHP error log.
+set_exception_handler(function (Throwable $e) {
+    error_log('Uncaught exception: ' . $e);
+    if (!headers_sent()) {
+        http_response_code(500);
+    }
+    if (str_ends_with($_SERVER['SCRIPT_NAME'] ?? '', 'Controller.php')) {
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'message' => APP_DEBUG ? $e->getMessage() : 'Something went wrong. Please try again.',
+            'data'    => [],
+        ], JSON_UNESCAPED_UNICODE);
+    } elseif (APP_DEBUG) {
+        echo '<pre>' . htmlspecialchars((string) $e) . '</pre>';
+    } else {
+        echo 'Something went wrong. Please try again.';
+    }
+});
+
 // ============================================================
 // 6. SESSION CONFIGURATION
 // ============================================================
