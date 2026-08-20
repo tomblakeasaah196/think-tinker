@@ -90,9 +90,10 @@ function renderMessages(messages){
     messages.forEach(m=>{
         if(m.date!==lastDate){h+=`<div style="text-align:center;font-size:0.6875rem;color:#999;margin:12px 0;">${m.date}</div>`;lastDate=m.date;}
         const cls=m.is_mine?'msg-mine':'msg-theirs';
+        const readReceipt = m.is_mine ? (m.is_read ? '<span style="color:var(--tinker-teal);margin-left:4px;">✓✓</span>' : '<span style="color:#999;margin-left:4px;">✓</span>') : '';
         h+=`<div class="msg-bubble ${cls}">`;
         if(!m.is_mine)h+=`<div class="msg-sender">${TT.escHtml(m.display_as)}</div>`;
-        h+=`${TT.escHtml(m.message_text)}<div class="msg-time">${m.time}</div></div>`;
+        h+=`${TT.escHtml(m.message_text)}<div class="msg-time">${m.time}${readReceipt}</div></div>`;
     });
     $('#chatMessages').html(h);
     const el=document.getElementById('chatMessages');el.scrollTop=el.scrollHeight;
