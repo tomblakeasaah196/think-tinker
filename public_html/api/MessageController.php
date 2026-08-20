@@ -47,7 +47,8 @@ function getConversations(): void {
                     (SELECT first_name FROM users u JOIN messages m2 ON u.id = m2.sender_id WHERE m2.conversation_id = m.conversation_id AND m2.sender_type = 'parent' LIMIT 1) as sender_name,
                     (SELECT sender_type FROM messages WHERE conversation_id = m.conversation_id ORDER BY created_at DESC LIMIT 1) as last_sender_type,
                     SUM(CASE WHEN m.sender_type = 'parent' AND m.is_read = 0 THEN 1 ELSE 0 END) as unread,
-                    m.child_id, (SELECT first_name FROM children WHERE id = m.child_id LIMIT 1) as child_name
+                    (SELECT child_id FROM messages WHERE conversation_id = m.conversation_id ORDER BY created_at DESC LIMIT 1) as child_id,
+                    (SELECT first_name FROM children WHERE id = (SELECT child_id FROM messages WHERE conversation_id = m.conversation_id ORDER BY created_at DESC LIMIT 1) LIMIT 1) as child_name
              FROM messages m GROUP BY m.conversation_id ORDER BY last_activity DESC");
     }
     foreach ($convos as &$c) {
