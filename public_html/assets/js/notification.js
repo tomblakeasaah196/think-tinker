@@ -37,10 +37,11 @@ TT.notifications = {
         // Mark single as read
         $(document).on('click', '.notif-item[data-id]', function() {
             const id = $(this).data('id');
-            const link = $(this).data('link');
-            TT.api('NotificationController.php', { action: 'mark_read', id: id }, { silent: true });
+            const link = $(this).attr('data-link');
+            TT.api('NotificationController.php', { action: 'mark_read', id: id }, { silent: true }).done(function() {
+                if (link && link !== 'null' && link !== 'undefined') window.location.href = link;
+            });
             $(this).removeClass('unread');
-            if (link) window.location.href = link;
         });
 
         // Mark all read
