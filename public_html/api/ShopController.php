@@ -30,7 +30,7 @@ function getProducts(): void {
     if ($grade) { $where .= " AND grade_level LIKE ?"; $params[] = "%$grade%"; }
     if ($search) { $where .= " AND (name LIKE ? OR description LIKE ?)"; $params[] = "%$search%"; $params[] = "%$search%"; }
     $orderBy = match($sort) { 'price_asc' => 'price ASC', 'price_desc' => 'price DESC', 'featured' => 'is_featured DESC, created_at DESC', default => 'created_at DESC' };
-    $products = dbFetchAll("SELECT id, name, slug, category, grade_level, price, compare_price, cover_image, is_featured FROM products WHERE $where ORDER BY $orderBy", $params);
+    $products = dbFetchAll("SELECT id, name, slug, category, grade_level, price, compare_price, stock_quantity, cover_image, is_featured FROM products WHERE $where ORDER BY $orderBy", $params);
     foreach ($products as &$p) { $p['formatted_price'] = formatNaira($p['price']); $p['image_url'] = $p['cover_image'] ? getUploadUrl($p['cover_image']) : null; }
     jsonResponse(true, '', ['products' => $products]);
 }
