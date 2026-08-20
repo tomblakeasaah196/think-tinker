@@ -256,6 +256,16 @@ body, .site-nav, .site-footer, .card, .pillar-card, .testimonial-card,
 [data-theme="dark"] .qty-control { border-color: var(--border-dark); }
 [data-theme="dark"] .qty-control button { background: var(--surface-alt-dark); color: var(--text-dark); }
 
+/* Alerts — brighter text + a solid (not translucent-over-dark) tinted
+   background so contrast holds regardless of what's behind them. Used on
+   parent/login.php (activation/reset messages) and parent/child.php
+   (medical notes warning); previously had no dark-mode variant at all, so
+   e.g. the success-green text (#1e8449) fell under WCAG AA on a dark card. */
+[data-theme="dark"] .alert-info    { background: rgba(52,152,219,0.16);  color: #6CB6EA; }
+[data-theme="dark"] .alert-success { background: rgba(39,174,96,0.16);   color: #5FD68C; }
+[data-theme="dark"] .alert-warning { background: rgba(253,184,19,0.14);  color: #FDCB4D; }
+[data-theme="dark"] .alert-danger  { background: rgba(232,97,77,0.16);   color: #F0897A; }
+
 /* Misc */
 [data-theme="dark"] .empty-state { color: var(--text-dark-muted); }
 [data-theme="dark"] .empty-state h3 { color: var(--text-dark); }
@@ -547,4 +557,91 @@ html .testi-text, [data-theme="dark"] .testi-text { color: var(--text-body); }
         backdrop-filter: none;
         background: var(--bg-page-dark);
     }
+}
+
+/* ============================================================
+   AUTH CARD — shared component for every login/register screen
+   (parent login, parent register, register-club, tutor login).
+   Lives here (theme.css, pulled in by every page via main.css's
+   @import) instead of being copy-pasted per-page, so there is one
+   definition to fix instead of four.
+
+   Deliberately self-contained rather than reusing the generic
+   .glass utility: .glass is a light-only translucent surface with
+   no dark-mode variant of its own, and this card needs to render
+   correctly in three different contexts — (a) light mode, (b) the
+   site's dark mode (toggled sitewide, independent of which portal
+   the visitor is in) and (c) fully inside a solid-colour
+   .page-hero/.teacher-hero, never spanning down onto the plain
+   page background where a translucent white card would have
+   almost no contrast. So: real background colours (not just alpha
+   over whatever is behind it) in both themes. The card is placed
+   as a normal in-flow child of the hero (see .auth-hero below)
+   rather than pulled up on top of it with a negative margin, so
+   the hero's own height always grows to fit the form — no
+   fixed/negative-margin measurement to keep in sync with content
+   that can change height (validation errors, longer translations,
+   browser autofill, text zoom, etc).
+   ============================================================ */
+.auth-card {
+    background: rgba(255, 255, 255, 0.97);
+    -webkit-backdrop-filter: var(--blur-md);
+    backdrop-filter: var(--blur-md);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--radius-lg);
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 40px;
+    position: relative;
+    z-index: 2;
+}
+.auth-card--wide { max-width: 620px; }
+.auth-card-brand { text-align: center; margin-bottom: 20px; }
+.auth-card-logo { height: 40px; width: auto; margin: 0 auto; display: block; }
+.auth-card-logo.logo-dark { display: none; }
+.auth-card-title { text-align: center; margin-bottom: 20px; color: var(--deep-navy); }
+.auth-card-heading { text-align: center; margin-bottom: 24px; }
+.auth-card-heading h2 { color: var(--deep-navy); margin-bottom: 4px; }
+.auth-card-heading p { color: #767676; font-size: 0.8125rem; }
+.auth-card-section-title { color: var(--tinker-teal); }
+.auth-card-footer { text-align: center; margin-top: 16px; font-size: 0.8125rem; color: #4a4a4a; }
+.auth-card-footer a { color: var(--tinker-teal); }
+.auth-card-muted { color: #767676; }
+.auth-card-strong { font-weight: 700; color: var(--tinker-teal); }
+.auth-card-strong--orange { color: var(--spark-orange); }
+.auth-card-forgot { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--cloud-gray); }
+
+/* Dark mode: swap to an opaque dark-navy surface (matching
+   --surface-dark used by every other card in the design system)
+   instead of trying to keep the light glass legible with text
+   colour patches. Logo swaps to the light-on-dark wordmark. */
+[data-theme="dark"] .auth-card {
+    background: var(--surface-dark);
+    border-color: var(--border-dark);
+    box-shadow: 0 4px 32px rgba(0,0,0,0.45);
+}
+[data-theme="dark"] .auth-card-logo.logo-light { display: none; }
+[data-theme="dark"] .auth-card-logo.logo-dark { display: block; }
+[data-theme="dark"] .auth-card-title,
+[data-theme="dark"] .auth-card-heading h2 { color: var(--text-dark); }
+[data-theme="dark"] .auth-card-heading p,
+[data-theme="dark"] .auth-card-muted,
+[data-theme="dark"] .auth-card-footer { color: var(--text-dark-muted); }
+[data-theme="dark"] .auth-card-forgot { border-top-color: var(--border-dark); }
+
+/* Auth hero: the same page-hero banner every interior page uses.
+   The card lives INSIDE the hero (not in a section below it), so
+   the hero's own height naturally grows to fit whatever the form
+   needs — no fixed/negative-margin math to keep in sync with
+   content height. That also guarantees the card always sits fully
+   on the hero's solid gradient, never spilling onto the plain page
+   background where a card would lose its contrast. */
+.auth-hero { padding: 56px 0 64px; text-align: center; }
+.auth-hero p { margin: 0 auto; }
+.auth-hero-link { display: inline-block; margin-top: 12px; color: #FFF; font-weight: 700; font-size: 0.875rem; text-decoration: underline; }
+.auth-hero .auth-card { margin-top: 32px; text-align: left; }
+@media (max-width: 640px) {
+    .auth-hero { padding: 40px 0 48px; }
+    .auth-card { padding: 28px 22px; }
 }

@@ -23,10 +23,9 @@ $unreadMessages = dbCount('messages',
     <meta charset="UTF-8">
     <!-- `user-scalable=no` is deliberately absent here: on several Android
          browsers / WebViews it caused the layout viewport to fall back to a
-         wide (~980px) "desktop" width, which made the min-width:769px media
-         query fire on a phone and draw the desktop .portal-subnav on top of
-         the mobile bottom nav (the "duplicate nav" bug). viewport-fit=cover
-         keeps the composer flush against the safe-area on notched devices. -->
+         wide (~980px) "desktop" width, which broke other width-dependent
+         layout in the portal. viewport-fit=cover keeps the composer flush
+         against the safe-area on notched devices. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title><?= htmlspecialchars($pageTitle) ?></title>
     <meta name="theme-color" content="#1AAFA0">
@@ -55,7 +54,9 @@ $unreadMessages = dbCount('messages',
 <header class="portal-topbar no-print">
     <div class="container flex items-center justify-between" style="height: 56px;">
         <div class="flex items-center gap-2">
-            <a href="<?= APP_URL ?>/parent/" class="topbar-logo">Think & Tinker</a>
+            <a href="<?= APP_URL ?>/parent/" class="topbar-logo">
+                <img src="<?= APP_URL ?>/assets/img/logo/logo-full.png" alt="Think & Tinker" class="topbar-logo-img">
+            </a>
         </div>
         <div class="flex items-center gap-1">
             <a href="<?= APP_URL ?>/" class="btn-back-home"><?= ttIcon('arrow-left', 'tt-icon', 14) ?> Home</a>
@@ -82,27 +83,13 @@ $unreadMessages = dbCount('messages',
     </div>
 </header>
 
-<!-- Desktop sub-nav: same 5 tabs as the mobile bottom nav below (footer-parent.php),
-     which is hidden at desktop widths. Keeps a way back to the dashboard visible
-     from Payments/Messages/My Child on any non-mobile screen. -->
-<nav class="portal-subnav no-print">
-    <a href="<?= APP_URL ?>/parent/" class="subnav-item <?= $currentTab === 'home' ? 'active' : '' ?>">
-        <span class="subnav-icon"><?= ttIcon('home', 'tt-icon', 17) ?></span> Home
-    </a>
-    <a href="<?= APP_URL ?>/parent/calendar.php" class="subnav-item <?= $currentTab === 'calendar' ? 'active' : '' ?>">
-        <span class="subnav-icon"><?= ttIcon('calendar', 'tt-icon', 17) ?></span> Calendar
-    </a>
-    <a href="<?= APP_URL ?>/parent/messages.php" class="subnav-item <?= $currentTab === 'messages' ? 'active' : '' ?>">
-        <span class="subnav-icon"><?= ttIcon('message', 'tt-icon', 17) ?></span> Messages
-        <?php if (($unreadMessages ?? 0) > 0): ?><span class="subnav-badge"><?= $unreadMessages ?></span><?php endif; ?>
-    </a>
-    <a href="<?= APP_URL ?>/parent/payments.php" class="subnav-item <?= $currentTab === 'payments' ? 'active' : '' ?>">
-        <span class="subnav-icon"><?= ttIcon('card', 'tt-icon', 17) ?></span> Payments
-    </a>
-    <a href="<?= APP_URL ?>/parent/child.php" class="subnav-item <?= $currentTab === 'child' ? 'active' : '' ?>">
-        <span class="subnav-icon"><?= ttIcon('smile', 'tt-icon', 17) ?></span> My Child
-    </a>
-</nav>
+<!-- Navigation for the portal is a SINGLE bottom tab bar (footer-parent.php),
+     shown at every screen size — see assets/css/main.css's .bottom-nav rules.
+     There used to also be a second, near-identical "desktop sub-nav" strip
+     rendered here between the top bar and the page content; on top of being
+     one more copy of the same 5 links to keep in sync, a mis-detected
+     viewport width could make both bars render at once. Removed rather than
+     patched — one nav, one source of truth. -->
 
 <style>
 /* Frosted glass top bar — echoes the public-site glass tokens (variables.css)
@@ -116,7 +103,8 @@ $unreadMessages = dbCount('messages',
     box-shadow: 0 4px 24px rgba(15,23,42,0.06);
     position: sticky; top: 0; z-index: 200;
 }
-.topbar-logo { font-family: 'Quicksand', sans-serif; font-weight: 800; font-size: 1.125rem; color: var(--tinker-teal); }
+.topbar-logo { display: flex; align-items: center; }
+.topbar-logo-img { height: 30px; width: auto; display: block; }
 .avatar-photo { width: 100%; height: 100%; border-radius: inherit; object-fit: cover; display: block; }
 </style>
 
