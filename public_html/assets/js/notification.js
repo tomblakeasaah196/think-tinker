@@ -28,11 +28,14 @@ TT.notifications = {
             }
         });
 
-        // Close on outside click
-        $(document).on('click', function() {
+        // Close on outside click. Checking .closest() here (rather than
+        // stopPropagation() on the dropdown itself) lets clicks inside the
+        // dropdown still bubble to document, so the delegated .notif-item
+        // and .notif-mark-all handlers below actually fire.
+        $(document).on('click', function(e) {
+            if ($(e.target).closest('.notif-wrapper').length) return;
             $('.notif-dropdown').removeClass('open');
         });
-        $('.notif-dropdown').on('click', function(e) { e.stopPropagation(); });
 
         // Mark single as read, then route. Use .attr('data-link') rather than
         // .data('link') so jQuery does not cache/coerce the URL (e.g. stripping

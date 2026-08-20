@@ -61,7 +61,7 @@ $moduleList = [
 <aside class="hub-sidebar no-print" id="hubSidebar">
     <div class="sidebar-header">
         <a href="<?= HUB_URL ?>/dashboard.php" class="sidebar-logo">
-            <span class="logo-icon"><?= ttIcon('zap', 'tt-icon', 20) ?></span>
+            <img src="<?= APP_URL ?>/assets/img/logo/logo-mark.png" alt="" class="logo-icon">
             <span class="logo-text">Think & Tinker</span>
         </a>
         <span class="sidebar-badge">HUB</span>
