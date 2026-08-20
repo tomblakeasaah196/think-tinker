@@ -133,6 +133,10 @@ function getNewMessages(): void {
     $where = "conversation_id = ?"; $params = [$conversationId];
     if ($after) { $where .= " AND created_at > ?"; $params[] = $after; }
     $messages = dbFetchAll("SELECT * FROM messages WHERE $where ORDER BY created_at ASC", $params);
-    foreach ($messages as &$m) { $m['is_mine'] = ($m['sender_id'] == $user['id']); $m['time'] = date('g:i A', strtotime($m['created_at'])); }
+    foreach ($messages as &$m) {
+        $m['is_mine'] = ($m['sender_id'] == $user['id']);
+        $m['time'] = date('g:i A', strtotime($m['created_at']));
+        $m['date'] = formatDate($m['created_at'], 'M j');
+    }
     jsonResponse(true, '', ['messages' => $messages]);
 }

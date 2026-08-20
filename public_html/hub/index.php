@@ -7,8 +7,12 @@
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/auth.php';
 
-// Already logged in? Go to dashboard
-if (getCurrentUser()) {
+// Already logged in? Staff go to the dashboard; parents never belong in the Hub.
+$already = getCurrentUser();
+if ($already) {
+    if (($already['user_type'] ?? '') === 'parent') {
+        redirect(APP_URL . '/parent/');
+    }
     header('Location: ' . HUB_URL . '/dashboard.php');
     exit;
 }

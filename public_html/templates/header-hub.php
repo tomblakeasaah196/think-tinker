@@ -89,7 +89,7 @@ $moduleList = [
                 <span class="sidebar-user-incomplete-dot" title="Your profile is missing some info"></span>
             <?php endif; ?>
             <?php if (!empty($user['profile_photo'])): ?>
-                <img src="<?= getUploadUrl($user['profile_photo']) ?>" alt="" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; display: block; flex-shrink: 0;">
+                <img src="<?= htmlspecialchars(getUploadUrl($user['profile_photo'])) ?>" alt="" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; display: block; flex-shrink: 0;">
             <?php else: ?>
                 <div class="avatar avatar-sm avatar-teal"><?= strtoupper(substr($user['first_name'],0,1) . substr($user['last_name'],0,1)) ?></div>
             <?php endif; ?>
