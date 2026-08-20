@@ -30,7 +30,7 @@ $unreadMessages = dbCount('messages',
     <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/parent.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
-<body class="has-bottom-nav parent-portal">
+<body class="has-bottom-nav parent-portal<?= !empty($bodyClass) ? ' ' . htmlspecialchars($bodyClass) : '' ?>">
 
 <!-- Top Bar -->
 <header class="portal-topbar no-print">

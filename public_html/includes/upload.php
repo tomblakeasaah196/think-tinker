@@ -183,8 +183,18 @@ function uploadSessionImage(string $fieldName): array
 }
 
 /**
- * Upload a document file (PDF, DOCX — no image processing).
+ * Chat attachment (images + PDF).
  */
+function uploadMessageAttachment(string $fieldName = 'attachment'): array
+{
+    return uploadFile($fieldName, 'messages', [
+        'maxWidth'     => 1600,
+        'maxSize'      => 10 * 1024 * 1024,
+        'quality'      => 82,
+        'allowedTypes' => ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'],
+    ]);
+}
+
 function uploadDocument(string $fieldName, string $subDir = 'resources'): array
 {
     return uploadFile($fieldName, $subDir, [

@@ -41,19 +41,18 @@ TT.api = function(controller, data, options = {}) {
         data = { action: data };
     }
 
-    // Inject CSRF token
-    if (!data._token) {
-        data._token = TT.config.csrfToken;
-    }
-
     const url = TT.config.apiBase + '/' + controller;
     const method = options.method || 'POST';
 
-    // Handle FormData (file uploads)
+    // Handle FormData (file uploads) BEFORE touching . _token — FormData
+    // is not a plain object, so assigning data._token would never reach PHP.
     let ajaxOptions;
     if (data instanceof FormData) {
         if (!data.has('_token')) {
             data.append('_token', TT.config.csrfToken);
+        }
+        if (!data.has('action') && options.action) {
+            data.append('action', options.action);
         }
         ajaxOptions = {
             url: url,
@@ -64,6 +63,9 @@ TT.api = function(controller, data, options = {}) {
             dataType: 'json',
         };
     } else {
+        if (typeof data === 'object' && data && !data._token) {
+            data._token = TT.config.csrfToken;
+        }
         ajaxOptions = {
             url: url,
             method: method,
