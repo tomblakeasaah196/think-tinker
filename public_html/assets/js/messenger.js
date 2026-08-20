@@ -60,9 +60,15 @@ Messenger.loadMessages = function() {
     TT.get('MessageController.php', { action: 'get_messages', conversation_id: Messenger.convoId }).done(function(r) {
         if (!r.success) return;
         let html = '';
+        let lastDate = '';
         (r.data.messages || []).forEach(m => {
+            if (m.date !== lastDate) {
+                html += `<div style="text-align:center;font-size:0.6875rem;color:#999;margin:12px 0;">${m.date}</div>`;
+                lastDate = m.date;
+            }
             const cls = m.is_mine ? 'msg-mine' : 'msg-theirs';
-            html += `<div class="msg-bubble ${cls}">${TT.escHtml(m.message_text)}<div class="msg-time">${m.time}</div></div>`;
+            const readReceipt = m.is_mine ? (m.is_read ? '<span style="color:var(--tinker-teal);margin-left:4px;">✓✓</span>' : '<span style="color:#999;margin-left:4px;">✓</span>') : '';
+            html += `<div class="msg-bubble ${cls}">${TT.escHtml(m.message_text)}<div class="msg-time">${m.time}${readReceipt}</div></div>`;
         });
         $('#parentMsgList').html(html || '<div style="text-align:center;color:#999;margin:auto;">No messages in this conversation.</div>');
         const el = document.getElementById('parentMsgList');

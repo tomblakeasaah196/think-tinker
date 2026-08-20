@@ -473,7 +473,7 @@ function handleGetCurrentUser(): void
         'email'      => $user['email'],
         'phone'      => $user['phone'],
         'user_type'  => $user['user_type'],
-        'photo'      => $user['profile_photo'],
+        'photo'      => isset($user['profile_photo']) && $user['profile_photo'] ? getUploadUrl($user['profile_photo']) : null,
         'csrf_token' => CSRF_TOKEN,
     ]);
 }

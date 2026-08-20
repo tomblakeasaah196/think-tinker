@@ -9,6 +9,12 @@ require_once __DIR__ . '/../includes/rbac.php';
 require_once __DIR__ . '/../includes/icons.php';
 
 $user = requireAuth();
+
+// Prevent parents from accessing the Hub
+if ($user['user_type'] === 'parent') {
+    redirect(APP_URL . '/parent/');
+}
+
 $modules = getUserModules($user);
 $pageTitle = ($pageTitle ?? 'Hub') . ' — Think & Tinker Hub';
 $currentModule = $currentModule ?? '';
@@ -82,7 +88,11 @@ $moduleList = [
             <?php if (empty($user['phone']) || empty($user['profile_photo'])): ?>
                 <span class="sidebar-user-incomplete-dot" title="Your profile is missing some info"></span>
             <?php endif; ?>
-            <div class="avatar avatar-sm avatar-teal"><?= strtoupper(substr($user['first_name'],0,1) . substr($user['last_name'],0,1)) ?></div>
+            <?php if (!empty($user['profile_photo'])): ?>
+                <img src="<?= getUploadUrl($user['profile_photo']) ?>" alt="" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; display: block; flex-shrink: 0;">
+            <?php else: ?>
+                <div class="avatar avatar-sm avatar-teal"><?= strtoupper(substr($user['first_name'],0,1) . substr($user['last_name'],0,1)) ?></div>
+            <?php endif; ?>
             <div class="sidebar-user-info">
                 <div class="sidebar-user-name"><?= htmlspecialchars($user['first_name']) ?></div>
                 <div class="sidebar-user-role"><?= ucfirst(str_replace('_', ' ', $user['user_type'])) ?></div>
