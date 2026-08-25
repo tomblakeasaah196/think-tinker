@@ -6,3 +6,12 @@
   AddHandler application/x-httpd-ea-php82 .php .php8 .phtml
 </IfModule>
 # php -- END cPanel-generated handler, do not edit
+
+# Raise the PHP-level upload cap so message/document attachments up to the
+# app's own 10MB limit (see includes/upload.php) don't get rejected earlier
+# by php.ini's default upload_max_filesize/post_max_size before our code
+# ever runs.
+<IfModule mime_module>
+  php_value upload_max_filesize 12M
+  php_value post_max_size 15M
+</IfModule>
