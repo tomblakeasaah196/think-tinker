@@ -22,6 +22,8 @@ switch ($action) {
     case 'mark_read':           markRead(); break;
     case 'assign_to_tutor':     assignToTutor(); break;
     case 'get_new_messages':    getNewMessages(); break;
+    case 'find_duplicate_conversations': findDuplicateConversations(); break;
+    case 'merge_conversations': mergeConversations(); break;
     default: jsonResponse(false, 'Invalid action.');
 }
 
@@ -175,6 +177,72 @@ function getNewMessages(): void {
         decorateMessage($m, $user);
     }
     jsonResponse(true, '', ['messages' => $messages]);
+}
+
+/**
+ * Find parents whose messages are split across more than one conversation_id.
+ * Caused historically by get_conversations throwing before a parent's
+ * existing thread could be looked up (see MSG_ATT_PREFIX fix) — every
+ * affected page load then minted a fresh conversation_id on send.
+ */
+function findDuplicateConversations(): void {
+    $user = requireAuth();
+    if ($user['user_type'] !== 'super_admin') jsonResponse(false, 'Access denied.', [], 403);
+
+    $senders = dbFetchAll(
+        "SELECT sender_id, COUNT(DISTINCT conversation_id) as convo_count
+         FROM messages WHERE sender_type = 'parent'
+         GROUP BY sender_id HAVING COUNT(DISTINCT conversation_id) > 1"
+    );
+
+    $duplicates = [];
+    foreach ($senders as $s) {
+        $convos = dbFetchAll(
+            "SELECT conversation_id, COUNT(*) as msg_count, MIN(created_at) as first_at, MAX(created_at) as last_at
+             FROM messages
+             WHERE conversation_id IN (SELECT DISTINCT conversation_id FROM messages WHERE sender_id = ? AND sender_type = 'parent')
+             GROUP BY conversation_id ORDER BY first_at ASC",
+            [$s['sender_id']]
+        );
+        $parent = dbFetchOne("SELECT first_name, last_name, email FROM users WHERE id = ?", [$s['sender_id']]);
+        $duplicates[] = [
+            'sender_id'                 => $s['sender_id'],
+            'parent_name'               => $parent ? trim($parent['first_name'] . ' ' . $parent['last_name']) : 'Unknown',
+            'parent_email'              => $parent['email'] ?? '',
+            'conversations'             => $convos,
+            'canonical_conversation_id' => $convos[0]['conversation_id'] ?? null,
+        ];
+    }
+    jsonResponse(true, '', ['duplicates' => $duplicates]);
+}
+
+/**
+ * Merge every duplicate conversation_id for one parent into a single thread —
+ * the earliest one, kept as canonical. Re-derives the set server-side rather
+ * than trusting posted IDs.
+ */
+function mergeConversations(): void {
+    $user = requireAuth(); validateCsrf();
+    if ($user['user_type'] !== 'super_admin') jsonResponse(false, 'Access denied.', [], 403);
+
+    $senderId = postInt('sender_id');
+    if (!$senderId) jsonResponse(false, 'Client ID required.');
+
+    $convos = dbFetchAll(
+        "SELECT conversation_id, MIN(created_at) as first_at
+         FROM messages
+         WHERE conversation_id IN (SELECT DISTINCT conversation_id FROM messages WHERE sender_id = ? AND sender_type = 'parent')
+         GROUP BY conversation_id ORDER BY first_at ASC",
+        [$senderId]
+    );
+    if (count($convos) < 2) jsonResponse(false, 'Nothing to merge for this client.');
+
+    $canonical = $convos[0]['conversation_id'];
+    $others = array_slice(array_column($convos, 'conversation_id'), 1);
+    $placeholders = implode(',', array_fill(0, count($others), '?'));
+    dbExecute("UPDATE messages SET conversation_id = ? WHERE conversation_id IN ($placeholders)", [$canonical, ...$others]);
+
+    jsonResponse(true, 'Merged ' . count($others) . ' duplicate thread(s) into one.', ['conversation_id' => $canonical]);
 }
 
 function encodeMessagePayload(string $text, ?array $attachment): string
